@@ -14,7 +14,7 @@ class _State extends State<LoginPage> {
   TextEditingController _userController = new TextEditingController();
   TextEditingController _passController = new TextEditingController();
   User user = new User("", "");
-  String url = "http://localhost:8080/authenticate";
+  var url = Uri.http("http://localhost:8080", "/authenticate");
   Future save() async{
     await http.post(url,
     headers: {'Context-Type': 'application/json'}, body: json.encode(
@@ -65,8 +65,11 @@ class _State extends State<LoginPage> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-              child: TextField(
-                controller: _userController,
+              child: TextFormField(
+                controller: TextEditingController(text: user.email),
+                onChanged: (val) {
+                  user.email = val;
+                },
                 style: TextStyle(fontSize: 18, color: Colors.black),
                 decoration: InputDecoration(
                     labelText: "USERNAME",
@@ -80,8 +83,11 @@ class _State extends State<LoginPage> {
               child: Stack(
                 alignment: AlignmentDirectional.centerEnd,
                 children: <Widget>[
-                  TextField(
-                    controller: _passController,
+                  TextFormField(
+                    controller: TextEditingController(text: user.password),
+                    onChanged: (val) {
+                      user.password = val;
+                    },
                     style: TextStyle(fontSize: 18, color: Colors.black),
                     obscureText: !_showPass,
                     decoration: InputDecoration(
@@ -112,7 +118,8 @@ class _State extends State<LoginPage> {
                   color: Colors.blue,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8))),
-                  onPressed: onSignInClicked,
+                  // onPressed: onSignInClicked,
+                  onPressed: () {  },
                   child: Text(
                     "SIGN IN",
                     style: TextStyle(color: Colors.white, fontSize: 16),
@@ -152,26 +159,26 @@ class _State extends State<LoginPage> {
     });
   }
 
-  void onSignInClicked() {
-    setState(() {
-      if (_userController.text.length < 6 ||
-          !_userController.text.contains("@")) {
-        _userInvalid = true;
-      } else {
-        _userInvalid = false;
-      }
-
-      if (_passController.text.length < 6) {
-        _passInvalid = true;
-      } else {
-        _passInvalid = false;
-      }
-
-      if (!_userInvalid && !_passInvalid) {
-        // Navigator.push(context, MaterialPageRoute(builder: gotoHome));
-      }
-    });
-  }
+  // void onSignInClicked() {
+  //   setState(() {
+  //     if (_userController.text.length < 6 ||
+  //         !_userController.text.contains("@")) {
+  //       _userInvalid = true;
+  //     } else {
+  //       _userInvalid = false;
+  //     }
+  //
+  //     if (_passController.text.length < 6) {
+  //       _passInvalid = true;
+  //     } else {
+  //       _passInvalid = false;
+  //     }
+  //
+  //     if (!_userInvalid && !_passInvalid) {
+  //       // Navigator.push(context, MaterialPageRoute(builder: gotoHome));
+  //     }
+  //   });
+  // }
 // Widget gotoHome(BuildContext context){
 //   return HomePage();
 // }
