@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:heath_care/model/user.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,6 +13,17 @@ class _State extends State<LoginPage> {
   bool _showPass = false;
   TextEditingController _userController = new TextEditingController();
   TextEditingController _passController = new TextEditingController();
+  User user = new User("", "");
+  String url = "http://localhost:8080/authenticate";
+  Future save() async{
+    await http.post(url,
+    headers: {'Context-Type': 'application/json'}, body: json.encode(
+          {
+            'username': user.username,
+            'password': user.password
+          }
+        ));
+  }
   var _userNameErr = "Username is invalid!";
   var _passNameErr = "Password must more than 6 characters";
   var _userInvalid = false;
