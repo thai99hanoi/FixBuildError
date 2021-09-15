@@ -10,5 +10,14 @@ class User{
   String? identityId;
   bool? isActive;
 
-  User(this.username, this.password);
+  User({this.username, this.password});
+
+  factory User.fromMap(Map<String, dynamic> json) => User(
+      username: json["username"],
+      password: json["password"]);
+
+  Map<String, dynamic> toMap() => {
+    "username": username,
+    "password": password
+  };
 }

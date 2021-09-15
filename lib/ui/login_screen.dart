@@ -2,7 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
+import 'package:heath_care/utils/http_exception.dart';
 import 'package:http/http.dart' as http;
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:provider/provider.dart';
+import 'package:heath_care/networks/auth.dart';
+
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,17 +19,33 @@ class _State extends State<LoginPage> {
   bool _showPass = false;
   TextEditingController _userController = new TextEditingController();
   TextEditingController _passController = new TextEditingController();
-  User user = new User("", "");
-  var url = Uri.http("http://localhost:8080", "/authenticate");
-  Future save() async{
-    await http.post(url,
-    headers: {'Context-Type': 'application/json'}, body: json.encode(
-          {
-            'username': user.username,
-            'password': user.password
-          }
-        ));
+  User user = new User();
+
+  // var url = Uri.http("http://localhost:8080", "/authenticate");
+  Future save() async {
+    try{
+      await Provider.of<Auth>(context, listen: false).login(user);
+      var errorMessage = 'login ok';
+      _showerrorDialog(errorMessage);
+    } on HttpException catch(e){
+      var errorMessage = 'Authentication Failed';
+      if (e.toString().contains('Username is invalid!')) {
+        errorMessage = 'Username is invalid!';
+        _showerrorDialog(errorMessage);
+      // } else if (e.toString().contains('EMAIL_NOT_FOUND')) {
+      //   errorMessage = 'This email not found';
+      //   _showerrorDialog(errorMessage);
+      } else if (e.toString().contains('Password must more than 6 characters')) {
+        errorMessage = 'Password must more than 6 characters';
+        _showerrorDialog(errorMessage);
+      }
+    } catch (error) {
+      var errorMessage = 'Please try again later';
+      print(error.toString());
+      _showerrorDialog(errorMessage);
+    }
   }
+
   var _userNameErr = "Username is invalid!";
   var _passNameErr = "Password must more than 6 characters";
   var _userInvalid = false;
@@ -66,9 +88,9 @@ class _State extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
               child: TextFormField(
-                controller: TextEditingController(text: user.email),
+                controller: TextEditingController(text: user.username),
                 onChanged: (val) {
-                  user.email = val;
+                  user.username = val;
                 },
                 style: TextStyle(fontSize: 18, color: Colors.black),
                 decoration: InputDecoration(
@@ -119,7 +141,7 @@ class _State extends State<LoginPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8))),
                   // onPressed: onSignInClicked,
-                  onPressed: () {  },
+                  onPressed: save,
                   child: Text(
                     "SIGN IN",
                     style: TextStyle(color: Colors.white, fontSize: 16),
@@ -159,27 +181,48 @@ class _State extends State<LoginPage> {
     });
   }
 
-  // void onSignInClicked() {
-  //   setState(() {
-  //     if (_userController.text.length < 6 ||
-  //         !_userController.text.contains("@")) {
-  //       _userInvalid = true;
-  //     } else {
-  //       _userInvalid = false;
-  //     }
-  //
-  //     if (_passController.text.length < 6) {
-  //       _passInvalid = true;
-  //     } else {
-  //       _passInvalid = false;
-  //     }
-  //
-  //     if (!_userInvalid && !_passInvalid) {
-  //       // Navigator.push(context, MaterialPageRoute(builder: gotoHome));
-  //     }
-  //   });
-  // }
+// void onSignInClicked() {
+//   setState(() {
+//     if (_userController.text.length < 6 ||
+//         !_userController.text.contains("@")) {
+//       _userInvalid = true;
+//     } else {
+//       _userInvalid = false;
+//     }
+//
+//     if (_passController.text.length < 6) {
+//       _passInvalid = true;
+//     } else {
+//       _passInvalid = false;
+//     }
+//
+//     if (!_userInvalid && !_passInvalid) {
+//       // Navigator.push(context, MaterialPageRoute(builder: gotoHome));
+//     }
+//   });
+// }
 // Widget gotoHome(BuildContext context){
 //   return HomePage();
 // }
+
+  void _showerrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'An Error Occurs',
+          style: TextStyle(color: Colors.blue),
+        ),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
 }
