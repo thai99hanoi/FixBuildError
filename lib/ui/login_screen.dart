@@ -25,6 +25,8 @@ class _State extends State<LoginPage> {
   Future save() async {
     try{
       await Provider.of<Auth>(context, listen: false).login(user);
+      var errorMessage = 'login ok';
+      _showerrorDialog(errorMessage);
     } on HttpException catch(e){
       var errorMessage = 'Authentication Failed';
       if (e.toString().contains('Username is invalid!')) {

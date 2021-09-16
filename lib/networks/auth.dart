@@ -29,11 +29,11 @@ class Auth with ChangeNotifier {
   }
 
   String get token {
-    if (_expiryDate != null &&
-        _expiryDate.isAfter(DateTime.now()) &&
-        _token != null) {
-      return _token;
-    }
+    // if (_expiryDate != null &&
+    //     _expiryDate.isAfter(DateTime.now()) &&
+    //     _token != null) {
+    //   return _token;
+    // }
     return _token;
   }
 
@@ -63,11 +63,11 @@ class Auth with ChangeNotifier {
   }
 
   void _autologout() {
-    if (_authTimer != null) {
-      _authTimer.cancel();
-    }
-    final timetoExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
-    _authTimer = Timer(Duration(seconds: timetoExpiry), logout);
+    // if (_authTimer != null) {
+    //   _authTimer.cancel();
+    // }
+    // // final timetoExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
+    // _authTimer = Timer(Duration(seconds: timetoExpiry), logout);
   }
 
   Future<bool> tryautoLogin() async {
@@ -80,14 +80,14 @@ class Auth with ChangeNotifier {
         json.decode(pref.getString('userData')) as Map<String, Object>;
 
     final expiryDate =
-        DateTime.parse(extractedUserData['date'].toString());
+        DateTime.parse(extractedUserData['expiryDate'].toString());
     if (expiryDate.isBefore(DateTime.now())) {
       return false;
     }
     _token = extractedUserData['jwttoken'];
     // _userId = extractedUserData['userId'];
     // _userEmail = extractedUserData['userEmail'];
-    _expiryDate = expiryDate;
+    // _expiryDate = expiryDate;
     notifyListeners();
     _autologout();
 
@@ -118,8 +118,8 @@ class Auth with ChangeNotifier {
       _token = responseData['jwttoken'];
       // _userId = responseData['localId'];
       // _userEmail = responseData['email'];
-      _expiryDate = DateTime.now()
-          .add(Duration(seconds: int.parse(responseData['date'])));
+      // _expiryDate = DateTime.now()
+      //     .add(Duration(seconds: int.parse(responseData['expiresIn'])));
 
       _autologout();
       notifyListeners();
@@ -129,7 +129,7 @@ class Auth with ChangeNotifier {
         'jwttoken': _token,
         // 'userId': _userId,
         // 'userEmail': _userEmail,
-        'date': _expiryDate.toIso8601String(),
+        // 'expiryDate': _expiryDate.toIso8601String(),
       });
 
       prefs.setString('userData', userData);
