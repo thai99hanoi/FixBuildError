@@ -6,6 +6,8 @@ import 'package:heath_care/model/user.dart';
 import 'package:heath_care/utils/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:heath_care/utils/http_exception.dart';
+import 'package:intl/intl.dart';
+
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
@@ -118,8 +120,11 @@ class Auth with ChangeNotifier {
       _token = responseData['token'];
       // _userId = responseData['localId'];
       // _userEmail = responseData['email'];
-      _expiryDate = DateTime.now()
-          .add(Duration(seconds: 500));
+      final testDate = new DateFormat('dd-MM-yyyy HH:mm:ss');
+      DateTime exDate =testDate.parse(responseData['date']);
+      final format = new DateFormat('ss');
+      print(exDate);
+      _expiryDate = DateTime.now().add(Duration(seconds: 600));
 
       _autologout();
       notifyListeners();

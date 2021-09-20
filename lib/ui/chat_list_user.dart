@@ -10,6 +10,7 @@ class ListUser extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(78, 159, 193, 1),
         title: Text('LIÊN HỆ HỖ TRỢ'),
       ),
       body: Column(
@@ -77,13 +78,31 @@ class ListUser extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.messenger), label: "Liên hệ"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang Chủ"),
-          BottomNavigationBarItem(icon: Icon(Icons.report), label: "Kết quả"),
-          // BottomNavigationBarItem(icon: Icon(Icons.send_and_archive), label: "Báo cáo"),
-          // BottomNavigationBarItem(icon: Icon(Icons.send_and_archive), label: "Báo cáo"),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: Color.fromRGBO(78, 159, 193, 1),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Business',
+            backgroundColor: Color.fromRGBO(78, 159, 193, 1),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'School',
+            backgroundColor: Color.fromRGBO(78, 159, 193, 1),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+            backgroundColor: Color.fromRGBO(78, 159, 193, 1),
+          ),
         ],
+        // currentIndex: _selectedIndex,
+        // selectedItemColor: Colors.amber[800],
+        // onTap: _onItemTapped,
       ),
       drawer: Drawer(
         child: ListView(
