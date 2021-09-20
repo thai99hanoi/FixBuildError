@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:heath_care/ui/login_screen.dart';
 import 'package:heath_care/networks/auth.dart';
+import 'package:heath_care/ui/chat_list_user.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -96,9 +97,10 @@ class HomeScreen extends StatelessWidget {
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                      onPressed: () {},
+                      onPressed:(){Route route = MaterialPageRoute(builder: (context) => ListUser());
+                           Navigator.push(context, route);},
                       child: new Text(
-                        'Báo Cáo \n Tình Trạng Sức Khoẻ',
+                        'Liên Hệ',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

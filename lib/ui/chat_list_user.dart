@@ -128,9 +128,8 @@ class ListUser extends StatelessWidget {
             ListTile(
               title: const Text('Đăng Xuất'),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
+                Navigator.of(context).pushReplacementNamed("/");
+                Provider.of<Auth>(context, listen: false).logout();
                 Navigator.pop(context);
               },
             ),
