@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
-import 'package:heath_care/utils/http_exception.dart';
+import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart';

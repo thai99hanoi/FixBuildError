@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/utils/api.dart';
 import 'package:http/http.dart' as http;
-import 'package:heath_care/utils/http_exception.dart';
 import 'package:intl/intl.dart';
+import 'package:heath_care/utils/http_exception.dart';
 
 
 // ignore: import_of_legacy_library_into_null_safe
@@ -115,15 +115,15 @@ class Auth with ChangeNotifier {
       final responseData = json.decode(response.body);
       print(responseData);
       if (responseData['error'] != null) {
-        throw BadRequestException(responseData['error']['message']);
+        throw HttpException(responseData['error']['message']);
       }
       _token = responseData['token'];
       // _userId = responseData['localId'];
       // _userEmail = responseData['email'];
-      final testDate = new DateFormat('dd-MM-yyyy HH:mm:ss');
-      DateTime exDate =testDate.parse(responseData['date']);
-      final format = new DateFormat('ss');
-      print(exDate);
+      // final testDate = new DateFormat('dd-MM-yyyy HH:mm:ss');
+      // DateTime exDate =testDate.parse(responseData['date']);
+      // final format = new DateFormat('ss');
+      // print(exDate);
       _expiryDate = DateTime.now().add(Duration(seconds: 600));
 
       _autologout();

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
-import 'package:heath_care/utils/http_exception.dart';
+import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:heath_care/utils/api.dart';
 
 class ApiBaseHelper {
