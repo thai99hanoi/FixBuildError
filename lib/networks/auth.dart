@@ -127,7 +127,7 @@ class Auth with ChangeNotifier {
 
       _autologout();
       notifyListeners();
-
+      Auth().setToken(_token);
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode({
         'token': _token,
@@ -143,6 +143,16 @@ class Auth with ChangeNotifier {
       print(e.toString());
       throw e;
     }
+  }
+
+  Future<bool> setToken(String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString('token', value);
+  }
+
+  Future<String> getToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
   }
 
   Future<void> login(User user) {

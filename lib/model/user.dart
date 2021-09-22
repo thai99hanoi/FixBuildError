@@ -8,8 +8,8 @@ class User {
   String? email;
   String? phone;
   String? identityId;
-  bool? isActive;
-  bool? isOnline;
+  String? isActive;
+  String? isOnline;
 
   User(
       {this.userId,
