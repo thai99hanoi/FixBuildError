@@ -1,4 +1,4 @@
-class User{
+class User {
   int? userId;
   int? roleId;
   int? stationId;
@@ -9,15 +9,34 @@ class User{
   String? phone;
   String? identityId;
   bool? isActive;
+  bool? isOnline;
 
-  User({this.username, this.password});
+  User(
+      {this.userId,
+      this.roleId,
+      this.stationId,
+      this.username,
+      this.password,
+      this.lastLogin,
+      this.email,
+      this.phone,
+      this.identityId,
+      this.isOnline,
+      this.isActive});
 
-  factory User.fromMap(Map<String, dynamic> json) => User(
-      username: json["username"],
-      password: json["password"]);
+  factory User.fromMap(Map<String, dynamic> json) =>
+      User(userId: json["userId"],
+          roleId: json["roleId"],
+          stationId: json["stationId"],
+          username: json["username"],
+          password: json["password"],
+          lastLogin: json["lastLogin"],
+          email: json["email"],
+          phone: json["phone"],
+          identityId: json["identityId"],
+          isActive: json["isActive"],
+          isOnline: json["isOnline"]
+      );
 
-  Map<String, dynamic> toMap() => {
-    "username": username,
-    "password": password
-  };
+  Map<String, dynamic> toMap() => {"username": username, "password": password};
 }

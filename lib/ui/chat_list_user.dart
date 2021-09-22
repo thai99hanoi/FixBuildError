@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/model/user.dart';
+import 'package:http/http.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart';
-import 'package:heath_care/ui/login_screen.dart';
 import 'package:heath_care/networks/auth.dart';
+import 'package:heath_care/networks/api_base_helper.dart';
 
+// ignore: must_be_immutable
 class ListUser extends StatelessWidget {
+  ApiBaseHelper apiBaseHelper = ApiBaseHelper();
+  User user = new User();
+  Future<User> getCurrentUser() async {
+    final response = await apiBaseHelper.get("/api/v1/current-user");
+    return user = User.fromMap(response);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +54,7 @@ class ListUser extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'User Name',
+                        user.username.toString(),
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
+import 'package:heath_care/networks/api_base_helper.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
 // ignore: import_of_legacy_library_into_null_safe
@@ -44,7 +45,6 @@ class _State extends State<LoginPage> {
       _showerrorDialog(errorMessage);
     }
   }
-
   var _userNameErr = "Username is invalid!";
   var _passNameErr = "Password must more than 6 characters";
   var _userInvalid = false;
