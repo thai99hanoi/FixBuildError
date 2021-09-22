@@ -17,20 +17,19 @@ class Auth with ChangeNotifier {
   var MainUrl = Api.authUrl;
 
   // ignore: non_constant_identifier_names
-  var AuthKey = Api.authKey;
 
   var _token;
   var _userId;
   var _userEmail;
   var _expiryDate;
   var _authTimer;
-
+  Auth();
   bool get isAuth {
     // ignore: unnecessary_null_comparison
     return token != null;
   }
 
-  String get token {
+   String get token {
     if (_expiryDate != null &&
         _expiryDate.isAfter(DateTime.now()) &&
         _token != null) {

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:heath_care/utils/api.dart';
+import 'package:heath_care/networks/auth.dart';
 
 class ApiBaseHelper {
   Future<dynamic> get(String url) async {
@@ -11,10 +12,10 @@ class ApiBaseHelper {
     var responseJson;
     try {
       final response = await http.get(
-        Uri.parse(Api.authKey + url),
+        Uri.parse(Api.authUrl + url),
         headers: {
           "content-type": "application/json",
-          "accept": "application/json",
+          HttpHeaders.authorizationHeader: Api.authKey,
         },
       );
       responseJson = _returnResponse(response);
@@ -30,10 +31,10 @@ class ApiBaseHelper {
     print('Api Post, url $url');
     var responseJson;
     try {
-      final response = await http.post(Uri.parse(Api.authKey + url),
+      final response = await http.post(Uri.parse(Api.authUrl + url),
           headers: {
             "content-type": "application/json",
-            "accept": "application/json",
+            HttpHeaders.authorizationHeader: Api.authKey,
           },
           body: body);
       responseJson = _returnResponse(response);
@@ -49,10 +50,10 @@ class ApiBaseHelper {
     print('Api Put, url $url');
     var responseJson;
     try {
-      final response = await http.put(Uri.parse(Api.authKey + url),
+      final response = await http.put(Uri.parse(Api.authUrl + url),
           headers: {
             "content-type": "application/json",
-            "accept": "application/json",
+            HttpHeaders.authorizationHeader: Api.authKey,
           },
           body: body);
       responseJson = _returnResponse(response);
@@ -70,10 +71,10 @@ class ApiBaseHelper {
     var apiResponse;
     try {
       final response = await http.delete(
-        Uri.parse(Api.authKey + url),
+        Uri.parse(Api.authUrl + url),
         headers: {
           "content-type": "application/json",
-          "accept": "application/json",
+          HttpHeaders.authorizationHeader: Api.authKey,
         },
       );
       apiResponse = _returnResponse(response);
