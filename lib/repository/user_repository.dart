@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/networks/api_base_helper.dart';
 
@@ -9,13 +12,18 @@ class UserRepository{
     return User.fromMap(entriesList[1].value);
   }
 
-  Future<List<User>?> getUserOnline(userId) async {
-    List<User>? userOnline;
-    Map<String, dynamic> response = await apiBaseHelper.get("/api/v1/users-online"+userId);
+  Future<List<User>?> getUserOnline() async {
+    var user = await UserRepository().getCurrentUser();
+    var userId = user.userId;
+    Map<String, dynamic> response = await apiBaseHelper.get("/api/v1/users-online"+userId.toString());
     var entriesList = response.entries.toList();
-    for(User user in entriesList[1].value){
-      userOnline!.add(user);
-    }
-    return userOnline;
+    return parseUser(entriesList[1].value);
   }
+
+  List<User>? parseUser(String responseBody) {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<User>((json) => User.fromMap(json)).toList();
+  }
+
+
 }
