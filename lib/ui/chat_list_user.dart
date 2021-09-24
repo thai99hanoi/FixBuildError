@@ -53,13 +53,11 @@ class ListUser extends StatelessWidget {
                           future: getUserOnline,
                           builder: (context, snapshot){
                             List<User>? users = snapshot.data;
-                            return new Column(
-                              children: users!.map((user) => new Column(
-                                children: <Widget>[
-                                  new Text(user.username.toString()),
-                                ],
-                              )),
-                            )
+                            if (snapshot.hasData) {
+                              return Text(users.toString());
+                            } else {
+                              return CircularProgressIndicator();
+                            }
                           }
                       ),
                       SizedBox(
