@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class ListUser extends StatelessWidget {
 
+  Future<List<User>?> getUserOnline = UserRepository().getUserOnline();
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +49,18 @@ class ListUser extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "UserRepogetUserOnline().toString()",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                      new FutureBuilder<List<User>?>(
+                          future: getUserOnline,
+                          builder: (context, snapshot){
+                            List<User>? users = snapshot.data;
+                            return new Column(
+                              children: users!.map((user) => new Column(
+                                children: <Widget>[
+                                  new Text(user.username.toString()),
+                                ],
+                              )),
+                            )
+                          }
                       ),
                       SizedBox(
                         height: 8,
