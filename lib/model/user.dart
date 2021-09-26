@@ -39,4 +39,18 @@ class User {
       );
 
   Map<String, dynamic> toMap() => {"username": username, "password": password};
+
+  factory User.fromJson(Map<String, dynamic> json) =>
+      User(userId: json['userId'] as int,
+          roleId: json['roleId'] as int,
+          stationId: json['stationId'] as int,
+          username: json['username'] as String,
+          password: json['password'] as String,
+          lastLogin: json['lastLogin'] as DateTime,
+          email: json['email'] as String,
+          phone: json['phone'] as String,
+          identityId: json['identityId'] as String,
+          isActive: json['isActive'] as String,
+          isOnline: json['isOnline'] as String
+      );
 }
