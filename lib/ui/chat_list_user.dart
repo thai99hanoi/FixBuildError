@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/repository/user_repository.dart';
 
+import 'chat_conversation.dart';
 import 'components/Bottom_Navigator.dart';
 
 // ignore: must_be_immutable
@@ -35,7 +36,11 @@ class ListUser extends StatelessWidget {
                 child: ListView.builder(
                     itemCount: users!.length,
                     itemBuilder: (BuildContext context, int index) => InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Route route = MaterialPageRoute(
+                                builder: (context) => ConversationChat());
+                            Navigator.push(context, route);
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 20 * 0.75),
@@ -48,7 +53,7 @@ class ListUser extends StatelessWidget {
                                       backgroundImage:
                                           AssetImage('assets/images/img_1.png'),
                                     ),
-                                    if ('${users[index].isActive}' == 'ACTIVE')
+                                    if ('${users[index].isOnline}' == 'ONLINE')
                                       Positioned(
                                         right: 0,
                                         bottom: 0,
