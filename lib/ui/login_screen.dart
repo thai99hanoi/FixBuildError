@@ -1,15 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
-import 'package:heath_care/networks/api_base_helper.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
-import 'package:http/http.dart' as http;
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart';
 import 'package:heath_care/networks/auth.dart';
-
-
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,24 +12,27 @@ class LoginPage extends StatefulWidget {
 
 class _State extends State<LoginPage> {
   bool _showPass = false;
+  // ignore: unused_field
   TextEditingController _userController = new TextEditingController();
+  // ignore: unused_field
   TextEditingController _passController = new TextEditingController();
   User user = new User();
 
   // var url = Uri.http("http://localhost:8080", "/authenticate");
   Future save() async {
-    try{
+    try {
       await Provider.of<Auth>(context, listen: false).login(user);
-
-    } on HttpException catch(e){
+    } on HttpException catch (e) {
       var errorMessage = 'Authentication Failed';
       if (e.toString().contains('Username is invalid!')) {
         errorMessage = 'Username is invalid!';
         _showerrorDialog(errorMessage);
-      // } else if (e.toString().contains('EMAIL_NOT_FOUND')) {
-      //   errorMessage = 'This email not found';
-      //   _showerrorDialog(errorMessage);
-      } else if (e.toString().contains('Password must more than 6 characters')) {
+        // } else if (e.toString().contains('EMAIL_NOT_FOUND')) {
+        //   errorMessage = 'This email not found';
+        //   _showerrorDialog(errorMessage);
+      } else if (e
+          .toString()
+          .contains('Password must more than 6 characters')) {
         errorMessage = 'Password must more than 6 characters';
         _showerrorDialog(errorMessage);
       }
@@ -45,6 +42,7 @@ class _State extends State<LoginPage> {
       _showerrorDialog(errorMessage);
     }
   }
+
   var _userNameErr = "Username is invalid!";
   var _passNameErr = "Password must more than 6 characters";
   var _userInvalid = false;
@@ -135,6 +133,7 @@ class _State extends State<LoginPage> {
               child: SizedBox(
                 width: double.infinity,
                 height: 56,
+                // ignore: deprecated_member_use
                 child: RaisedButton(
                   color: Colors.blue,
                   shape: RoundedRectangleBorder(
@@ -214,6 +213,7 @@ class _State extends State<LoginPage> {
         ),
         content: Text(message),
         actions: <Widget>[
+          // ignore: deprecated_member_use
           FlatButton(
             child: Text('Okay'),
             onPressed: () {

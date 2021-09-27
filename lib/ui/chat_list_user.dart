@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
-import 'package:heath_care/networks/api_base_helper.dart';
-import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/repository/user_repository.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:provider/provider.dart';
+
+import 'components/Bottom_Navigator.dart';
 
 // ignore: must_be_immutable
 class ListUser extends StatelessWidget {
-
-  Future<List<User>?> getUserOnline = UserRepository().getUserOnline();
+  // new FutureBuilder<List<User>?>(
+  // future: getUserOnline,
+  // builder: (context, snapshot) {
+  // List<User>? users = snapshot.data;
+  // print(users!.toList().toString());
+  // if (snapshot.hasData) {
+  // return Text(users.toString());
+  // } else {
+  // return CircularProgressIndicator();
+  // }
+  // }),
+  Future<List<User>?> _getUserOnline = UserRepository().getUserOnline();
 
   @override
   Widget build(BuildContext context) {
@@ -18,136 +26,86 @@ class ListUser extends StatelessWidget {
         backgroundColor: Color.fromRGBO(78, 159, 193, 1),
         title: Text('LIÊN HỆ HỖ TRỢ'),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.20),
-            child: Row(
-              children: [
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 23,
-                      backgroundImage: AssetImage("assets/images/img_1.png"),
-                    ),
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        height: 16,
-                        width: 16,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      new FutureBuilder<List<User>?>(
-                          future: getUserOnline,
-                          builder: (context, snapshot){
-                            List<User>? users = snapshot.data;
-                            if (snapshot.hasData) {
-                              return Text(users.toString());
-                            } else {
-                              return CircularProgressIndicator();
-                            }
-                          }
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Opacity(
-                        opacity: 0.64,
-                        child: Text(
-                          'Last message is here!!!...',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.normal),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Opacity(
-                    opacity: 0.64,
-                    child: Text('3m ago'),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: Color.fromRGBO(78, 159, 193, 1),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
-            backgroundColor: Color.fromRGBO(78, 159, 193, 1),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
-            backgroundColor: Color.fromRGBO(78, 159, 193, 1),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-            backgroundColor: Color.fromRGBO(78, 159, 193, 1),
-          ),
-        ],
-        // currentIndex: _selectedIndex,
-        // selectedItemColor: Colors.amber[800],
-        // onTap: _onItemTapped,
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: const Text('Trang Chủ'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Hướng Dẫn SỬ Dụng Phần Mềm'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Đăng Xuất'),
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed("/");
-                Provider.of<Auth>(context, listen: false).logout();
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-
+      body: FutureBuilder<List<User>?>(
+          future: _getUserOnline,
+          builder: (context, snapshot) {
+            List<User>? users = snapshot.data;
+            if (snapshot.hasData) {
+              return Container(
+                child: ListView.builder(
+                    itemCount: users!.length,
+                    itemBuilder: (BuildContext context, int index) => InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20 * 0.75),
+                            child: Row(
+                              children: [
+                                Stack(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 24,
+                                      backgroundImage:
+                                          AssetImage('assets/images/img_1.png'),
+                                    ),
+                                    if ('${users[index].isActive}' == 'ACTIVE')
+                                      Positioned(
+                                        right: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                          height: 16,
+                                          width: 16,
+                                          decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                color: Colors.white, width: 3),
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+                                Expanded(
+                                    child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${users[index].username}',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Opacity(
+                                        opacity: 0.64,
+                                        child: Text(
+                                          "Last Message Here!",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                                Opacity(
+                                  opacity: 0.64,
+                                  child: Text("3m ago"),
+                                )
+                              ],
+                            ),
+                          ),
+                        )),
+              );
+            }
+            return Center(child: CircularProgressIndicator());
+          }),
+      bottomNavigationBar: BottomNavigator(),
     );
   }
 }

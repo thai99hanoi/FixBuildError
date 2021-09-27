@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:provider/provider.dart';
-import 'package:heath_care/ui/login_screen.dart';
-import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/ui/chat_list_user.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -72,6 +67,7 @@ class HomeScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 130.0,
                     height: 125.0,
+                    // ignore: deprecated_member_use
                     child: new RaisedButton(
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
@@ -93,12 +89,16 @@ class HomeScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 130.0,
                     height: 125.0,
+                    // ignore: deprecated_member_use
                     child: new RaisedButton(
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                      onPressed:(){Route route = MaterialPageRoute(builder: (context) => ListUser());
-                           Navigator.push(context, route);},
+                      onPressed: () {
+                        Route route =
+                            MaterialPageRoute(builder: (context) => ListUser());
+                        Navigator.push(context, route);
+                      },
                       child: new Text(
                         'Liên Hệ',
                         textAlign: TextAlign.center,
@@ -125,6 +125,7 @@ class HomeScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 130.0,
                     height: 125.0,
+                    // ignore: deprecated_member_use
                     child: new RaisedButton(
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
@@ -146,6 +147,7 @@ class HomeScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 130.0,
                     height: 125.0,
+                    // ignore: deprecated_member_use
                     child: new RaisedButton(
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
@@ -177,6 +179,7 @@ class HomeScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 130.0,
                     height: 125.0,
+                    // ignore: deprecated_member_use
                     child: new RaisedButton(
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
@@ -198,6 +201,7 @@ class HomeScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 130.0,
                     height: 125.0,
+                    // ignore: deprecated_member_use
                     child: new RaisedButton(
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(

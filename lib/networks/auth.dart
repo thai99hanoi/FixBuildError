@@ -5,9 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/utils/api.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:heath_care/utils/http_exception.dart';
-
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +27,7 @@ class Auth with ChangeNotifier {
     return token != null;
   }
 
-   String get token {
+  String get token {
     if (_expiryDate != null &&
         _expiryDate.isAfter(DateTime.now()) &&
         _token != null) {
@@ -80,8 +78,7 @@ class Auth with ChangeNotifier {
     final extractedUserData =
         json.decode(pref.getString('userData')) as Map<String, Object>;
 
-    final expiryDate =
-        DateTime.parse(extractedUserData['date'].toString());
+    final expiryDate = DateTime.parse(extractedUserData['date'].toString());
     if (expiryDate.isBefore(DateTime.now())) {
       return false;
     }
