@@ -6,7 +6,7 @@ import 'chat_conversation.dart';
 import 'components/Bottom_Navigator.dart';
 
 // ignore: must_be_immutable
-class ListUser extends StatelessWidget {
+class ListUser extends StatefulWidget {
   // new FutureBuilder<List<User>?>(
   // future: getUserOnline,
   // builder: (context, snapshot) {
@@ -18,6 +18,12 @@ class ListUser extends StatelessWidget {
   // return CircularProgressIndicator();
   // }
   // }),
+  @override
+  State<ListUser> createState() => _ListUserState();
+}
+
+class _ListUserState extends State<ListUser> {
+  int _selectedIndex = 1;
   Future<List<User>?> _getUserOnline = UserRepository().getUserOnline();
 
   @override
@@ -110,7 +116,7 @@ class ListUser extends StatelessWidget {
             }
             return Center(child: CircularProgressIndicator());
           }),
-      bottomNavigationBar: BottomNavigator(),
+
     );
   }
 }
