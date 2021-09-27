@@ -7,7 +7,6 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-<<<<<<< HEAD
         Expanded(
           child: ListView.builder(
               itemBuilder: (context, index) => Text("Chat Text")),
@@ -15,10 +14,6 @@ class Body extends StatelessWidget {
         ChatInputField(
           key: null,
         ),
-=======
-        Expanded(child: ListView.builder(itemBuilder: (context, index) => Text("Chat Text")),)
-        ChatInputField(key: null,),
->>>>>>> main
       ],
     );
   }
