@@ -4,6 +4,7 @@ import 'package:heath_care/repository/user_repository.dart';
 
 import 'chat_conversation.dart';
 import 'components/Bottom_Navigator.dart';
+import 'components/NavSideBar.dart';
 
 // ignore: must_be_immutable
 class ListUser extends StatefulWidget {
@@ -116,7 +117,7 @@ class _ListUserState extends State<ListUser> {
             }
             return Center(child: CircularProgressIndicator());
           }),
-
+        drawer: NavDrawer()
     );
   }
 }

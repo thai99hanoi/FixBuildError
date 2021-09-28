@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
           value: Auth(),
           child: Consumer<Auth>(
             builder: (ctx, auth, _) => MaterialApp(
+              debugShowCheckedModeBanner: false,
               theme: ThemeData(
                 primarySwatch: Colors.blue,
                 visualDensity: VisualDensity.adaptivePlatformDensity,

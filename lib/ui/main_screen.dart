@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/ui/report_screen.dart';
+import 'package:heath_care/ui/test_screen.dart';
+import 'package:heath_care/ui/user_profile_screen.dart';
 
 import 'chat_list_user.dart';
 import 'new_home.dart';
@@ -9,10 +12,13 @@ class MainScreen extends StatefulWidget {
   }
 
 class _MainScreenState extends State<MainScreen>{
-  int pageIndex = 0;
+  int pageIndex = 2;
   List<Widget> pageList = <Widget>[
-    homeScreen(),
+    ReportScreen(),
     ListUser(),
+    homeScreen(),
+    TestScreen(),
+    UserProfileScreen()
   ];
   @override
   Widget build(BuildContext context) {

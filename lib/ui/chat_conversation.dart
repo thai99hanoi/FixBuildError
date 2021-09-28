@@ -14,7 +14,6 @@ class ConversationChat extends StatelessWidget {
   AppBar buildAppBar() {
     return AppBar(
         title: Row(children: [
-          BackButton(),
           CircleAvatar(
             backgroundImage: AssetImage("assets/images/img_1.png"),
           ),

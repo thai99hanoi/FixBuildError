@@ -19,7 +19,7 @@ class ChatInputField extends StatelessWidget {
         ]),
         child: SafeArea(
             child: Row(children: [
-          Icon(Icons.mic, color: Colors.blue),
+          Icon(Icons.camera_alt_outlined, color: Colors.blue),
           SizedBox(
             width: 20,
           ),
@@ -43,9 +43,7 @@ class ChatInputField extends StatelessWidget {
                         border: InputBorder.none,
                       )),
                     ),
-                    Icon(Icons.attach_file,
-                        color: Colors.blue.withOpacity(0.64)),
-                    Icon(Icons.camera_alt_outlined,
+                    Icon(Icons.send,
                         color: Colors.blue.withOpacity(0.64)),
                   ])))
         ])));
