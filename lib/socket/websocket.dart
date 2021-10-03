@@ -1,30 +1,41 @@
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/status.dart' as status;
-import 'package:heath_care/utils/message_chat_json.dart';
+import 'dart:async';
+import 'dart:convert';
 
-class Websocket {
-  IOWebSocketChannel? channel;
-  String? url;
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:stomp_dart_client/stomp.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:stomp_dart_client/stomp_config.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:stomp_dart_client/stomp_frame.dart';
 
-  Websocket(String url){
-      this.url = url;
-      this.channel = IOWebSocketChannel.connect('ws://$url/chat');
-  }
+onConnect(StompFrame frame) {
+  stompClient.subscribe(
+    destination: '/topic/public/',
+    callback: (frame) {
+      List<dynamic>? result = json.decode(frame.body!);
+      print(result);
+    },
+  );
 
-  void disconnectFromServer() {
-    // TODO: error handling, for now it will crash and burn
-    channel!.sink.close(status.goingAway);
-  }
-
-  void listenForMessages(void onMessageReceived(dynamic  message)) {
-    // TODO: error handling, for now it will crash and burn
-    channel!.stream.listen(onMessageReceived);
-    print('now listening for messages');
-  }
-
-  void sendMessage(String message) {
-    print('sending a message: ' + message);
-    // TODO: error handling, for now it will crash and burn
-    channel!.sink.add(MessageJson.encodeMessageJSON(message));
-  }
+  Timer.periodic(Duration(seconds: 10), (_) {
+    stompClient.send(
+      destination: '/app/test/endpoints',
+      body: json.encode({'a': 123}),
+    );
+  });
 }
+
+final stompClient = StompClient(
+  config: StompConfig(
+    url: 'ws://localhost:8080',
+    onConnect: onConnect,
+    beforeConnect: () async {
+      print('waiting to connect...');
+      await Future.delayed(Duration(milliseconds: 200));
+      print('connecting...');
+    },
+    onWebSocketError: (dynamic error) => print(error.toString()),
+    stompConnectHeaders: {'Authorization': 'Bearer yourToken'},
+    webSocketConnectHeaders: {'Authorization': 'Bearer yourToken'},
+  ),
+);

@@ -26,8 +26,7 @@ class ConversationChat extends StatelessWidget {
           ])
         ]),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.local_phone)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.videocam)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.send)),
           SizedBox(
             width: 20,
           )
