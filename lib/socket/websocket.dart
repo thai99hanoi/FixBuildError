@@ -1,41 +1,48 @@
 import 'dart:async';
 import 'dart:convert';
 
-// ignore: import_of_legacy_library_into_null_safe
+import 'package:heath_care/networks/auth.dart';
 import 'package:stomp_dart_client/stomp.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:stomp_dart_client/stomp_config.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:stomp_dart_client/stomp_frame.dart';
 
-onConnect(StompFrame frame) {
-  stompClient.subscribe(
-    destination: '/topic/public/',
-    callback: (frame) {
-      List<dynamic>? result = json.decode(frame.body!);
-      print(result);
-    },
-  );
+String? username;
+
+dynamic onConnect(StompClient client, StompFrame frame) {
+  client.subscribe(
+      destination: '/topic/public',
+      callback: onMessageReceive);
 
   Timer.periodic(Duration(seconds: 10), (_) {
-    stompClient.send(
-      destination: '/app/test/endpoints',
-      body: json.encode({'a': 123}),
-    );
+    client.send(
+        destination: '/app/chat.register',
+        body: json.encode({'sender': username, 'type': 'JOIN'}));
   });
 }
 
+Future<String> getToken() async {
+  String token = await Auth().getToken();
+  return token;
+}
+
+var token = getToken();
+
 final stompClient = StompClient(
-  config: StompConfig(
-    url: 'ws://localhost:8080',
-    onConnect: onConnect,
-    beforeConnect: () async {
-      print('waiting to connect...');
-      await Future.delayed(Duration(milliseconds: 200));
-      print('connecting...');
-    },
-    onWebSocketError: (dynamic error) => print(error.toString()),
-    stompConnectHeaders: {'Authorization': 'Bearer yourToken'},
-    webSocketConnectHeaders: {'Authorization': 'Bearer yourToken'},
-  ),
-);
+    config: StompConfig(
+        url: 'ws://10.0.2.2:8080/chat-test',
+        onConnect: onConnect,
+        onWebSocketError: (dynamic error) => print(error.toString()),
+        stompConnectHeaders: {'Authorization': 'Bearer $token'},
+        webSocketConnectHeaders: {'Authorization': 'Bearer $token'}));
+
+void onMessageReceive(StompFrame frame) {
+  var message = json.decode(frame.body);
+
+  if (message.type == 'JOIN') {
+    message.content = message.sender + 'joined';
+  } else if (message.type == 'LEAVE') {
+    message.content = message.sender + ' left!';
+  } else {
+
+  }
+}
