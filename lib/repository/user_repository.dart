@@ -12,21 +12,21 @@ class UserRepository {
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
   Future<User> getCurrentUser() async {
     Map<String, dynamic> response =
-        await apiBaseHelper.get("/api/v1/current-user");
+        await apiBaseHelper.get("/v1/api/current-user");
     var entriesList = response.entries.toList();
-    return User.fromMap(entriesList[1].value);
+    return User.fromJson(entriesList[1].value);
   }
 
   Future<List<User>?> getUserOnline() async {
     var user = await UserRepository().getCurrentUser();
     String token = await Auth().getToken();
     var userId = user.userId;
-    print('Api Get, url /api/v1/users-online?userId="' + userId.toString());
+    print('Api Get, url /v1/api/users-online?userId="' + userId.toString());
     var responseJson;
     try {
       final response = await http.get(
         Uri.parse(
-            Api.authUrl + "/api/v1/users-online?userId=" + userId.toString()),
+            Api.authUrl + "/v1/api/users-online?userId=" + userId.toString()),
         headers: {
           "content-type": "application/json",
           'Authorization': 'Bearer $token',

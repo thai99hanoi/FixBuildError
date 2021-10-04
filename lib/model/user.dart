@@ -1,3 +1,8 @@
+import 'package:heath_care/model/role.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonSerializable(explicitToJson: true)
 class User {
   int? userId;
   int? roleId;
@@ -13,8 +18,8 @@ class User {
   String? lastname;
   String? address;
   String? avatar;
-  String? isActive;
-  String? isOnline;
+  int? isActive;
+  int? isOnline;
 
   User(
       {this.userId,
@@ -36,7 +41,7 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> json) => User(
       userId: json["userId"],
-      roleId: json["roleId"],
+      roleId: json['role']['roleId'] as int,
       stationId: json["stationId"],
       username: json["username"],
       password: json["password"],
@@ -56,7 +61,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
       userId: json['userId'] as int,
-      roleId: json['roleId'] as int,
+      roleId: json['role']['roleId'] as int,
       stationId: json['stationId'] as int,
       username: json['username'] as String,
       password: json['password'] as String,
@@ -69,6 +74,7 @@ class User {
       lastname: json["lastname"] as String,
       address: json["address"] as String,
       avatar: json["avatar"] as String,
-      isActive: json['isActive'] as String,
-      isOnline: json['isOnline'] as String);
+      isActive: json['isActive'] as int,
+      isOnline: json['isOnline'] as int);
 }
+
