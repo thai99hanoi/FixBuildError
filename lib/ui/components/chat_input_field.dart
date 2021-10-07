@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ChatInputField extends StatelessWidget {
-  const ChatInputField({
-     Key? key,
-  }) : super(key: key);
+  final Function(String) onSendMessage;
+
+  ChatInputField(this.onSendMessage);
+
+  TextEditingController textEditingController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,13 +41,19 @@ class ChatInputField extends StatelessWidget {
                     ),
                     Expanded(
                       child: TextField(
+                          controller: textEditingController,
                           decoration: InputDecoration(
-                        hintText: "Type message",
-                        border: InputBorder.none,
-                      )),
+                            hintText: "Type message",
+                            border: InputBorder.none,
+                          )),
                     ),
-                    Icon(Icons.send,
-                        color: Colors.blue.withOpacity(0.64)),
+                    IconButton(
+                        onPressed: () {
+                          onSendMessage(textEditingController.text);
+                          textEditingController.text = '';
+                        },
+                        icon: Icon(Icons.send,
+                            color: Colors.blue.withOpacity(0.64))),
                   ])))
         ])));
   }

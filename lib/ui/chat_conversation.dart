@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/model/message.dart';
 
 import 'components/body.dart';
 
@@ -7,7 +8,7 @@ class ConversationChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Body(),
+      body:   Body(),
     );
   }
 

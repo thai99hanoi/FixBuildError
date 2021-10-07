@@ -60,7 +60,7 @@ class _ListUserState extends State<ListUser> {
                                       backgroundImage:
                                           AssetImage('assets/images/img_1.png'),
                                     ),
-                                    if ('${users[index].isOnline}' == 'ONLINE')
+                                    if ('${users[index].isOnline}' == '1')
                                       Positioned(
                                         right: 0,
                                         bottom: 0,
