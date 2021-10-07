@@ -127,7 +127,11 @@ packages:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "4.1.0"
+=======
+    version: "3.1.1"
+>>>>>>> 25b2b56659b90c0ea2c9b8790c70942c6900b809
   matcher:
     dependency: transitive
     description:
