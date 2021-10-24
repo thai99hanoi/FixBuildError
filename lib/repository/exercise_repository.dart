@@ -9,11 +9,11 @@ import 'package:http/http.dart' as http;
 class ExerciseRepository{
   Future<List<Exercise>?> getAllSymptom() async {
     String? token = await Auth().getToken();
-    print('Api Get, url /v1/api/symptom/get-all');
+    print('Api Get, url /v1/api/exercise/get-all');
     var responseJson;
     try {
       final response = await http.get(
-        Uri.parse(Api.authUrl + "/v1/api/symptom/get-all"),
+        Uri.parse(Api.authUrl + "/v1/api/exercise/get-all"),
         headers: {
           "content-type": "application/json",
           'Authorization': 'Bearer $token',
