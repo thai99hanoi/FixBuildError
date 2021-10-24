@@ -12,10 +12,15 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.3
+  shared_preferences: ^0.5.7+3
+  provider: ^4.1.2
+  intl: ^0.16.1
+  web_socket_channel: ^1.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+<<<<<<< .mine
 #  cloud_firestore: ^2.5.3
 #  firebase_core: ^1.7.0
   shared_preferences: ^2.0.7
@@ -23,6 +28,15 @@ dependencies:
   provider: ^6.0.1
   json_annotation: ^4.0.1
   intl: ^0.17.0
+=======
+  stomp_dart_client: ^0.3.8
+  json_annotation: ^4.1.0
+
+
+
+
+
+>>>>>>> .theirs
 
 dev_dependencies:
   flutter_test:
@@ -43,4 +57,10 @@ flutter:
     - assets/images/img.png
     - assets/images/img_1.png
     - assets/images/alarm.png
+<<<<<<< .mine
     - assets/images/img_2.png
+
+=======
+    - assets/images/img_2.png
+    - assets/images/ex.jpeg
+>>>>>>> .theirs
