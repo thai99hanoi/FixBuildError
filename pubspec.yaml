@@ -57,10 +57,6 @@ flutter:
     - assets/images/img.png
     - assets/images/img_1.png
     - assets/images/alarm.png
-<<<<<<< .mine
-    - assets/images/img_2.png
-
-=======
     - assets/images/img_2.png
     - assets/images/ex.jpeg
->>>>>>> .theirs
+
