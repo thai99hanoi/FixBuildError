@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:heath_care/ui/excercise.dart';
 import 'components/Bottom_Navigator.dart';
 import 'components/NavSideBar.dart';
 
@@ -174,13 +175,38 @@ class homeScreen extends StatelessWidget {
             endIndent: 20,
           ),
           Center(
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: SizedBox(
+                width: 210.0,
+                height: 60.0,
+                // ignore: deprecated_member_use
+                child: new RaisedButton(
+                  color: Color.fromRGBO(78, 159, 193, 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                  onPressed: () {},
+                  child: new Text(
+                    'Khai báo y tế',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Center(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                 Padding(
-                   padding: const EdgeInsets.all(18.0),
-                   child: SizedBox(
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: SizedBox(
                     width: 130.0,
                     height: 40.0,
                     // ignore: deprecated_member_use
@@ -188,9 +214,15 @@ class homeScreen extends StatelessWidget {
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15))),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ExcerciseScreen()),
+                        );
+                      },
                       child: new Text(
-                        'Khai báo y tế',
+                        'Tập phục hồi',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -199,8 +231,8 @@ class homeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                  ),
                 ),
-                 ),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: SizedBox(
@@ -213,7 +245,7 @@ class homeScreen extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(15))),
                       onPressed: () {},
                       child: new Text(
-                        'Tập phục hồi',
+                        'Thuốc sử dụng',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

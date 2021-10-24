@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/ui/next_report.dart';
 import 'components/NavSideBar.dart';
 
 class ReportScreen extends StatelessWidget {
@@ -33,7 +34,7 @@ class ReportScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(children: const [
-                Text("Nồng độ Oxy",
+                Text("Nhiệt độ",
                     style:
                         TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                 Padding(
@@ -142,13 +143,18 @@ class ReportScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const Center(
+            Center(
               // ignore: deprecated_member_use
               child: RaisedButton(
                 color: Color.fromRGBO(78, 159, 193, 1),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15))),
-                onPressed: null,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NextScreenReport()));
+                },
                 child: Text(
                   'Tiếp theo',
                   textAlign: TextAlign.center,

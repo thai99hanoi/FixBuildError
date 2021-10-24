@@ -17,19 +17,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  ChangeNotifierProvider.value(
-          value: Auth(),
-          child: Consumer<Auth>(
+    return ChangeNotifierProvider.value(
+        value: Auth(),
+        child: Consumer<Auth>(
             builder: (ctx, auth, _) => MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-              ),
-              home: auth.isAuth ? MainScreen() : FutureBuilder(future: auth.tryautoLogin(),
-               builder: (ctx, snapshot) => snapshot.connectionState == ConnectionState.waiting ? SplashScreen() : LoginPage()),
-            )
-          )
-        );
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                ),
+                // home: auth.isAuth ? MainScreen() : FutureBuilder(future: auth.tryautoLogin(),
+                //  builder: (ctx, snapshot) => snapshot.connectionState == ConnectionState.waiting ? SplashScreen() : LoginPage()),
+                home: homeScreen())));
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'components/nav_side_bar.dart';
+import 'components/NavSideBar.dart';
 
 class ExcerciseScreen extends StatelessWidget {
   const ExcerciseScreen({Key? key}) : super(key: key);
@@ -12,20 +12,26 @@ class ExcerciseScreen extends StatelessWidget {
           title: const Text("BÁO CÁO SỨC KHOẺ HÀNG NGÀY"),
         ),
         body: ListView(children: [
-          Wrap(children: [
-            Row(children: [
-              Column(children: [
-                Container(
+          Padding(
+            padding: const EdgeInsets.all(8.8),
+            child: Wrap(children: [
+              InkWell(
+                onTap: () {}, // Handle your callback.
+                splashColor: Colors.brown.withOpacity(0.5),
+                child: Ink(
+                  height: 100,
+                  width: 100,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/ex.jpeg'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  child: Image.network('https://placeimg.com/640/480/any',
-                      width: 150, height: 150, fit: BoxFit.fill),
-                )
-              ])
-            ])
-          ])
+                ),
+              )
+            ]),
+          )
         ]),
-        drawer: const NavDrawer());
+        drawer: NavDrawer());
   }
 }
