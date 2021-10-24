@@ -95,7 +95,7 @@ class Auth with ChangeNotifier {
   // ignore: non_constant_identifier_names
   Future<void> Authentication(User user) async {
     try {
-      final url = '$MainUrl/authenticate';
+      final url = '$MainUrl/anonymous/authenticate';
 
       final response = await http.post(Uri.parse(url),
           headers: {
