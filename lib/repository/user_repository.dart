@@ -19,7 +19,7 @@ class UserRepository {
 
   Future<List<User>?> getUserOnline() async {
     var user = await UserRepository().getCurrentUser();
-    String token = await Auth().getToken();
+    String? token = await Auth().getToken();
     var userId = user.userId;
     print('Api Get, url /v1/api/users-online?userId="' + userId.toString());
     var responseJson;

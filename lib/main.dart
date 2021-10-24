@@ -26,8 +26,9 @@ class MyApp extends StatelessWidget {
                   primarySwatch: Colors.blue,
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                 ),
-                // home: auth.isAuth ? MainScreen() : FutureBuilder(future: auth.tryautoLogin(),
-                //  builder: (ctx, snapshot) => snapshot.connectionState == ConnectionState.waiting ? SplashScreen() : LoginPage()),
-                home: homeScreen())));
+                home: auth.isAuth ? MainScreen() : FutureBuilder(future: auth.tryautoLogin(),
+                 builder: (ctx, snapshot) => snapshot.connectionState == ConnectionState.waiting ? SplashScreen() : LoginPage()),
+               )));
+
   }
 }

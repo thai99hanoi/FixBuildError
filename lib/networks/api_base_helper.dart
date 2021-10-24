@@ -9,7 +9,7 @@ import 'package:heath_care/utils/api.dart';
 class ApiBaseHelper {
   Future<dynamic> get(String url) async {
     print('Api Get, url $url');
-    String token = await Auth().getToken();
+    String? token = await Auth().getToken();
     var responseJson;
     try {
       final response = await http.get(
@@ -30,7 +30,7 @@ class ApiBaseHelper {
 
   Future<dynamic> post(String url, dynamic body) async {
     print('Api Post, url $url');
-    String token = await Auth().getToken();
+    String? token = await Auth().getToken();
     var responseJson;
     try {
       final response = await http.post(Uri.parse(Api.authUrl + url),
@@ -50,7 +50,7 @@ class ApiBaseHelper {
 
   Future<dynamic> put(String url, dynamic body) async {
     print('Api Put, url $url');
-    String token = await Auth().getToken();
+    String? token = await Auth().getToken();
     var responseJson;
     try {
       final response = await http.put(Uri.parse(Api.authUrl + url),
@@ -71,7 +71,7 @@ class ApiBaseHelper {
 
   Future<dynamic> delete(String url) async {
     print('Api delete, url $url');
-    String token = await Auth().getToken();
+    String? token = await Auth().getToken();
     var apiResponse;
     try {
       final response = await http.delete(

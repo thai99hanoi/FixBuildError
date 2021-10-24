@@ -92,8 +92,8 @@ class ChatService {
   }
 }
 
-Future<String> getToken() async {
-  String token = await Auth().getToken();
+Future<String?> getToken() async {
+  String? token = await Auth().getToken();
   return token;
 }
 
