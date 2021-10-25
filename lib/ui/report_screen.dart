@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/model/symptom.dart';
+import 'package:heath_care/repository/symptom_repository.dart';
 import 'package:heath_care/ui/next_report.dart';
 import 'components/NavSideBar.dart';
 
-class ReportScreen extends StatelessWidget {
+class ReportScreen extends StatefulWidget {
   const ReportScreen({Key? key}) : super(key: key);
 
   @override
+  State<ReportScreen> createState() => _ReportScreenState();
+}
+
+
+
+Future<List<Symptom>?> symtomList = SymptomRepository().getAllSymptom();
+List<Symptom> data = symtomList as List<Symptom>;
+
+class _ReportScreenState extends State<ReportScreen> {
+  @override
   Widget build(BuildContext context) {
-    bool _checkbox = false;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(78, 159, 193, 1),
@@ -52,79 +63,25 @@ class ReportScreen extends StatelessWidget {
               child: Text("Tình trạng sức khoẻ",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             ),
-            Row(
-              children: [
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _checkbox,
-                      onChanged: (value) {
-                        setState(() {
-                          _checkbox = !_checkbox;
-                        });
-                      },
-                    ),
-                    const Text('Ho'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _checkbox,
-                      onChanged: (value) {
-                        setState(() {
-                          _checkbox = !_checkbox;
-                        });
-                      },
-                    ),
-                    const Text('Đau người, mệt mỏi'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _checkbox,
-                      onChanged: (value) {
-                        setState(() {
-                          _checkbox = !_checkbox;
-                        });
-                      },
-                    ),
-                    const Text('Sức Khoẻ tốt'),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _checkbox,
-                      onChanged: (value) {
-                        setState(() {
-                          _checkbox = !_checkbox;
-                        });
-                      },
-                    ),
-                    const Text('Sốt'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _checkbox,
-                      onChanged: (value) {
-                        setState(() {
-                          _checkbox = !_checkbox;
-                        });
-                      },
-                    ),
-                    const Text('Khó thở'),
-                  ],
-                ),
-              ],
-            ),
+            ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return new Card(
+                      child: new Container(
+                          padding: new EdgeInsets.all(10.0),
+                          child: Column(children: <Widget>[
+                            new CheckboxListTile(
+                                activeColor: Colors.pink[300],
+                                dense: true,
+                                title: new Text(
+                                  data[index].name.toString(),
+                                ),
+                                value: data[index].isCheck,
+                                onChanged: (bool? val) {
+                                  itemChanged(val!, index);
+                                })
+                          ])));
+                }),
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text("Ghi chú khác",
@@ -171,5 +128,9 @@ class ReportScreen extends StatelessWidget {
         drawer: NavDrawer());
   }
 
-  void setState(Null Function() param0) {}
+  void itemChanged(bool val, int index) {
+    setState(() {
+      data[index].isCheck = val;
+    });
+  }
 }
