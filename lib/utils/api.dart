@@ -1,3 +1,3 @@
 class Api {
-  static const authUrl = 'http://localhost:8080';
+  static const authUrl = 'http://3.138.99.8:8080';
 }

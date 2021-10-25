@@ -9,6 +9,7 @@ class HttpException implements Exception {
     return "$prefix$message";
   }
 }
+
 class FetchDataException extends HttpException {
   FetchDataException(String message)
       : super(message, "Error During Communication: ");

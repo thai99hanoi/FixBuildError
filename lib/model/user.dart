@@ -41,7 +41,7 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> json) => User(
       userId: json["userId"],
-      roleId: json['role']['roleId'] as int,
+      roleId: json['role']['roleId'] as int?,
       stationId: json["stationId"],
       username: json["username"],
       password: json["password"],
@@ -60,21 +60,38 @@ class User {
   Map<String, dynamic> toMap() => {"username": username, "password": password};
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-      userId: json['userId'] as int,
-      roleId: json['role']['roleId'] as int,
-      stationId: json['stationId'] as int,
-      username: json['username'] as String,
-      password: json['password'] as String,
-      lastLogin: json['lastLogin'] as DateTime,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-      identityId: json['identityId'] as String,
-      firstname: json["firstname"] as String,
-      surname: json["surname"] as String,
-      lastname: json["lastname"] as String,
-      address: json["address"] as String,
-      avatar: json["avatar"] as String,
-      isActive: json['isActive'] as int,
-      isOnline: json['isOnline'] as int);
+      userId: json['userId'] as int?,
+      roleId: json['role']['roleId'] as int?,
+      stationId: json['stationId'] as int?,
+      username: json['username'] as String?,
+      password: json['password'] as String?,
+      lastLogin: json['lastLogin'] as DateTime?,
+      email: json['email'] as String?,
+      phone: json['phone'] as String?,
+      identityId: json['identityId'] as String?,
+      firstname: json["firstname"] as String?,
+      surname: json["surname"] as String?,
+      lastname: json["lastname"] as String?,
+      address: json["address"] as String?,
+      avatar: json["avatar"] as String?,
+      isActive: json['isActive'] as int?,
+      isOnline: json['isOnline'] as int?);
+
+  String getLastName() {
+    if(lastname != null && lastname!.isNotEmpty){
+      return lastname.toString();
+    }
+    return username.toString();
+  }
+
+  String getDisplayName() {
+    if (firstname != null &&
+        lastname != null &&
+        firstname!.isNotEmpty &&
+        lastname!.isNotEmpty) {
+      return firstname.toString() + " ${surname ?? ""} " + lastname.toString();
+    }
+    return username.toString();
+  }
 }
 
