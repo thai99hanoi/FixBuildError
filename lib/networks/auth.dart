@@ -109,7 +109,7 @@ class Auth with ChangeNotifier {
     DioCacheManager(CacheConfig(baseUrl: Api.authUrl)).clearAll();
     print('login');
     try {
-      final url = '$MainUrl/authenticate';
+      final url = '$MainUrl/anonymous/signin';
 
       final response = await http.post(Uri.parse(url),
           headers: {

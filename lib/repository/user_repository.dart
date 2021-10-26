@@ -11,7 +11,7 @@ class UserRepository {
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
 
   Future<User> getCurrentUser() async {
-    final response = await apiBaseHelper.getWithCache("/v1/api/current-user");
+    final response = await apiBaseHelper.getWithCache("/v1/api/user/current-user");
     User _currentUser = User.fromJson(response['data']);
     return _currentUser;
   }
@@ -19,7 +19,7 @@ class UserRepository {
   Future<User?> getUserByUserName(String userName) async {
     try {
       Map<String, dynamic> response =
-      await apiBaseHelper.getWithCache("/v1/api/$userName");
+      await apiBaseHelper.getWithCache("/v1/api/user/$userName");
       return User.fromJson(response['data']);
     } on FetchDataException catch (e) {
       print(e);
@@ -29,12 +29,12 @@ class UserRepository {
   Future<List<User>?> getUserOnline() async {
     var user = await getCurrentUser();
     var userId = user.userId;
-    print('Api Get, url /v1/api/users-online?userId="' + userId.toString());
+    print('Api Get, url /v1/api/user/users-online?userId="' + userId.toString());
     try {
       final response = await apiBaseHelper
-          .get("/v1/api/users-online?userId=" + userId.toString());
+          .get("/v1/api/user/users-online?userId=" + userId.toString());
       print('api get user online recieved!');
-      final mapUsers = json.decode(response);
+      final mapUsers = json.decode(utf8.decode(response.bodyBytes));
       return (mapUsers['data'] as List)
           .map((user) => User.fromJson(user))
           .toList();

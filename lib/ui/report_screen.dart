@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/symptom.dart';
 import 'package:heath_care/repository/symptom_repository.dart';
-import 'package:heath_care/ui/list_symtom.dart';
 import 'package:heath_care/ui/next_report.dart';
 import 'components/NavSideBar.dart';
 

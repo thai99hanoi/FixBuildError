@@ -19,7 +19,7 @@ class ExerciseRepository{
           'Authorization': 'Bearer $token',
         },
       );
-      responseJson = jsonDecode(response.body);
+      responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print('api get recieved!');
       return (responseJson['data'] as List)
           .map((exercise) => Exercise.fromJson(exercise))
