@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/symptom.dart';
 import 'package:heath_care/repository/symptom_repository.dart';
+import 'package:heath_care/ui/list_symtom.dart';
 import 'package:heath_care/ui/next_report.dart';
 import 'components/NavSideBar.dart';
 
@@ -10,11 +11,6 @@ class ReportScreen extends StatefulWidget {
   @override
   State<ReportScreen> createState() => _ReportScreenState();
 }
-
-
-
-Future<List<Symptom>?> symtomList = SymptomRepository().getAllSymptom();
-List<Symptom> data = symtomList as List<Symptom>;
 
 class _ReportScreenState extends State<ReportScreen> {
   @override
@@ -63,25 +59,34 @@ class _ReportScreenState extends State<ReportScreen> {
               child: Text("Tình trạng sức khoẻ",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             ),
-            ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return new Card(
-                      child: new Container(
-                          padding: new EdgeInsets.all(10.0),
-                          child: Column(children: <Widget>[
-                            new CheckboxListTile(
-                                activeColor: Colors.pink[300],
-                                dense: true,
-                                title: new Text(
-                                  data[index].name.toString(),
-                                ),
-                                value: data[index].isCheck,
-                                onChanged: (bool? val) {
-                                  itemChanged(val!, index);
-                                })
-                          ])));
-                }),
+            Container(
+              child: new FutureBuilder<List<Symptom>?>(
+                  future: SymptomRepository().getAllSymptom(),
+                  builder: (context, symptomAll) {
+                    if (symptomAll.hasData) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: symptomAll.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                                title: Text(
+                                    symptomAll.data![index].name.toString()),
+                                trailing: Checkbox(
+                                    value: symptomAll.data![index].isCheck,
+                                    onChanged: (bool? val) {
+                                      setState(() {
+                                        symptomAll.data![index].isCheck =
+                                            !symptomAll.data![index].isCheck;
+                                      });
+                                    }));
+                          });
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
+            ),
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text("Ghi chú khác",
@@ -126,11 +131,5 @@ class _ReportScreenState extends State<ReportScreen> {
           ],
         ),
         drawer: NavDrawer());
-  }
-
-  void itemChanged(bool val, int index) {
-    setState(() {
-      data[index].isCheck = val;
-    });
   }
 }
