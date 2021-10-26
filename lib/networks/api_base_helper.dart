@@ -61,12 +61,12 @@ class ApiBaseHelper {
       final response = await http.get(
         Uri.parse(Api.authUrl + url),
         headers: {
-          "content-type": "application/json",
+          "content-type": "application/json; charset=utf-8",
           'Authorization': 'Bearer $token',
         },
       ).timeout(Duration(seconds: 10));;
       responseJson =
-          _returnResponse(response.statusCode, json.encode(response.body));
+          _returnResponse(response.statusCode, json.encode(utf8.decode(response.bodyBytes)));
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');

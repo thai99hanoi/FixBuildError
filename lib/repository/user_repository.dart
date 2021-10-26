@@ -34,7 +34,7 @@ class UserRepository {
       final response = await apiBaseHelper
           .get("/v1/api/user/users-online?userId=" + userId.toString());
       print('api get user online recieved!');
-      final mapUsers = json.decode(utf8.decode(response.bodyBytes));
+      final mapUsers = json.decode(response);
       return (mapUsers['data'] as List)
           .map((user) => User.fromJson(user))
           .toList();
