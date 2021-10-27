@@ -3,6 +3,7 @@ import 'package:heath_care/model/symptom.dart';
 import 'package:heath_care/repository/symptom_repository.dart';
 import 'package:heath_care/ui/next_report.dart';
 import 'components/NavSideBar.dart';
+import 'list_symtom.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreenState extends State<ReportScreen> {
+  Future<List<Symptom>?> _allSymtom = new SymptomRepository().getAllSymptom();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,9 +23,11 @@ class _ReportScreenState extends State<ReportScreen> {
           title: const Text("BÁO CÁO SỨC KHOẺ HÀNG NGÀY"),
         ),
         body: ListView(
-          children: [
+          shrinkWrap: true,
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+          children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(children: const [
                 Text("Nồng độ Oxy",
                     style:
@@ -38,7 +43,7 @@ class _ReportScreenState extends State<ReportScreen> {
               ]),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(children: const [
                 Text("Nhiệt độ",
                     style:
@@ -49,47 +54,22 @@ class _ReportScreenState extends State<ReportScreen> {
                       width: 100,
                       height: 20,
                       child: TextField(
-                          style: TextStyle(fontSize: 12, color: Colors.black))),
+                          style: TextStyle(fontSize: 14, color: Colors.black))),
                 )
               ]),
             ),
             const Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(20.10),
               child: Text("Tình trạng sức khoẻ",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
             ),
-            Container(
-              child: new FutureBuilder<List<Symptom>?>(
-                  future: SymptomRepository().getAllSymptom(),
-                  builder: (context, symptomAll) {
-                    if (symptomAll.hasData) {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: symptomAll.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                                title: Text(
-                                    symptomAll.data![index].name.toString()),
-                                trailing: Checkbox(
-                                    value: symptomAll.data![index].isCheck,
-                                    onChanged: (bool? val) {
-                                      setState(() {
-                                        symptomAll.data![index].isCheck =
-                                            !symptomAll.data![index].isCheck;
-                                      });
-                                    }));
-                          });
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }),
+            new Expanded(
+              child: ListAllSymtom(),
             ),
             const Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(28.0),
               child: Text("Ghi chú khác",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
             ),
             const Center(
               child: Card(
@@ -101,32 +81,27 @@ class _ReportScreenState extends State<ReportScreen> {
                             hintText: "Enter your text here"),
                       ))),
             ),
-            const SizedBox(
-              height: 20,
-            ),
             Center(
-              // ignore: deprecated_member_use
-              child: RaisedButton(
-                color: Color.fromRGBO(78, 159, 193, 1),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15))),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NextScreenReport()));
-                },
-                child: Text(
-                  'Tiếp theo',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 13,
-                  ),
+                child: RaisedButton(
+              color: Color.fromRGBO(78, 159, 193, 1),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NextScreenReport()));
+              },
+              child: Text(
+                'Tiếp theo',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 13,
                 ),
               ),
-            )
+            )),
           ],
         ),
         drawer: NavDrawer());
