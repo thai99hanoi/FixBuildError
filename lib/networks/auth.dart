@@ -5,10 +5,9 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/utils/api.dart';
-import 'package:http/http.dart' as http;
 import 'package:heath_care/utils/http_exception.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,12 +34,6 @@ class Auth with ChangeNotifier {
     if(_token == null){
       _token = await getToken();
     }
-    _expiryDate = await getExpiryDate();
-    if (_expiryDate != null &&
-        _expiryDate.isAfter(DateTime.now()) &&
-        _token != null) {
-      return _token;
-    }
     return null;
   }
 
@@ -62,20 +55,10 @@ class Auth with ChangeNotifier {
       _authTimer.cancel();
       _authTimer = null;
     }
-
     notifyListeners();
-
+    setToken("");
     final pref = await SharedPreferences.getInstance();
     pref.clear();
-    DioCacheManager(CacheConfig(baseUrl: Api.authUrl)).clearAll();
-  }
-
-  void _autologout() {
-    if (_authTimer != null) {
-      _authTimer.cancel();
-    }
-    final timetoExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
-    _authTimer = Timer(Duration(seconds: timetoExpiry), logout);
     DioCacheManager(CacheConfig(baseUrl: Api.authUrl)).clearAll();
   }
 
@@ -99,7 +82,6 @@ class Auth with ChangeNotifier {
     // _userEmail = extractedUserData['userEmail'];
     _expiryDate = expiryDate;
     notifyListeners();
-    _autologout();
 
     return true;
   }
@@ -128,23 +110,11 @@ class Auth with ChangeNotifier {
         throw HttpException(responseData['error']['message']);
       }
       _token = responseData['token'];
-      // _userId = responseData['localId'];
-      // _userEmail = responseData['email'];
-      // final testDate = new DateFormat('dd-MM-yyyy HH:mm:ss');
-      // DateTime exDate =testDate.parse(responseData['date']);
-      // final format = new DateFormat('ss');
-      // print(exDate);
-      _expiryDate = DateTime.now().add(Duration(seconds: 600));
-
-      _autologout();
       notifyListeners();
 
 
       final userData = json.encode({
         'token': _token,
-        // 'userId': _userId,
-        // 'userEmail': _userEmail,
-        'expiryDate': _expiryDate.toIso8601String(),
       });
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('userData', userData);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
+import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class _State extends State<LoginPage> {
   // var url = Uri.http("http://localhost:8080", "/authenticate");
   Future save() async {
     try {
-      await Provider.of<Auth>(context, listen: false).login(user);
+      await Provider.of<Auth>(context, listen: false).login(user).then((value) => UserRepository().updateUserOnline(1));
     } on HttpException catch (e) {
       var errorMessage = 'Authentication Failed';
       if (e.toString().contains('Username is invalid!')) {

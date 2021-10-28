@@ -6,6 +6,7 @@ import 'package:heath_care/networks/api_base_helper.dart';
 import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/utils/api.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
+import 'package:http/http.dart' as http;
 
 class UserRepository {
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
@@ -47,5 +48,38 @@ class UserRepository {
   List<User>? parseUser(String responseBody) {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     return parsed.map<User>((json) => User.fromJson(json)).toList();
+  }
+
+  Future<void> updateUserOnline(int isOnline) async {
+    var user = await getCurrentUser();
+    print('Api Post, url /v1/api/user/update');
+    String token = await Auth().getToken();
+    var responseJson;
+    try {
+      final response = await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
+          headers: {
+            "content-type": "application/json",
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode({
+            "username": user.username,
+            "mail": user.email,
+            "phone":user.phone,
+            "lastLogin": DateTime.now().toString(),
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "surname": user.surname,
+            "avatar": user.avatar,
+            "isOnline": isOnline,
+            "isActive": user.isActive
+          }));
+      responseJson = json.encode(response.body);
+
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+    print('api post.');
+    return responseJson;
   }
 }
