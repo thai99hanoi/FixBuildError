@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:heath_care/model/covid_analysis.dart';
 import 'package:heath_care/networks/api_base_helper.dart';
+import 'package:heath_care/utils/app_exceptions.dart';
+import 'package:http/http.dart' as http;
 
 class CovidAnalysisRepository {
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
@@ -10,9 +15,19 @@ class CovidAnalysisRepository {
     return _currentPatients;
   }
 
-  Future<CovidAnalysis> getTodayPatients() async {
-    final response = await apiBaseHelper.getCovidInfo();
-    CovidAnalysis _todayPatients = CovidAnalysis.fromJson(response['today']['internal']);
-    return _todayPatients;
+  Future<List<CovidAnalysis>?> getTodayPatients() async {
+    print('Api Get, url https://static.pipezero.com/covid/data.json');
+    try {
+      final response = await http.get(Uri.parse("https://static.pipezero.com/covid/data.json"),
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      ).timeout(Duration(seconds: 10));
+      final todayPatients = json.decode(response.body);
+      return (todayPatients['today']['internal'] as List).map((patient) => CovidAnalysis.fromJson(patient)).toList();
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
   }
 }

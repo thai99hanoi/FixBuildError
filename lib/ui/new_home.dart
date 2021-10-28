@@ -33,11 +33,14 @@ class _homeScreenState extends State<homeScreen> {
           ),
 
           Expanded(
-            child: FutureBuilder<CovidAnalysis>(
+            child: FutureBuilder<List<CovidAnalysis>?>(
                 future: CovidAnalysisRepository().getTodayPatients(),
                 builder: (context, snapshot) {
                   if(snapshot.hasData){
-                    return Text(snapshot.data!.death.toString());
+                    // return Text(snapshot.data[index]!.death.toString());
+                    return ListView.builder(itemBuilder: (BuildContext context, int index){
+                       return Text(context.data[index]!.death.toString());
+                    });
                   }
                   else{
                     return Center(

@@ -90,7 +90,7 @@ class ApiBaseHelper {
           "content-type": "application/json; charset=utf-8",
           'Authorization': 'Bearer $token',
         },
-      ).timeout(Duration(seconds: 10));;
+      ).timeout(Duration(seconds: 10));
       responseJson =
           _returnResponse(response.statusCode, json.encode(utf8.decode(response.bodyBytes)));
     } on SocketException {
