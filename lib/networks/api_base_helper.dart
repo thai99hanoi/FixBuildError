@@ -53,6 +53,32 @@ class ApiBaseHelper {
     return responseJson;
   }
 
+  Future<dynamic> getCovidInfo(
+      {Map<String, dynamic>? params, Options? options}) async {
+    params ??= {};
+    options ??= buildCacheOptions(Duration(minutes: 30),
+        maxStale: Duration(minutes: 30));
+    print('Api Get, url https://static.pipezero.com/covid/data.json');
+    String token = await Auth().getToken();
+    print('token $token');
+    var responseJson;
+    try {
+      _dio.options.headers['content-Type'] = 'application/json';
+      final response = await _dio.get("https://static.pipezero.com/covid/data.json",
+          queryParameters: params, options: options);
+
+      responseJson =
+          _returnResponse(response.statusCode ?? 0, json.encode(response.data));
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+    print('api get recieved!');
+    return responseJson;
+  }
+
+
+
   Future<dynamic> get(String url) async {
     print('Api Get, url $url');
     String token = await Auth().getToken();
