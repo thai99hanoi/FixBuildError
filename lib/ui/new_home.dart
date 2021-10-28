@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:heath_care/model/covid_analysis.dart';
+import 'package:heath_care/repository/covid_analysis_repository.dart';
 import 'package:heath_care/ui/excercise.dart';
 import 'components/Bottom_Navigator.dart';
 import 'components/NavSideBar.dart';
 
 // ignore: camel_case_types
-class homeScreen extends StatelessWidget {
+class homeScreen extends StatefulWidget {
+  @override
+  State<homeScreen> createState() => _homeScreenState();
+
+}
+
+
+class _homeScreenState extends State<homeScreen> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,167 +24,29 @@ class homeScreen extends StatelessWidget {
           title: Text("Trang Chủ"),
           backgroundColor: Color.fromRGBO(78, 159, 193, 1),
         ),
-        body: ListView(children: [
+        body: Column(children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text("TÌNH HÌNH DỊCH TẠI VIỆT NAM",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-            child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      child: Column(children: [
-                        Container(
-                          height: 70,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            color: Color.fromRGBO(243, 231, 189, 1),
-                          ),
-                          child: Column(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text("667.023",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 10,
-                                      color: Color.fromRGBO(192, 150, 0, 1))),
-                            ),
-                            Text("Ca Nhiễm",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 10),
-                                textAlign: TextAlign.center),
-                          ]),
-                        ),
-                        Container(
-                            height: 40,
-                            width: 100,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                color: Color.fromRGBO(232, 200, 89, 1)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text(
-                                "+9.373",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 10),
-                                textAlign: TextAlign.center,
-                              ),
-                            ))
-                      ]),
-                    ),
-                  ),
-                  //One Column
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      child: Column(children: [
-                        Container(
-                          height: 70,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            color: Color.fromRGBO(243, 189, 189, 1),
-                          ),
-                          child: Column(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text("667.023",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 10,
-                                      color: Color.fromRGBO(232, 89, 89, 1))),
-                            ),
-                            Text("Ca Nhiễm",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 10),
-                                textAlign: TextAlign.center),
-                          ]),
-                        ),
-                        Container(
-                            height: 40,
-                            width: 100,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                color: Color.fromRGBO(232, 89, 89, 1)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text(
-                                "+9.373",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 10),
-                                textAlign: TextAlign.center,
-                              ),
-                            ))
-                      ]),
-                    ),
-                  ),
 
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Container(
-                      child: Column(children: [
-                        Container(
-                          height: 70,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            color: Color.fromRGBO(189, 243, 194, 1),
-                          ),
-                          child: Column(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text("667.023",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 10,
-                                      color: Color.fromRGBO(0, 192, 8, 1))),
-                            ),
-                            Text("Ca Nhiễm",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 10),
-                                textAlign: TextAlign.center),
-                          ]),
-                        ),
-                        Container(
-                            height: 40,
-                            width: 100,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                color: Color.fromRGBO(0, 192, 8, 1)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text(
-                                "+9.373",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 10),
-                                textAlign: TextAlign.center,
-                              ),
-                            ))
-                      ]),
-                    ),
-                  ),
-                ]),
+          Expanded(
+            child: FutureBuilder<CovidAnalysis>(
+                future: CovidAnalysisRepository().getTodayPatients(),
+                builder: (context, snapshot) {
+                  if(snapshot.hasData){
+                    return Text(snapshot.data!.death.toString());
+                  }
+                  else{
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
           ),
-          const Divider(
-            height: 20,
-            thickness: 5,
-            indent: 20,
-            endIndent: 20,
-          ),
+
           Center(
             child: Padding(
               padding: const EdgeInsets.all(18.0),
@@ -213,7 +86,8 @@ class homeScreen extends StatelessWidget {
                     child: new RaisedButton(
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                          borderRadius: BorderRadius.all(Radius.circular(
+                              15))),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -242,7 +116,8 @@ class homeScreen extends StatelessWidget {
                     child: new RaisedButton(
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                          borderRadius: BorderRadius.all(Radius.circular(
+                              15))),
                       onPressed: () {},
                       child: new Text(
                         'Thuốc sử dụng',
@@ -288,4 +163,5 @@ class homeScreen extends StatelessWidget {
         ]),
         drawer: NavDrawer());
   }
+
 }
