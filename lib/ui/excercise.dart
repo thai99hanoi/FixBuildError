@@ -1,37 +1,108 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/repository/exercise_repository.dart';
 import 'components/NavSideBar.dart';
 
-class ExcerciseScreen extends StatelessWidget {
+class ExcerciseScreen extends StatefulWidget {
   const ExcerciseScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ExcerciseScreen> createState() => _ExcerciseScreenState();
+}
+
+class _ExcerciseScreenState extends State<ExcerciseScreen> {
+  Widget createExListView(BuildContext context, AsyncSnapshot snapshot) {
+    var values = snapshot.data;
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 250,
+          childAspectRatio: 2,
+          mainAxisExtent: 150,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 30),
+      itemCount: values.length,
+      itemBuilder: (BuildContext context, int index) {
+        return values.isNotEmpty
+            ? Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        "assets/images/ex.jpeg",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        values[index].name.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            // ? GridView.count(
+            //     primary: false,
+            //     padding: const EdgeInsets.all(20),
+            //     crossAxisSpacing: 10,
+            //     mainAxisSpacing: 10,
+            //     crossAxisCount: 2,
+            //     children: <Widget>[
+            //       // ListTile(
+            //       //     title: Text(values[index].name.toString()),
+            //       //     trailing: Checkbox(
+            //       //         value: values[index].isCheck,
+            //       //         onChanged: (bool? val) {
+            //       //           setState(() {
+            //       //             values[index].isCheck = !values[index].isCheck;
+            //       //           });
+            //       //         }))
+            //       Container(
+            //         padding: const EdgeInsets.all(8),
+            //         child: Text(values[index].name.toString()),
+            //         color: Colors.teal[100],
+            //       ),
+            //     ],
+            //   )
+            : CircularProgressIndicator();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(78, 159, 193, 1),
-          title: const Text("BÁO CÁO SỨC KHOẺ HÀNG NGÀY"),
+          title: const Text("BÀI TẬP PHỤC HỒI"),
         ),
-        body: ListView(children: [
-          Padding(
-            padding: const EdgeInsets.all(8.8),
-            child: Wrap(children: [
-              InkWell(
-                onTap: () {}, // Handle your callback.
-                splashColor: Colors.brown.withOpacity(0.5),
-                child: Ink(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/ex.jpeg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              )
-            ]),
-          )
-        ]),
+        body: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(20.20),
+              child: Text("CÁC BÀI TẬP",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FutureBuilder(
+                    future: ExerciseRepository().getAllExercises(),
+                    initialData: [],
+                    builder: (context, snapshot) {
+                      return createExListView(context, snapshot);
+                    }),
+              ),
+            ),
+          ],
+        ),
         drawer: NavDrawer());
   }
 }

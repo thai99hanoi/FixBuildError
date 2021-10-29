@@ -1,173 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/repository/exercise_repository.dart';
+import 'package:heath_care/repository/medicine_repository.dart';
 import 'components/NavSideBar.dart';
 
-class NextScreenReport extends StatelessWidget {
+class NextScreenReport extends StatefulWidget {
   const NextScreenReport({Key? key}) : super(key: key);
 
   @override
+  State<NextScreenReport> createState() => _NextScreenReportState();
+}
+
+class _NextScreenReportState extends State<NextScreenReport> {
+  Widget createExListView(BuildContext context, AsyncSnapshot snapshot) {
+    var values = snapshot.data;
+    return ListView.builder(
+      itemCount: values.length,
+      itemBuilder: (BuildContext context, int index) {
+        return values.isNotEmpty
+            ? Column(
+                children: <Widget>[
+                  ListTile(
+                      title: Text(values[index].name.toString()),
+                      trailing: Checkbox(
+                          value: values[index].isCheck,
+                          onChanged: (bool? val) {
+                            setState(() {
+                              values[index].isCheck = !values[index].isCheck;
+                            });
+                          }))
+                ],
+              )
+            : CircularProgressIndicator();
+      },
+    );
+  }
+
+  Widget createMedicineListView(BuildContext context, AsyncSnapshot snapshot) {
+    var values = snapshot.data;
+    return ListView.builder(
+      itemCount: values.length,
+      itemBuilder: (BuildContext context, int index) {
+        return values.isNotEmpty
+            ? Column(
+                children: <Widget>[
+                  ListTile(
+                      title: Text(values[index].name.toString()),
+                      trailing: Checkbox(
+                          value: values[index].isCheck,
+                          onChanged: (bool? val) {
+                            setState(() {
+                              values[index].isCheck = !values[index].isCheck;
+                            });
+                          }))
+                ],
+              )
+            : CircularProgressIndicator();
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool _checkbox = false;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(78, 159, 193, 1),
           title: const Text("BÁO CÁO SỨC KHOẺ HÀNG NGÀY"),
         ),
-        body: ListView(children: [
+        body: Column(children: [
           const Padding(
             padding: EdgeInsets.all(20.20),
             child: Text("Báo cáo bài tập hàng ngày",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           ),
-          Row(
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài Tập 1'),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài tập 2'),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài tập 3'),
-                ],
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài tập 4'),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài tập 5'),
-                ],
-              ),
-            ],
+          Expanded(
+            child: FutureBuilder(
+                future: ExerciseRepository().getAllExercises(),
+                initialData: [],
+                builder: (context, snapshot) {
+                  return createExListView(context, snapshot);
+                }),
           ),
           const Padding(
             padding: EdgeInsets.all(20.20),
-            child: Text("Báo cáo bài tập hàng ngày",
+            child: Text("Báo cáo thuốc hàng ngày",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           ),
-          Row(
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài Tập 1'),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài tập 2'),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài tập 3'),
-                ],
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài tập 4'),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _checkbox,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkbox = !_checkbox;
-                      });
-                    },
-                  ),
-                  const Text('Bài tập 5'),
-                ],
-              ),
-            ],
+          Expanded(
+            child: FutureBuilder(
+                future: MedicineRepository().getAllMedicine(),
+                initialData: [],
+                builder: (context, snapshot) {
+                  return createMedicineListView(context, snapshot);
+                }),
           ),
           Padding(
             padding: const EdgeInsets.all(20.20),
@@ -192,6 +116,4 @@ class NextScreenReport extends StatelessWidget {
         ]),
         drawer: NavDrawer());
   }
-
-  void setState(Null Function() param0) {}
 }
