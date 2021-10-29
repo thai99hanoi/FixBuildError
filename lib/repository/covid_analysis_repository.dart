@@ -15,7 +15,7 @@ class CovidAnalysisRepository {
     return _currentPatients;
   }
 
-  Future<List<CovidAnalysis>?> getTodayPatients() async {
+  Future<CovidAnalysis> getTodayPatients() async {
     print('Api Get, url https://static.pipezero.com/covid/data.json');
     try {
       final response = await http.get(Uri.parse("https://static.pipezero.com/covid/data.json"),
@@ -24,7 +24,8 @@ class CovidAnalysisRepository {
         },
       ).timeout(Duration(seconds: 10));
       final todayPatients = json.decode(response.body);
-      return (todayPatients['today']['internal'] as List).map((patient) => CovidAnalysis.fromJson(patient)).toList();
+      CovidAnalysis data = CovidAnalysis.fromJson(todayPatients['today']['internal']);
+      return data;
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
