@@ -6,8 +6,9 @@ import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/utils/api.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
-class ExerciseRepository{
-  Future<List<Exercise>?> getAllSymptom() async {
+
+class ExerciseRepository {
+  Future<List<Exercise>?> getAllExercises() async {
     String? token = await Auth().getToken();
     print('Api Get, url /v1/api/exercise/get-all');
     var responseJson;
