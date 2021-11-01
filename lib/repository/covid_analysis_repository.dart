@@ -10,21 +10,36 @@ class CovidAnalysisRepository {
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
 
   Future<CovidAnalysis> getCurrentPatients() async {
-    final response = await apiBaseHelper.getCovidInfo();
-    CovidAnalysis _currentPatients = CovidAnalysis.fromJson(response['total']['internal']);
-    return _currentPatients;
+    print('Api Get, url https://static.pipezero.com/covid/data.json');
+    try {
+      final response = await http.get(
+        Uri.parse("https://static.pipezero.com/covid/data.json"),
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      ).timeout(Duration(seconds: 20));
+      final todayPatients = json.decode(response.body);
+      CovidAnalysis data =
+          CovidAnalysis.fromJson(todayPatients['total']['internal']);
+      return data;
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
   }
 
   Future<CovidAnalysis> getTodayPatients() async {
     print('Api Get, url https://static.pipezero.com/covid/data.json');
     try {
-      final response = await http.get(Uri.parse("https://static.pipezero.com/covid/data.json"),
+      final response = await http.get(
+        Uri.parse("https://static.pipezero.com/covid/data.json"),
         headers: {
           "content-type": "application/json; charset=utf-8",
         },
-      ).timeout(Duration(seconds: 10));
+      ).timeout(Duration(seconds: 20));
       final todayPatients = json.decode(response.body);
-      CovidAnalysis data = CovidAnalysis.fromJson(todayPatients['today']['internal']);
+      CovidAnalysis data =
+          CovidAnalysis.fromJson(todayPatients['today']['internal']);
       return data;
     } on SocketException {
       print('No net');
