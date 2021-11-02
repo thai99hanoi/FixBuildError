@@ -30,4 +30,25 @@ class MedicineRepository {
       throw FetchDataException('No Internet connection');
     }
   }
+
+  Future<Medicine> getMedicineById(int medicineId) async {
+    String? token = await Auth().getToken();
+    print('Api Get, url /v1/api/medicine/get');
+    var responseJson;
+    try {
+      final response = await http.get(
+        Uri.parse(Api.authUrl + "/v1/api/medicine/get?medicineId="+medicineId.toString()),
+        headers: {
+          "content-type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+      responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      print('api get recieved!');
+      return responseJson['data'].map((medicine) => Medicine.fromJson(medicine));
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+  }
 }
