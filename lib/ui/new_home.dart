@@ -15,6 +15,18 @@ class homeScreen extends StatefulWidget {
 const _url = 'http://tokhaiyte.vn';
 
 class _homeScreenState extends State<homeScreen> {
+  CovidAnalysis _currentData = new CovidAnalysis();
+  CovidAnalysis _todayData = new CovidAnalysis();
+
+  _homeScreenState() {
+    CovidAnalysisRepository().getCurrentPatients().then((val) => setState(() {
+          _currentData = val;
+        }));
+    CovidAnalysisRepository().getTodayPatients().then((val) => setState(() {
+          _todayData = val;
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,207 +41,178 @@ class _homeScreenState extends State<homeScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center),
           ),
-          Center(
-              child: Column(children: [
-            FutureBuilder<CovidAnalysis>(
-                future: CovidAnalysisRepository().getCurrentPatients(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Row(children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: Container(
-                            height: 70,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Color.fromRGBO(243, 231, 189, 1),
-                            ),
-                            child: Column(children: [
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text(snapshot.data!.cases.toString(),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10,
-                                        color: Color.fromRGBO(192, 150, 0, 1))),
-                              ),
-                              Text("Ca Nhiễm",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 10),
-                                  textAlign: TextAlign.center),
-                            ]),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+            child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      child: Column(children: [
+                        Container(
+                          height: 70,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: Color.fromRGBO(243, 231, 189, 1),
                           ),
+                          child: Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(_currentData.cases.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 10,
+                                      color: Color.fromRGBO(192, 150, 0, 1))),
+                            ),
+                            Text("Ca Nhiễm",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 10),
+                                textAlign: TextAlign.center),
+                          ]),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: Container(
-                            height: 70,
+                        Container(
+                            height: 40,
                             width: 100,
                             decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Color.fromRGBO(243, 189, 189, 1),
-                            ),
-                            child: Column(children: [
-                              Padding(
+                                shape: BoxShape.rectangle,
+                                color: Color.fromRGBO(232, 200, 89, 1)),
+                            child: Padding(
                                 padding: const EdgeInsets.all(15.0),
-                                child: Text(snapshot.data!.death.toString(),
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: '+ ',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10,
-                                        color: Color.fromRGBO(232, 89, 89, 1))),
-                              ),
-                              Text("Tử Vong",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 10),
-                                  textAlign: TextAlign.center),
-                            ]),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: Container(
-                            height: 70,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Color.fromRGBO(189, 243, 194, 1),
-                            ),
-                            child: Column(children: [
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text(snapshot.data!.recovered.toString(),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10,
-                                        color: Color.fromRGBO(0, 192, 8, 1))),
-                              ),
-                              Text("Hồi Phục",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 10),
-                                  textAlign: TextAlign.center),
-                            ]),
-                          ),
-                        )
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontSize: 10),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: _todayData.cases.toString(),
+                                      ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                )))
                       ]),
-                    );
+                    ),
+                  ),
+                  //One Column
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      child: Column(children: [
+                        Container(
+                          height: 70,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: Color.fromRGBO(243, 189, 189, 1),
+                          ),
+                          child: Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(_currentData.death.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 10,
+                                      color: Color.fromRGBO(232, 89, 89, 1))),
+                            ),
+                            Text("Tử Vong",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 10),
+                                textAlign: TextAlign.center),
+                          ]),
+                        ),
+                        Container(
+                            height: 40,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                color: Color.fromRGBO(232, 89, 89, 1)),
+                            child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: '+ ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontSize: 10),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: _todayData.death.toString(),
+                                      ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                )))
+                      ]),
+                    ),
+                  ),
 
-                    // Text(snapshot.data!.death.toString());
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                }),
-            FutureBuilder<CovidAnalysis>(
-                future: CovidAnalysisRepository().getTodayPatients(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Row(children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                          child: Container(
-                              height: 40,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  color: Color.fromRGBO(232, 200, 89, 1)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text.rich(
-                                  TextSpan(children: <TextSpan>[
-                                    TextSpan(
-                                        text: "+ ",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: 10)),
-                                    TextSpan(
-                                        text: snapshot.data!.cases.toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: 10)),
-                                  ]),
-                                  textAlign: TextAlign.center,
-                                ),
-                              )),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      child: Column(children: [
+                        Container(
+                          height: 70,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: Color.fromRGBO(189, 243, 194, 1),
+                          ),
+                          child: Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(_currentData.recovered.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 10,
+                                      color: Color.fromRGBO(0, 192, 8, 1))),
+                            ),
+                            Text("Hồi Phục",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 10),
+                                textAlign: TextAlign.center),
+                          ]),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                          child: Container(
-                              height: 40,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  color: Color.fromRGBO(232, 89, 89, 1)),
-                              child: Padding(
+                        Container(
+                            height: 40,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                color: Color.fromRGBO(0, 192, 8, 1)),
+                            child: Padding(
                                 padding: const EdgeInsets.all(15.0),
-                                child: Text.rich(
-                                  TextSpan(children: <TextSpan>[
-                                    TextSpan(
-                                        text: "+ ",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: 10)),
-                                    TextSpan(
-                                        text: snapshot.data!.death.toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: 10)),
-                                  ]),
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: '+ ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontSize: 10),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: _todayData.recovered.toString(),
+                                      ),
+                                    ],
+                                  ),
                                   textAlign: TextAlign.center,
-                                ),
-                              )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                          child: Container(
-                              height: 40,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  color: Color.fromRGBO(0, 192, 8, 1)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text.rich(
-                                  TextSpan(children: <TextSpan>[
-                                    TextSpan(
-                                        text: "+ ",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: 10)),
-                                    TextSpan(
-                                      text: snapshot.data!.recovered.toString(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize: 10),
-                                    ),
-                                  ]),
-                                  textAlign: TextAlign.center,
-                                ),
-                              )),
-                        ),
+                                )))
                       ]),
-                    );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                })
-          ])),
+                    ),
+                  ),
+                ]),
+          ),
+          const Divider(
+            height: 20,
+            thickness: 5,
+            indent: 20,
+            endIndent: 20,
+          ),
           Center(
             child: Padding(
               padding: const EdgeInsets.all(18.0),
@@ -348,3 +331,9 @@ class _homeScreenState extends State<homeScreen> {
 
 void _launchURL() async =>
     await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+
+Future<CovidAnalysis> _getdata() async {
+  CovidAnalysis curentInfo =
+      await CovidAnalysisRepository().getCurrentPatients();
+  return curentInfo;
+}
