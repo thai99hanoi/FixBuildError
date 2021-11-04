@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:heath_care/model/covid_analysis.dart';
 import 'package:heath_care/repository/covid_analysis_repository.dart';
-import 'package:heath_care/ui/excercise.dart';
+import 'package:heath_care/ui/excercise_screen.dart';
+import 'package:heath_care/ui/medicine_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'components/NavSideBar.dart';
 
@@ -282,7 +283,13 @@ class _homeScreenState extends State<homeScreen> {
                       color: Color.fromRGBO(78, 159, 193, 1),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15))),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MedicineScreen()),
+                        );
+                      },
                       child: new Text(
                         'Thuốc sử dụng',
                         textAlign: TextAlign.center,

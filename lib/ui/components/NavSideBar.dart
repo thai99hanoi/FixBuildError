@@ -6,7 +6,7 @@ import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/login_screen.dart';
 import 'package:provider/provider.dart';
 
-class NavDrawer extends StatefulWidget{
+class NavDrawer extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _NavDrawer();
 }
@@ -14,7 +14,9 @@ class NavDrawer extends StatefulWidget{
 class _NavDrawer extends State<NavDrawer> {
   Future logout() async {
     try {
-      await Provider.of<Auth>(context, listen: false).logout().then((value) => UserRepository().updateUserOnline(0));
+      await Provider.of<Auth>(context, listen: false)
+          .logout()
+          .then((value) => UserRepository().updateUserOnline(0));
       Route route = MaterialPageRoute(builder: (context) => LoginPage());
       Navigator.push(context, route);
     } catch (error) {
@@ -23,40 +25,43 @@ class _NavDrawer extends State<NavDrawer> {
       _showerrorDialog(errorMessage);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
           DrawerHeader(
-            child: Text(
-              'Side menu',
-              style: TextStyle(color: Colors.white, fontSize: 25),
+            decoration: BoxDecoration(
+              color: new Color.fromRGBO(107, 157, 177, 1.0),
             ),
+            child:
+                // Image.asset("assets/images/Health Care System-logos_white.png"),
+                ClipRRect(
+                    child: Image.asset(
+                        "assets/images/Health Care System-logos_white.png",
+                        width: 200,
+                        height: 100,
+                        fit: BoxFit.fill)),
           ),
           ListTile(
-            leading: Icon(Icons.input),
-            title: Text('Welcome'),
+            leading: Icon(Icons.security_outlined),
+            title: Text('Thay đổi mật khẩu'),
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.verified_user),
-            title: Text('Profile'),
+            leading: Icon(Icons.help_center_outlined),
+            title: Text('Liên hệ hỗ trợ'),
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            leading: Icon(Icons.info_outline),
+            title: Text('Về chúng tôi'),
             onTap: () => {},
           ),
           ListTile(
-            leading: Icon(Icons.border_color),
-            title: Text('Feedback'),
-            onTap: () => {},
-          ),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: Icon(Icons.logout_outlined),
+            title: Text('Đăng xuất'),
             onTap: () => {logout()},
           ),
         ],
@@ -85,6 +90,4 @@ class _NavDrawer extends State<NavDrawer> {
       ),
     );
   }
-
-
 }
