@@ -11,8 +11,9 @@ import 'package:http/http.dart' as http;
 class UserRepository {
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
 
-  Future<User> getCurrentUser() async {
-    final response = await apiBaseHelper.getWithCache("/v1/api/user/current-user");
+  Future<User> getCurrentUser({String? tokenTmp}) async {
+    final response = await apiBaseHelper
+        .getWithCache("/v1/api/user/current-user", tokenTmp: tokenTmp);
     User _currentUser = User.fromJson(response['data']);
     return _currentUser;
   }
@@ -20,7 +21,7 @@ class UserRepository {
   Future<User?> getUserByUserName(String userName) async {
     try {
       Map<String, dynamic> response =
-      await apiBaseHelper.getWithCache("/v1/api/user/$userName");
+          await apiBaseHelper.getWithCache("/v1/api/user/$userName");
       return User.fromJson(response['data']);
     } on FetchDataException catch (e) {
       print(e);
@@ -30,7 +31,8 @@ class UserRepository {
   Future<List<User>?> getUserOnline() async {
     var user = await getCurrentUser();
     var userId = user.userId;
-    print('Api Get, url /v1/api/user/users-online?userId="' + userId.toString());
+    print(
+        'Api Get, url /v1/api/user/users-online?userId="' + userId.toString());
     try {
       final response = await apiBaseHelper
           .get("/v1/api/user/users-online?userId=" + userId.toString());
@@ -56,25 +58,25 @@ class UserRepository {
     String token = await Auth().getToken();
     var responseJson;
     try {
-      final response = await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
-          headers: {
-            "content-type": "application/json",
-            'Authorization': 'Bearer $token',
-          },
-          body: json.encode({
-            "username": user.username,
-            "mail": user.email,
-            "phone":user.phone,
-            "lastLogin": DateTime.now().toString(),
-            "firstname": user.firstname,
-            "lastname": user.lastname,
-            "surname": user.surname,
-            "avatar": user.avatar,
-            "isOnline": isOnline,
-            "isActive": user.isActive
-          }));
+      final response =
+          await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
+              headers: {
+                "content-type": "application/json",
+                'Authorization': 'Bearer $token',
+              },
+              body: json.encode({
+                "username": user.username,
+                "mail": user.email,
+                "phone": user.phone,
+                "lastLogin": DateTime.now().toString(),
+                "firstname": user.firstname,
+                "lastname": user.lastname,
+                "surname": user.surname,
+                "avatar": user.avatar,
+                "isOnline": isOnline,
+                "isActive": user.isActive
+              }));
       responseJson = json.encode(response.body);
-
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');

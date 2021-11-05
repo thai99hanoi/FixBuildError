@@ -15,6 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
   // ignore: non_constant_identifier_names
+
+  var userRepository = UserRepository();
   var MainUrl = Api.authUrl;
 
   // ignore: non_constant_identifier_names
@@ -24,6 +26,14 @@ class Auth with ChangeNotifier {
   var _userEmail;
   var _expiryDate;
   var _authTimer;
+  User? _currentUser;
+
+  setCurrentUser(User user) {
+    _currentUser = user;
+    notifyListeners();
+  }
+
+  User? getCurrentUser() => _currentUser;
 
   Auth();
 
@@ -33,7 +43,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<String?> get token async {
-    if(_token == null){
+    if (_token == null) {
       _token = await getToken();
     }
     _expiryDate = await getExpiryDate();
@@ -89,13 +99,16 @@ class Auth with ChangeNotifier {
     }
 
     final extractedUserData =
-    json.decode(pref.getString('userData') ?? "") as Map<String, Object>;
+        json.decode(pref.getString('userData') ?? "") as Map<String, Object>;
 
-    final expiryDate = DateTime.parse(extractedUserData['expiryDate'].toString());
+    final expiryDate =
+        DateTime.parse(extractedUserData['expiryDate'].toString());
     if (expiryDate.isBefore(DateTime.now())) {
       return false;
     }
     _token = extractedUserData['token'];
+    User user = await userRepository.getCurrentUser(tokenTmp: _token);
+    setCurrentUser(user);
     // _userId = extractedUserData['userId'];
     // _userEmail = extractedUserData['userEmail'];
     _expiryDate = expiryDate;
@@ -105,23 +118,25 @@ class Auth with ChangeNotifier {
     return true;
   }
 
-  // ignore: non_constant_identifier_names
-  Future<void> Authentication(User user) async {
+// ignore: non_constant_identifier_names
+  Future<void> Authentication(User userLogin) async {
     DioCacheManager(CacheConfig(baseUrl: Api.authUrl)).clearAll();
     print('login');
     try {
       final url = '$MainUrl/anonymous/signin';
 
-      final response = await http.post(Uri.parse(url),
-          headers: {
-            "content-type": "application/json",
-            "accept": "application/json",
-          },
-          body: json.encode({
-            'username': user.username,
-            'password': user.password,
-            // 'returnSecureToken': true
-          })).timeout(Duration(seconds: 10));;
+      final response = await http
+          .post(Uri.parse(url),
+              headers: {
+                "content-type": "application/json",
+                "accept": "application/json",
+              },
+              body: json.encode({
+                'username': userLogin.username,
+                'password': userLogin.password,
+                // 'returnSecureToken': true
+              }))
+          .timeout(Duration(seconds: 10));
 
       final responseData = json.decode(response.body);
       print(responseData);
@@ -135,11 +150,12 @@ class Auth with ChangeNotifier {
       // DateTime exDate =testDate.parse(responseData['date']);
       // final format = new DateFormat('ss');
       // print(exDate);
+      User user = await userRepository.getCurrentUser(tokenTmp: _token);
+      setCurrentUser(user);
       _expiryDate = DateTime.now().add(Duration(seconds: 600));
 
       _autologout();
       notifyListeners();
-
 
       final userData = json.encode({
         'token': _token,
@@ -175,10 +191,10 @@ class Auth with ChangeNotifier {
   Future<DateTime?> getExpiryDate() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? dateTime = prefs.getString('expiryDate');
-    try{
+    try {
       print(dateTime);
-      return DateFormat("yyyy-MM-dd hh:mm:ss.SSSS").parse(dateTime??"");
-    }catch(e){
+      return DateFormat("yyyy-MM-dd hh:mm:ss.SSSS").parse(dateTime ?? "");
+    } catch (e) {
       return null;
     }
   }

@@ -20,7 +20,7 @@ class ApiBaseHelper {
 
   ApiBaseHelper() {
     BaseOptions options =
-    BaseOptions(connectTimeout: _timeOut, receiveTimeout: _timeOut);
+        BaseOptions(connectTimeout: _timeOut, receiveTimeout: _timeOut);
     options.baseUrl = Api.authUrl;
     _dio = Dio(options);
     // _dio.interceptors
@@ -29,12 +29,14 @@ class ApiBaseHelper {
   }
 
   Future<dynamic> getWithCache(String url,
-      {Map<String, dynamic>? params, Options? options}) async {
+      {Map<String, dynamic>? params,
+      Options? options,
+      String? tokenTmp}) async {
     params ??= {};
     options ??= buildCacheOptions(Duration(minutes: 30),
         maxStale: Duration(minutes: 30));
     print('Api Get, url $url');
-    String token = await Auth().getToken();
+    String token = tokenTmp != null ? tokenTmp : await Auth().getToken();
     print('token $token');
     var responseJson;
     try {
@@ -64,8 +66,10 @@ class ApiBaseHelper {
     var responseJson;
     try {
       _dio.options.headers['content-Type'] = 'application/json';
-      final response = await _dio.get("https://static.pipezero.com/covid/data.json",
-          queryParameters: params, options: options);
+      final response = await _dio.get(
+          "https://static.pipezero.com/covid/data.json",
+          queryParameters: params,
+          options: options);
 
       responseJson =
           _returnResponse(response.statusCode ?? 0, json.encode(response.data));
@@ -76,8 +80,6 @@ class ApiBaseHelper {
     print('api get recieved!');
     return responseJson;
   }
-
-
 
   Future<dynamic> get(String url) async {
     print('Api Get, url $url');
@@ -91,8 +93,8 @@ class ApiBaseHelper {
           'Authorization': 'Bearer $token',
         },
       ).timeout(Duration(seconds: 10));
-      responseJson =
-          _returnResponse(response.statusCode, json.encode(utf8.decode(response.bodyBytes)));
+      responseJson = _returnResponse(
+          response.statusCode, json.encode(utf8.decode(response.bodyBytes)));
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');

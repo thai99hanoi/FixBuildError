@@ -5,7 +5,6 @@ import 'package:heath_care/model/symptom.dart';
 import 'package:heath_care/repository/exercise_repository.dart';
 import 'package:heath_care/repository/medicine_repository.dart';
 import 'package:heath_care/repository/symptom_repository.dart';
-import 'package:heath_care/ui/list_exercise.dart';
 import 'package:heath_care/ui/next_report.dart';
 import 'components/NavSideBar.dart';
 import 'list_symtom.dart';
@@ -129,8 +128,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                   _allExercise[index].isCheck =
                                       !_allExercise[index].isCheck;
                                   if (_allExercise[index].isCheck) {
-                                    _selectedExercise.add(
-                                        _allExercise[index].name.toString());
+                                    _selectedExercise.add(_allExercise[index].name.toString());
                                   } else {
                                     _selectedExercise.remove(
                                         _allExercise[index].name.toString());
