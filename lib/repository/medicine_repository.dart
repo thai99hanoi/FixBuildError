@@ -45,7 +45,8 @@ class MedicineRepository {
       );
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print('api get recieved!');
-      return responseJson['data'].map((medicine) => Medicine.fromJson(medicine));
+      Medicine medicine = Medicine.fromJson(responseJson['data']);
+      return medicine;
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');

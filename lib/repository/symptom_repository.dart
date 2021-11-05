@@ -45,7 +45,8 @@ class SymptomRepository{
       );
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print('api get recieved!');
-      return responseJson['data'].map((symptom) => Symptom.fromJson(symptom));
+      Symptom symptom = Symptom.fromJson(responseJson['data']);
+      return symptom;
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');

@@ -45,7 +45,8 @@ class ExerciseRepository {
       );
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print('api get recieved!');
-      return responseJson['data'].map((exercise) => Exercise.fromJson(exercise));
+      Exercise exe = Exercise.fromJson(responseJson['data']);
+      return exe;
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
