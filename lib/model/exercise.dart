@@ -7,7 +7,7 @@ class Exercise {
   Exercise({this.id, this.name, this.thumbnail});
 
   factory Exercise.fromJson(Map<String, dynamic> json) => Exercise(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      thumbnail: json['thumbnail'] as String);
+      id: json['id'] as int?,
+      name: json['name'] as String?,
+      thumbnail: json['thumbnail'] as String?);
 }
