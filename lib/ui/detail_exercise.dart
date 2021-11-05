@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/exercise.dart';
+import 'package:heath_care/model/exercise_detail.dart';
+import 'package:heath_care/repository/exercise_detail_repository.dart';
 import 'package:heath_care/repository/exercise_repository.dart';
 
 class DetailScreenExcercise extends StatefulWidget {
@@ -14,12 +16,18 @@ class DetailScreenExcercise extends StatefulWidget {
 
 class _DetailScreenExcerciseState extends State<DetailScreenExcercise> {
   Exercise ex = new Exercise();
+  List<ExerciseDetail> exDetail = [];
   final int ExerciseId;
 
   _DetailScreenExcerciseState(this.ExerciseId) {
     ExerciseRepository().getExerciseById(ExerciseId).then((val) => setState(() {
           ex = val;
         }));
+    ExerciseDetailRepository()
+        .getDetailExercise(ExerciseId)
+        .then((vall) => setState(() {
+              exDetail = vall!;
+            }));
   }
 
   @override
@@ -64,16 +72,41 @@ class _DetailScreenExcerciseState extends State<DetailScreenExcercise> {
                   )),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(ex.description.toString(),
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-            ),
-          ),
+          ListView.builder(
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemCount: exDetail.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: Column(children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Image.asset(
+                                "assets/images/ex.jpeg",
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(exDetail[index].description.toString()),
+                          ),
+                        ])));
+              })
+          // Padding(
+          //   padding: const EdgeInsets.all(20.0),
+          //   child: Align(
+          //     alignment: Alignment.centerLeft,
+          //     child: Text(ex.description.toString(),
+          //         style: TextStyle(
+          //           fontSize: 16,
+          //         )),
+          //   ),
+          // ),
         ],
       ),
     );
