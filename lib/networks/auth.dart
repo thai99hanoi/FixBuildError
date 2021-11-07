@@ -143,7 +143,7 @@ class Auth with ChangeNotifier {
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
-      _token = responseData['token'];
+      _token = responseData['data']['token'];
       // _userId = responseData['localId'];
       // _userEmail = responseData['email'];
       // final testDate = new DateFormat('dd-MM-yyyy HH:mm:ss');
