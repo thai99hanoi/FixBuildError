@@ -18,6 +18,8 @@ class User {
   String? lastname;
   String? address;
   String? avatar;
+  String? gender;
+  DateTime? dateOfBirth;
   int? isActive;
   int? isOnline;
 
@@ -36,6 +38,8 @@ class User {
       this.lastname,
       this.address,
       this.avatar,
+        this.gender,
+        this.dateOfBirth,
       this.isOnline,
       this.isActive});
 
@@ -73,6 +77,8 @@ class User {
       surname: json["surname"] as String?,
       lastname: json["lastname"] as String?,
       address: json["address"] as String?,
+      gender: json["gender"] as String?,
+      dateOfBirth: DateTime?.parse(json["dateOfBirth"]),
       avatar: json["avatar"] as String?,
       isActive: json['isActive'] as int?,
       isOnline: json['isOnline'] as int?);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/repository/exercise_repository.dart';
 import 'package:heath_care/ui/detail_exercise.dart';
+import 'package:heath_care/utils/image_util.dart';
 import 'components/NavSideBar.dart';
 
 class ExcerciseScreen extends StatefulWidget {
@@ -39,8 +40,10 @@ class _ExcerciseScreenState extends State<ExcerciseScreen> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(
-                          "assets/images/ex.jpeg",
+                        child: Image.network(
+                          "https://healthcaresystemstorage.s3.us-east-2.amazonaws.com/images/exercise/"+values[index].thumbnail,
+                          height: 100,
+                          width: 200,
                           fit: BoxFit.cover,
                         ),
                       ),
