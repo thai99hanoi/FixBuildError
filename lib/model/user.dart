@@ -1,4 +1,8 @@
+import 'package:heath_care/model/district.dart';
+import 'package:heath_care/model/province.dart';
 import 'package:heath_care/model/role.dart';
+import 'package:heath_care/model/village.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:json_annotation/json_annotation.dart';
 
@@ -6,7 +10,9 @@ import 'package:json_annotation/json_annotation.dart';
 class User {
   int? userId;
   int? roleId;
-  int? stationId;
+  Village? village;
+  District? district;
+  Province? province;
   String? username;
   String? password;
   DateTime? lastLogin;
@@ -26,7 +32,9 @@ class User {
   User(
       {this.userId,
       this.roleId,
-      this.stationId,
+      this.village,
+      this.district,
+      this.province,
       this.username,
       this.password,
       this.lastLogin,
@@ -38,35 +46,19 @@ class User {
       this.lastname,
       this.address,
       this.avatar,
-        this.gender,
-        this.dateOfBirth,
+      this.gender,
+      this.dateOfBirth,
       this.isOnline,
       this.isActive});
-
-  factory User.fromMap(Map<String, dynamic> json) => User(
-      userId: json["userId"],
-      roleId: json['role']['roleId'] as int?,
-      stationId: json["stationId"],
-      username: json["username"],
-      password: json["password"],
-      lastLogin: json["lastLogin"],
-      email: json["email"],
-      phone: json["phone"],
-      identityId: json["identityId"],
-      firstname: json["firstname"],
-      surname: json["surname"],
-      lastname: json["lastname"],
-      address: json["address"],
-      avatar: json["avatar"],
-      isActive: json["isActive"],
-      isOnline: json["isOnline"]);
 
   Map<String, dynamic> toMap() => {"username": username, "password": password};
 
   factory User.fromJson(Map<String, dynamic> json) => User(
       userId: json['userId'] as int?,
       roleId: json['role']['roleId'] as int?,
-      stationId: json['stationId'] as int?,
+      village: json['village'] as Village?,
+      district: json['village']["district"] as District?,
+      province: json['village']["district"]['province'] as Province?,
       username: json['username'] as String?,
       password: json['password'] as String?,
       lastLogin: json['lastLogin'] as DateTime?,
@@ -84,7 +76,7 @@ class User {
       isOnline: json['isOnline'] as int?);
 
   String getLastName() {
-    if(lastname != null && lastname!.isNotEmpty){
+    if (lastname != null && lastname!.isNotEmpty) {
       return lastname.toString();
     }
     return username.toString();
@@ -100,4 +92,3 @@ class User {
     return username.toString();
   }
 }
-
