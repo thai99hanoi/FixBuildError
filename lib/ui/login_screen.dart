@@ -13,10 +13,6 @@ class LoginPage extends StatefulWidget {
 
 class _State extends State<LoginPage> {
   bool _showPass = false;
-  // ignore: unused_field
-  TextEditingController _userController = new TextEditingController();
-  // ignore: unused_field
-  TextEditingController _passController = new TextEditingController();
   User user = new User();
 
   // var url = Uri.http("http://localhost:8080", "/authenticate");

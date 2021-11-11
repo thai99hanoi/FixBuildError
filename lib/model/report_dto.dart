@@ -4,11 +4,11 @@ class ReportDTO {
   String? surname;
   String? lastname;
   String? oxygen;
-  String? temprate;
-  int? symptomId;
+  String? temperate;
+  List<int?>? symptomId;
   String? comment;
-  int? exerciseId;
-  int? medicineId;
+  List<int?>? exerciseId;
+  List<int?>? medicineId;
 
   ReportDTO(
       {this.username,
@@ -16,7 +16,7 @@ class ReportDTO {
       this.firstname,
       this.lastname,
       this.oxygen,
-      this.temprate,
+      this.temperate,
       this.comment,
       this.symptomId,
       this.exerciseId,
@@ -28,10 +28,10 @@ class ReportDTO {
         firstname: json['firstname'] as String?,
         lastname: json['lastname'] as String?,
         oxygen: json['oxygen'] as String?,
-        temprate: json['temprate'] as String?,
-        symptomId: json['symptomId'] as int?,
+        temperate: json['temperate'] as String?,
+        symptomId: json['symptomId'] as List<int?>?,
         comment: json['comment'] as String?,
-        exerciseId: json['exerciseId'] as int?,
-        medicineId: json['medicineId'] as int?,
+        exerciseId: json['exerciseId'] as List<int?>?,
+        medicineId: json['medicineId'] as List<int?>?,
       );
 }
