@@ -56,9 +56,9 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => User(
       userId: json['userId'] as int?,
       roleId: json['role']['roleId'] as int?,
-      village: json['village'] as Village?,
-      district: json['village']["district"] as District?,
-      province: json['village']["district"]['province'] as Province?,
+      village:  Village.fromJson(json['village']),
+      district: District.fromJson(json['village']["district"]) ,
+      province: Province.fromJson(json['village']["district"]['province']),
       username: json['username'] as String?,
       password: json['password'] as String?,
       lastLogin: json['lastLogin'] as DateTime?,

@@ -11,7 +11,7 @@ class District {
   factory District.fromJson(Map<String, dynamic> json) => District(
     districtId: json['districtId'] as int?,
     name: json['name'] as String?,
-    province: json['province'] as Province?,
+    province: Province.fromJson(json['province']),
     isActive: json['isActive'] as int?
   );
 }
