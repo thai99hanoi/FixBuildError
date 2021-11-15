@@ -3,12 +3,17 @@ import 'dart:convert';
 
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/repository/user_repository.dart';
+import 'package:heath_care/ui/home_screen.dart';
+import 'package:heath_care/ui/main_screen.dart';
 import 'package:heath_care/utils/api.dart';
+import 'package:heath_care/utils/navigation_util.dart';
 import 'package:http/http.dart' as http;
 import 'package:heath_care/utils/http_exception.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
@@ -138,7 +143,7 @@ class Auth with ChangeNotifier {
               }))
           .timeout(Duration(seconds: 10));
 
-      final responseData = json.decode(response.body);
+      final responseData = json.decode(utf8.decode(response.bodyBytes));
       print(responseData);
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
@@ -150,6 +155,23 @@ class Auth with ChangeNotifier {
       // DateTime exDate =testDate.parse(responseData['date']);
       // final format = new DateFormat('ss');
       // print(exDate);
+
+      String role = responseData['data']['roles'][0];
+      if (role == 'admin') {
+        NavigationUtil.pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => MainScreen(),
+          ),
+        );
+      } else if (role == 'Quản lý') {
+        NavigationUtil.pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
+      } else {
+        showToast('Đăng nhập lỗi');
+      }
       User user = await userRepository.getCurrentUser(tokenTmp: _token);
       setCurrentUser(user);
       _expiryDate = DateTime.now().add(Duration(seconds: 600));

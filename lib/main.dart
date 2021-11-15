@@ -6,6 +6,8 @@ import 'package:heath_care/ui/home_screen.dart';
 import 'package:heath_care/ui/login_screen.dart';
 import 'package:heath_care/ui/main_screen.dart';
 import 'package:heath_care/ui/splash_screen.dart';
+import 'package:heath_care/utils/navigation_util.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 import 'model/user.dart';
@@ -33,35 +35,17 @@ class _MyAppState extends State<MyApp> {
         value: Auth(),
         child: Consumer<Auth>(builder: (ctx, auth, _) {
           print('rebuild');
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
+          return OKToast(
+            child: MaterialApp(
+              navigatorKey: NavigationUtil.navigatorKey,
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+              ),
+              home:  LoginPage()
+
             ),
-            home: FutureBuilder<bool>(
-                future: auth.isAuth,
-                builder: (ctx, snapshot) {
-                  if ((snapshot.hasData && snapshot.data == true)) {
-                    if (auth.getCurrentUser() != null) {
-                      if (auth.getCurrentUser()?.roleId == 1) {
-                        return MainScreen();
-                      } else
-                        return HomeScreen();
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  } else {
-                    return FutureBuilder(
-                        future: auth.tryautoLogin(),
-                        builder: (ctx, snapshot) =>
-                            snapshot.connectionState == ConnectionState.waiting
-                                ? SplashScreen()
-                                : LoginPage());
-                  }
-                }),
           );
         }));
   }

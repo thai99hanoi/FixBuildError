@@ -15,8 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future logout() async {
     try {
       await Provider.of<Auth>(context, listen: false)
-          .logout()
-          .then((value) => UserRepository().updateUserOnline(0));
+          .logout();
       Route route = MaterialPageRoute(builder: (context) => LoginPage());
       Navigator.push(context, route);
     } catch (error) {

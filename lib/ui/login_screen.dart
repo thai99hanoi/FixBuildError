@@ -18,7 +18,7 @@ class _State extends State<LoginPage> {
   // var url = Uri.http("http://localhost:8080", "/authenticate");
   Future save() async {
     try {
-      await Provider.of<Auth>(context, listen: false).login(user).then((value) => UserRepository().updateUserOnline(1));
+      await Provider.of<Auth>(context, listen: false).login(user);
     } on HttpException catch (e) {
       var errorMessage = 'Authentication Failed';
       if (e.toString().contains('Username is invalid!')) {
