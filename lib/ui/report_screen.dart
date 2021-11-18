@@ -7,10 +7,8 @@ import 'package:heath_care/repository/exercise_repository.dart';
 import 'package:heath_care/repository/medicine_repository.dart';
 import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/repository/symptom_repository.dart';
-import 'package:heath_care/ui/next_report.dart';
-import 'package:provider/provider.dart';
+
 import 'components/NavSideBar.dart';
-import 'list_symtom.dart';
 
 class ReportScreen extends StatefulWidget {
   const ReportScreen({Key? key}) : super(key: key);
@@ -38,13 +36,14 @@ class _ReportScreenState extends State<ReportScreen> {
           _allMedicine = val!;
         }));
   }
-Future save() async{
-    try{
+  Future save() async {
+    try {
       ReportDTORepository().createReport(reportDTO);
-    }catch (error) {
+    } catch (error) {
       print(error.toString());
     }
-}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +65,8 @@ Future save() async{
                       width: 100,
                       height: 20,
                       child: TextField(
-                          controller: TextEditingController(text: reportDTO.oxygen),
+                          controller:
+                              TextEditingController(text: reportDTO.oxygen),
                           onChanged: (val) {
                             reportDTO.oxygen = val;
                           },
@@ -86,7 +86,8 @@ Future save() async{
                       width: 100,
                       height: 20,
                       child: TextField(
-                          controller: TextEditingController(text: reportDTO.temperate),
+                          controller:
+                              TextEditingController(text: reportDTO.temperate),
                           onChanged: (val) {
                             reportDTO.temperate = val;
                           },
@@ -99,112 +100,108 @@ Future save() async{
               child: Text("Tình trạng sức khoẻ",
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
             ),
-            new Expanded(
-              child: ListView.builder(
-                  physics: ScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _allSymptom.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                            title: Text(_allSymptom[index].name.toString()),
-                            trailing: Checkbox(
-                                value: _allSymptom[index].isCheck,
-                                onChanged: (bool? val) {
-                                  setState(() {
-                                    _allSymptom[index].isCheck =
-                                        !_allSymptom[index].isCheck;
-                                    if (_allSymptom[index].isCheck) {
-                                      _selectedSymptom!.add(
-                                          _allSymptom[index].symptomId);
-                                      reportDTO.symptomId = _selectedSymptom;
-                                    } else {
-                                      _selectedSymptom!.remove(
-                                          _allSymptom[index].symptomId);
-                                    }
-                                  });
-                                }))
-                        // Text(symptomAll.data![index].name.toString())
-                        ;
-                  }),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(20.10),
-              child: Text("Báo Cáo Bài Tập Hàng Ngày",
-                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
-            ),
-            new Expanded(
-              child: ListView.builder(
+            ListView.builder(
                 physics: ScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: _allExercise.length,
+                itemCount: _allSymptom.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                          title: Text(_allExercise[index].name.toString()),
+                          title: Text(_allSymptom[index].name.toString()),
                           trailing: Checkbox(
-                              value: _allExercise[index].isCheck,
+                              value: _allSymptom[index].isCheck,
                               onChanged: (bool? val) {
                                 setState(() {
-                                  _allExercise[index].isCheck =
-                                      !_allExercise[index].isCheck;
-                                  if (_allExercise[index].isCheck) {
-                                    _selectedExercise!.add(_allExercise[index].id);
-                                    reportDTO.exerciseId = _selectedExercise;
+                                  _allSymptom[index].isCheck =
+                                      !_allSymptom[index].isCheck;
+                                  if (_allSymptom[index].isCheck) {
+                                    _selectedSymptom!
+                                        .add(_allSymptom[index].symptomId);
+                                    reportDTO.symptomId = _selectedSymptom;
                                   } else {
-                                    _selectedExercise!.remove(
-                                        _allExercise[index].name.toString());
+                                    _selectedSymptom!
+                                        .remove(_allSymptom[index].symptomId);
                                   }
                                 });
                               }))
                       // Text(symptomAll.data![index].name.toString())
                       ;
-                },
-              ),
+                }),
+            const Padding(
+              padding: EdgeInsets.all(20.10),
+              child: Text("Báo Cáo Bài Tập Hàng Ngày",
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
+            ),
+            ListView.builder(
+              physics: ScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: _allExercise.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                        title: Text(_allExercise[index].name.toString()),
+                        trailing: Checkbox(
+                            value: _allExercise[index].isCheck,
+                            onChanged: (bool? val) {
+                              setState(() {
+                                _allExercise[index].isCheck =
+                                    !_allExercise[index].isCheck;
+                                if (_allExercise[index].isCheck) {
+                                  _selectedExercise!
+                                      .add(_allExercise[index].id);
+                                  reportDTO.exerciseId = _selectedExercise;
+                                } else {
+                                  _selectedExercise!.remove(
+                                      _allExercise[index].name.toString());
+                                }
+                              });
+                            }))
+                    // Text(symptomAll.data![index].name.toString())
+                    ;
+              },
             ),
             const Padding(
               padding: EdgeInsets.all(20.10),
               child: Text("Báo Cáo Thuốc Hàng Ngày",
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
             ),
-            Expanded(
-              child: ListView.builder(
-                physics: ScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: _allMedicine.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                          title: Text(_allMedicine[index].name.toString()),
-                          trailing: Checkbox(
-                              value: _allMedicine[index].isCheck,
-                              onChanged: (bool? val) {
-                                setState(() {
-                                  _allMedicine[index].isCheck =
-                                      !_allMedicine[index].isCheck;
-                                  if (_allMedicine[index].isCheck) {
-                                    _selectedMedicine!.add(
-                                        _allMedicine[index].id);
-                                    reportDTO.medicineId = _selectedMedicine;
-                                  } else {
-                                    _selectedMedicine!.remove(
-                                        _allMedicine[index].name.toString());
-                                  }
-                                });
-                              }))
-                      // Text(symptomAll.data![index].name.toString())
-                      ;
-                },
-              ),
+            ListView.builder(
+              physics: ScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: _allMedicine.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                        title: Text(_allMedicine[index].name.toString()),
+                        trailing: Checkbox(
+                            value: _allMedicine[index].isCheck,
+                            onChanged: (bool? val) {
+                              setState(() {
+                                _allMedicine[index].isCheck =
+                                    !_allMedicine[index].isCheck;
+                                if (_allMedicine[index].isCheck) {
+                                  _selectedMedicine!
+                                      .add(_allMedicine[index].id);
+                                  reportDTO.medicineId = _selectedMedicine;
+                                } else {
+                                  _selectedMedicine!.remove(
+                                      _allMedicine[index].name.toString());
+                                }
+                              });
+                            }))
+                    // Text(symptomAll.data![index].name.toString())
+                    ;
+              },
             ),
             const Padding(
               padding: EdgeInsets.all(28.0),
               child: Text("Ghi chú khác",
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
             ),
-             Center(
+            Center(
               child: Card(
                   child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: TextField(
-                        controller: TextEditingController(text: reportDTO.comment),
+                        controller:
+                            TextEditingController(text: reportDTO.comment),
                         onChanged: (val) {
                           reportDTO.comment = val;
                         },

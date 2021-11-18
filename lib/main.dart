@@ -2,9 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:heath_care/repository/user_repository.dart';
-import 'package:heath_care/ui/home_screen.dart';
-import 'package:heath_care/ui/login_screen.dart';
-import 'package:heath_care/ui/main_screen.dart';
 import 'package:heath_care/ui/splash_screen.dart';
 import 'package:heath_care/utils/navigation_util.dart';
 import 'package:oktoast/oktoast.dart';
@@ -37,15 +34,13 @@ class _MyAppState extends State<MyApp> {
           print('rebuild');
           return OKToast(
             child: MaterialApp(
-              navigatorKey: NavigationUtil.navigatorKey,
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-              ),
-              home:  LoginPage()
-
-            ),
+                navigatorKey: NavigationUtil.navigatorKey,
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                ),
+                home: SplashScreen()),
           );
         }));
   }
