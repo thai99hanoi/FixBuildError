@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/repository/user_repository.dart';
+import 'package:heath_care/ui/otp_screen.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:provider/provider.dart';
@@ -157,10 +158,18 @@ class _State extends State<LoginPage> {
                       color: Color(0xff888888),
                     ),
                   ),
-                  Text(
-                    "FORGOT PASSWORD?",
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  )
+                  // RaisedButton(
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => OTPScreen()),
+                  //     );
+                  //   },
+                  //   child: Text(
+                  //     "FORGOT PASSWORD?",
+                  //     style: TextStyle(fontSize: 15, color: Colors.blue),
+                  //   ),
+                  // )
                 ],
               ),
             ),
