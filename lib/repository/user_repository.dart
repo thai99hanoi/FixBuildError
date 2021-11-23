@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:heath_care/model/doctor_by_patient_dto.dart';
 import 'package:heath_care/model/patient_dto.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/networks/api_base_helper.dart';
@@ -87,15 +88,44 @@ class UserRepository {
   }
 
   Future<List<PatientDTO>?> getPatientByDoctor() async {
+    String? token = await Auth().getToken();
     print('Api Get, url v1/api/patient-doctor/get-patient');
+    var responseJson;
     try {
-      final response =
-          await apiBaseHelper.get("v1/api/patient-doctor/get-patient");
+      final response = await http.get(
+        Uri.parse(Api.authUrl + "v1/api/patient-doctor/get-patient"),
+        headers: {
+          "content-type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
       print('api get user online recieved!');
-      final mapUsers = json.decode(response);
-      return (mapUsers['data'] as List)
+      responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      return (responseJson['data'] as List)
           .map((user) => PatientDTO.fromJson(user))
           .toList();
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+  }
+
+  Future<DoctorByPatientDTO> getDoctorByPatient() async {
+    print('Api Get, url v1/api/patient-doctor/get-doctor');
+    String? token = await Auth().getToken();
+    var responseJson;
+    try {
+      final response = await http.get(
+        Uri.parse(Api.authUrl + "v1/api/patient-doctor/get-doctor"),
+        headers: {
+          "content-type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+      print('api get user online recieved!');
+      responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      DoctorByPatientDTO doctorByPatientDTO = DoctorByPatientDTO.fromJson(responseJson['data']);
+      return doctorByPatientDTO;
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
