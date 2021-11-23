@@ -15,8 +15,8 @@ class UserRepository {
 
   Future<User> getCurrentUser({String? tokenTmp}) async {
     final response = await apiBaseHelper
-        .getWithCache("/v1/api/user/current-user", tokenTmp: tokenTmp);
-    User _currentUser = User.fromJson(response['data']);
+        .getWithCache("/v1/api/user/v2/current-user", tokenTmp: tokenTmp);
+    User _currentUser = User.fromJson(response);
     return _currentUser;
   }
 

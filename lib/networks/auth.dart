@@ -187,13 +187,13 @@ class Auth with ChangeNotifier {
       String role = responseData['data']['roles'][0];
       prefs.setString('role', role);
 
-      if (role == 'admin') {
+      if (role == 'F0' || role == 'F1') {
         NavigationUtil.pushReplacement(
           MaterialPageRoute(
             builder: (context) => MainScreen(),
           ),
         );
-      } else if (role == 'Super admin') {
+      } else if (role == 'Bác sĩ') {
         NavigationUtil.pushReplacement(
           MaterialPageRoute(
             builder: (context) => MainScreenDoctor(),
