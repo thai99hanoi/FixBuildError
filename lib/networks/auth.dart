@@ -36,6 +36,7 @@ class Auth with ChangeNotifier {
 
   setCurrentUser(User user) {
     _currentUser = user;
+
     notifyListeners();
   }
 
@@ -167,6 +168,7 @@ class Auth with ChangeNotifier {
       _token = responseData['data']['token'];
 
       User user = await userRepository.getCurrentUser(tokenTmp: _token);
+      setCurrentUserCache(user.userId);
       setCurrentUser(user);
       _expiryDate = DateTime.now().add(Duration(seconds: 600));
 
@@ -222,6 +224,16 @@ class Auth with ChangeNotifier {
   Future<String> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('token') ?? "";
+  }
+
+  Future<bool> setCurrentUserCache(int? value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString('userId', value.toString());
+  }
+
+  Future<String> getCurrentUserCache() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userId') ?? "";
   }
 
   Future<DateTime?> getExpiryDate() async {
