@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:heath_care/model/patient_dto.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/networks/api_base_helper.dart';
 import 'package:heath_care/networks/auth.dart';
@@ -83,5 +84,21 @@ class UserRepository {
     }
     print('api post.');
     return responseJson;
+  }
+
+  Future<List<PatientDTO>?> getPatientByDoctor() async {
+    print('Api Get, url v1/api/patient-doctor/get-patient');
+    try {
+      final response =
+          await apiBaseHelper.get("v1/api/patient-doctor/get-patient");
+      print('api get user online recieved!');
+      final mapUsers = json.decode(response);
+      return (mapUsers['data'] as List)
+          .map((user) => PatientDTO.fromJson(user))
+          .toList();
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
   }
 }

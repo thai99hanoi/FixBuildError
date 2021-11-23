@@ -9,7 +9,7 @@ import 'package:heath_care/utils/api.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
 class AddressRepository{
-  Future<List<Province>?> getAllProvince() async {
+  Future<List<Province>> getAllProvince() async {
     String? token = await Auth().getToken();
     print('Api Get, url /v1/api/province/get-all');
     var responseJson;

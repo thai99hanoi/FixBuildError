@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:heath_care/model/list_report_dto.dart';
 import 'package:heath_care/model/report_dto.dart';
 import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/repository/user_repository.dart';
@@ -40,5 +41,27 @@ class ReportDTORepository {
     }
     print('api post.');
     return responseJson;
+  }
+
+  Future<ListReportDTO> getReportByUser(int userId) async {
+    String? token = await Auth().getToken();
+    print('Api Get, url  /v1/api/report/get-report');
+    var responseJson;
+    try {
+      final response = await http.get(
+        Uri.parse(Api.authUrl + "/v1/api/report/get-report?userId="+userId.toString()),
+        headers: {
+          "content-type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+      responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      print('api get recieved!');
+      ListReportDTO listReportDTO = ListReportDTO.fromJson(responseJson['data']);
+      return listReportDTO;
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
   }
 }
