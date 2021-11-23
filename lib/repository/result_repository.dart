@@ -32,4 +32,30 @@ class ResultRepository {
       throw FetchDataException('No Internet connection');
     }
   }
+
+  Future<List<Result>?> getAllResultCurrentUserId() async {
+    var _userID = await Auth().getCurrentUserCache();
+    String? token = await Auth().getToken();
+    print('Api Get, url /v1/api/result/get-result');
+    var responseJson;
+    try {
+      final response = await http.get(
+        Uri.parse(Api.authUrl +
+            "/v1/api/result/get-result?userId=" +
+            _userID.toString()),
+        headers: {
+          "content-type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+      responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      print('api get recieved!');
+      return (responseJson['data'] as List)
+          .map((result) => Result.fromJson(result))
+          .toList();
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+  }
 }
