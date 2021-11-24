@@ -20,6 +20,16 @@ class UserRepository {
     return _currentUser;
   }
 
+  Future<User?> getUserByUserId(int? userId) async {
+    try {
+      Map<String, dynamic> response =
+      await apiBaseHelper.getWithCache("/v1/api/user/get-by-id?userId="+userId.toString());
+      return User.fromJson(response['data']);
+    } on FetchDataException catch (e) {
+      print(e);
+    }
+  }
+
   Future<User?> getUserByUserName(String userName) async {
     try {
       Map<String, dynamic> response =
@@ -130,5 +140,25 @@ class UserRepository {
       print('No net');
       throw FetchDataException('No Internet connection');
     }
+  }
+
+  Future<User?>getDoctor() async{
+    DoctorByPatientDTO doctorByPatientDTO = await getDoctorByPatient();
+    User? doctor = await getUserByUserId(doctorByPatientDTO.userId);
+    if (doctor != null){
+      return doctor;
+    } else{
+      return null;
+    }
+  }
+
+  Future<List<User>?>getPatient() async{
+    List<PatientDTO>? patients = await getPatientByDoctor();
+    List<User>? users;
+    for(PatientDTO patient in patients!){
+      User? user = await getUserByUserId(patient.userId);
+      users!.add(user!);
+    }
+    return users;
   }
 }
