@@ -8,7 +8,7 @@ import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
 
 class ExerciseDetailRepository{
-  Future<List<ExerciseDetail>?> getDetailExercise(int? exerciseId) async {
+  Future<List<ExerciseDetail>> getDetailExercise(int? exerciseId) async {
     String? token = await Auth().getToken();
     print('Api Get, url /v1/api/exercise_detail/get');
     var responseJson;

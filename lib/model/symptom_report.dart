@@ -14,6 +14,8 @@ class SymptomReport{
       id: json['id'] as int?,
       user: User.fromJson(json['user']),
       symptom: Symptom.fromJson(json['symptom']),
-      date: DateTime?.parse(json["date"]),
+      date: json['date'] != null
+          ? DateTime?.parse(json["date"])
+          : json['date'] as DateTime?,
       time: json['time'] as String?);
 }

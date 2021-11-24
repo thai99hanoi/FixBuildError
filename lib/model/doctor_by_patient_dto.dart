@@ -4,6 +4,7 @@ class DoctorByPatientDTO {
   String? firstname;
   String? surname;
   String? lastname;
+  String? username;
   String? email;
   String? phone;
   String? villageName;
@@ -17,6 +18,7 @@ class DoctorByPatientDTO {
       this.firstname,
       this.surname,
       this.lastname,
+      this.username,
       this.email,
       this.phone,
       this.villageName,
@@ -31,6 +33,7 @@ class DoctorByPatientDTO {
           firstname: json["firstname"] as String?,
           surname: json["surname"] as String?,
           lastname: json["lastname"] as String?,
+          username: json["username"] as String?,
           email: json['email'] as String?,
           phone: json['phone'] as String?,
           villageName: json['villageName'] as String?,

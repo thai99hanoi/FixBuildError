@@ -15,6 +15,8 @@ class MedicineReport{
       id: json['id'] as int?,
       user: User.fromJson(json['user']),
       medicine: Medicine.fromJson(json['medicine']),
-      date: DateTime?.parse(json["date"]),
+      date: json['date'] != null
+          ? DateTime?.parse(json["date"])
+          : json['date'] as DateTime?,
       time: json['time'] as String?);
 }

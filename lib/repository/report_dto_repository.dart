@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:heath_care/model/DailyCheckDTO.dart';
 import 'package:heath_care/model/list_report_dto.dart';
 import 'package:heath_care/model/report_dto.dart';
 import 'package:heath_care/networks/auth.dart';
@@ -59,6 +60,29 @@ class ReportDTORepository {
       print('api get recieved!');
       ListReportDTO listReportDTO = ListReportDTO.fromJson(responseJson['data']);
       return listReportDTO;
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+  }
+
+  Future<List<DailyCheckDTO>> getTemperatureAndOxygen() async {
+    String? token = await Auth().getToken();
+    print('Api Get, url  /v1/api/daily-report/get-check');
+    var responseJson;
+    try {
+      final response = await http.get(
+        Uri.parse(Api.authUrl + "/v1/api/daily-report/get-check"),
+        headers: {
+          "content-type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+      responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      print('api get recieved!');
+      return (responseJson['data'] as List)
+          .map((report) => DailyCheckDTO.fromJson(report))
+          .toList() ;
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
