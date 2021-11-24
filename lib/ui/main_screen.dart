@@ -58,17 +58,17 @@ class _MainScreenState extends State<MainScreen> {
           if (firstRequest.from == currentUser.username) {
             navigatorPage(CallPage(firstRequest.isVoiceCall, true,
                 datas.first.reference, currentUser.username, () {
-                  isInCall = false;
-                }));
+              isInCall = false;
+            }));
           } else if (firstRequest.inComingCall == false) {
             navigatorPage(CallPage(firstRequest.isVoiceCall, false,
                 datas.first.reference, currentUser.username, () {
-                  isInCall = false;
-                }));
+              isInCall = false;
+            }));
           } else if (firstRequest.roomId?.isNotEmpty == true) {
             navigatorPage(ReceiveCallPage(
               datas.first.reference,
-                  () {
+              () {
                 isInCall = false;
               },
               fullNameFrom: firstRequest.fullNameFrom,
@@ -114,7 +114,8 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.message), label: "Liên Hệ"),
           BottomNavigationBarItem(icon: Icon(Icons.home, size: 45), label: ""),
           BottomNavigationBarItem(
-              icon: Icon(Icons.message), label: "Xét Nghiệm"),
+              icon: Icon(Icons.assignment_returned_outlined),
+              label: "Xét Nghiệm"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Cá Nhân")
         ],
       ),

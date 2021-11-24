@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/repository/exercise_repository.dart';
 import 'package:heath_care/ui/detail_exercise.dart';
+import 'package:heath_care/utils/api.dart';
 import 'package:heath_care/utils/image_util.dart';
 import 'components/NavSideBar.dart';
 
@@ -41,7 +42,7 @@ class _ExcerciseScreenState extends State<ExcerciseScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.network(
-                          "https://healthcaresystemstorage.s3.us-east-2.amazonaws.com/images/exercise/"+values[index].thumbnail,
+                          Api.imageUrl + values[index].thumbnail,
                           height: 100,
                           width: 200,
                           fit: BoxFit.cover,

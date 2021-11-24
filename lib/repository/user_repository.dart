@@ -22,8 +22,8 @@ class UserRepository {
 
   Future<User?> getUserByUserId(int? userId) async {
     try {
-      Map<String, dynamic> response =
-      await apiBaseHelper.getWithCache("/v1/api/user/get-by-id?userId="+userId.toString());
+      Map<String, dynamic> response = await apiBaseHelper
+          .getWithCache("/v1/api/user/get-by-id?userId=" + userId.toString());
       return User.fromJson(response['data']);
     } on FetchDataException catch (e) {
       print(e);
@@ -134,7 +134,8 @@ class UserRepository {
       );
       print('api get user online recieved!');
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
-      DoctorByPatientDTO doctorByPatientDTO = DoctorByPatientDTO.fromJson(responseJson['data']);
+      DoctorByPatientDTO doctorByPatientDTO =
+          DoctorByPatientDTO.fromJson(responseJson['data']);
       return doctorByPatientDTO;
     } on SocketException {
       print('No net');
@@ -142,20 +143,22 @@ class UserRepository {
     }
   }
 
-  Future<User?>getDoctor() async{
+  Future<List<User>?> getDoctor() async {
+    List<User>? users;
     DoctorByPatientDTO doctorByPatientDTO = await getDoctorByPatient();
     User? doctor = await getUserByUserId(doctorByPatientDTO.userId);
-    if (doctor != null){
-      return doctor;
-    } else{
+    if (doctor != null) {
+      users!.add(doctor);
+      return users;
+    } else {
       return null;
     }
   }
 
-  Future<List<User>?>getPatient() async{
+  Future<List<User>?> getPatient() async {
     List<PatientDTO>? patients = await getPatientByDoctor();
     List<User>? users;
-    for(PatientDTO patient in patients!){
+    for (PatientDTO patient in patients!) {
       User? user = await getUserByUserId(patient.userId);
       users!.add(user!);
     }

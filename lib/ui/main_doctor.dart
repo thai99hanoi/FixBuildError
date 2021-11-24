@@ -5,6 +5,7 @@ import 'package:heath_care/firebase/chat_firebase.dart';
 import 'package:heath_care/model/message.dart';
 import 'package:heath_care/model/request_call.dart';
 import 'package:heath_care/repository/user_repository.dart';
+import 'package:heath_care/ui/doctor_all_contact.dart';
 import 'package:heath_care/ui/home_doctor.dart';
 import 'package:heath_care/ui/report_screen.dart';
 import 'package:heath_care/ui/test_screen.dart';
@@ -24,7 +25,7 @@ class _MainScreenState extends State<MainScreenDoctor> {
   int pageIndex = 0;
   List<Widget> pageList = <Widget>[
     homeScreenDoctor(),
-    ListUser(),
+    ListAllPattients(),
     ListUser(),
     UserProfileScreen()
   ];

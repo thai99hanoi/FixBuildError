@@ -46,11 +46,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     } else {
       _textDOBController.text = DateFormat.yMd().format(_profile.dateOfBirth!);
     }
+    if (_selectedProvince == null) {
+      _selectedProvince = _profile.province;
+    }
+    if (selectedDistrict == null) {
+      selectedDistrict = _profile.district;
+    }
+    if (selectedVillage == null) {
+      selectedVillage = _profile.village;
+    }
 
-    _selectedProvince = _profile.province;
     _selectedGender = _profile.gender;
-    selectedDistrict = _profile.district;
-    selectedVillage = _profile.village;
+
     if (_profile.firstname == null) {
       return Scaffold(
           appBar: AppBar(
@@ -127,8 +134,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: DropdownButton<String>(
-                                hint: Text(_selectedGender ??
-                                    'Vui Lòng Chọn Giới Tính'),
+                                hint: Text(
+                                    _selectedGender ??
+                                        'Vui Lòng Chọn Giới Tính',
+                                    style: TextStyle(fontSize: 12)),
                                 items:
                                     <String>['Nam', 'Nữ'].map((String value) {
                                   return new DropdownMenuItem<String>(
@@ -175,12 +184,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 );
                               }).toList(),
                               onChanged: (province) async {
+                                setState(() {
+                                  _selectedProvince = province;
+                                });
                                 AddressRepository()
                                     .getAllDistrictByProvinceId(
                                         province!.provinceId)
                                     .then((vall) => setState(() {
                                           _selectedProvince = province;
-                                          selectedDistrict = null;
+
                                           _districts = vall!;
                                         }));
                               }),
@@ -206,11 +218,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               );
                             }).toList(),
                             onChanged: (district) {
+                              setState(() {
+                                selectedDistrict = district;
+                              });
                               AddressRepository()
                                   .getAllVillageByDistrictId(
                                       district!.districtId)
                                   .then((vall) => setState(() {
                                         _allVillage = vall!;
+                                        selectedDistrict = district;
                                       }));
                               //tượng tự có districtId, làm tiếp
                             },

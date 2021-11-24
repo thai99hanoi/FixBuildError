@@ -8,15 +8,15 @@ import 'package:heath_care/ui/components/item_conversation.dart';
 import 'components/NavSideBar.dart';
 import 'components/item_user_online.dart';
 
-class ListUser extends StatefulWidget {
+class ChatDoctor extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ListUserState();
+  State<StatefulWidget> createState() => _ChatDoctorState();
 }
 
-class _ListUserState extends State<ListUser> {
+class _ChatDoctorState extends State<ChatDoctor> {
   bool _buildOnlinePage = false;
 
-  Future<List<User>?> _userOnline = new UserRepository().getDoctor();
+  Future<List<User>?> _userOnline = new UserRepository().getPatient();
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,10 @@ class _ListUserState extends State<ListUser> {
             );
           } else {
             return Center(
-              child: CircularProgressIndicator(),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: CircularProgressIndicator(),
+              ),
             );
           }
         });

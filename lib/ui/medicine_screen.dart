@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/repository/medicine_repository.dart';
 import 'package:heath_care/ui/detail_medicine.dart';
+import 'package:heath_care/utils/api.dart';
 
 class MedicineScreen extends StatefulWidget {
   const MedicineScreen({Key? key}) : super(key: key);
@@ -37,12 +38,18 @@ class _MedicineScreenState extends State<MedicineScreen> {
                   child: Column(
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(
-                          "assets/images/ex.jpeg",
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: values[index].thumbnail.isNotEmpty
+                              ? Image.network(
+                                  Api.imageUrl + values[index].thumbnail,
+                                  height: 100,
+                                  width: 200,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  "assets/images/ex.jpeg",
+                                  fit: BoxFit.cover,
+                                )),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
