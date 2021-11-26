@@ -13,7 +13,7 @@ class ListAllPattients extends StatefulWidget {
 
 class _ListAllPattientsState extends State<ListAllPattients> {
   User _currentUser = new User();
-  Future<List<User>?> _listPattients = new UserRepository().getPatient();
+  Future<List<User>?> _listPattients = new UserRepository().getPatientByDoctor();
   _ListAllPattientsState() {
     UserRepository().getCurrentUser().then((val) => setState(() {
           _currentUser = val;

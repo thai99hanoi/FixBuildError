@@ -16,7 +16,7 @@ class ChatDoctor extends StatefulWidget {
 class _ChatDoctorState extends State<ChatDoctor> {
   bool _buildOnlinePage = false;
 
-  Future<List<User>?> _userOnline = new UserRepository().getPatient();
+  Future<List<User>?> _userOnline = new UserRepository().getPatientByDoctor();
 
   @override
   Widget build(BuildContext context) {

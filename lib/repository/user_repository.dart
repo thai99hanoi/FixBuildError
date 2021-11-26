@@ -33,7 +33,7 @@ class UserRepository {
   Future<User?> getUserByUserName(String userName) async {
     try {
       Map<String, dynamic> response =
-      await apiBaseHelper.getWithCache("/v1/api/user/$userName");
+          await apiBaseHelper.getWithCache("/v1/api/user/$userName");
       return User.fromJson(response['data']);
     } on FetchDataException catch (e) {
       print(e);
@@ -71,23 +71,23 @@ class UserRepository {
     var responseJson;
     try {
       final response =
-      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
-          headers: {
-            "content-type": "application/json",
-            'Authorization': 'Bearer $token',
-          },
-          body: json.encode({
-            "username": user.username,
-            "mail": user.email,
-            "phone": user.phone,
-            "lastLogin": DateTime.now().toString(),
-            "firstname": user.firstname,
-            "lastname": user.lastname,
-            "surname": user.surname,
-            "avatar": user.avatar,
-            "isOnline": isOnline,
-            "isActive": user.isActive
-          }));
+          await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
+              headers: {
+                "content-type": "application/json",
+                'Authorization': 'Bearer $token',
+              },
+              body: json.encode({
+                "username": user.username,
+                "mail": user.email,
+                "phone": user.phone,
+                "lastLogin": DateTime.now().toString(),
+                "firstname": user.firstname,
+                "lastname": user.lastname,
+                "surname": user.surname,
+                "avatar": user.avatar,
+                "isOnline": isOnline,
+                "isActive": user.isActive
+              }));
       responseJson = json.encode(response.body);
     } on SocketException {
       print('No net');
@@ -97,7 +97,7 @@ class UserRepository {
     return responseJson;
   }
 
-  Future<List<PatientDTO>?> getPatientByDoctor() async {
+  Future<List<User>?> getPatientByDoctor() async {
     String? token = await Auth().getToken();
     print('Api Get, url /v1/api/patient-doctor/get-patient');
     var responseJson;
@@ -112,7 +112,7 @@ class UserRepository {
       print('api get user online recieved!');
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       return (responseJson['data'] as List)
-          .map((user) => PatientDTO.fromJson(user))
+          .map((user) => User.fromJson(user))
           .toList();
     } on SocketException {
       print('No net');
@@ -120,9 +120,10 @@ class UserRepository {
     }
   }
 
-  Future<DoctorByPatientDTO> getDoctorByPatient() async {
+  Future<List<User>?> getDoctorByPatient() async {
     print('Api Get, url /v1/api/patient-doctor/get-doctor');
     String? token = await Auth().getToken();
+    List<User>? users;
     var responseJson;
     try {
       final response = await http.get(
@@ -134,30 +135,12 @@ class UserRepository {
       );
       print('api get user online recieved!');
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
-      DoctorByPatientDTO doctorByPatientDTO =
-      DoctorByPatientDTO.fromJson(responseJson['data']);
-      return doctorByPatientDTO;
+      return (responseJson['data'] as List)
+          .map((user) => User.fromJson(user))
+          .toList();
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
     }
   }
-
-  Future<List<User>?> getDoctor() async {
-    List<User>? users;
-    DoctorByPatientDTO doctorByPatientDTO = await getDoctorByPatient();
-    User? doctor = await getUserByUserId(doctorByPatientDTO.userId);
-    users!.add(doctor!);
-    return users;
-  }
-
-
-Future<List<User>?> getPatient() async {
-  List<PatientDTO>? patients = await getPatientByDoctor();
-  List<User>? users;
-  await Future.forEach(patients!, (PatientDTO patient) async {
-    User? user = await getUserByUserId(patient.userId);
-    users!.add(user!);
-  });
-  return users;
-}}
+}

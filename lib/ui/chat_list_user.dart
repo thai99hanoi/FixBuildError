@@ -16,7 +16,7 @@ class ListUser extends StatefulWidget {
 class _ListUserState extends State<ListUser> {
   bool _buildOnlinePage = false;
 
-  Future<List<User>?> _userOnline = new UserRepository().getDoctor();
+  Future<List<User>?> _userOnline = new UserRepository().getDoctorByPatient();
 
   @override
   Widget build(BuildContext context) {
