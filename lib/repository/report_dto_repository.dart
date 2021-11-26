@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:heath_care/model/DailyCheckDTO.dart';
+
+import 'package:heath_care/model/daily_check_dto.dart';
 import 'package:heath_care/model/list_report_dto.dart';
 import 'package:heath_care/model/report_dto.dart';
 import 'package:heath_care/networks/auth.dart';
@@ -80,7 +81,7 @@ class ReportDTORepository {
       );
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print('api get recieved!');
-      return (responseJson['data'] as List)
+      return (responseJson as List)
           .map((report) => DailyCheckDTO.fromJson(report))
           .toList() ;
     } on SocketException {

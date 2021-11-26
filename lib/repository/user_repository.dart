@@ -33,7 +33,7 @@ class UserRepository {
   Future<User?> getUserByUserName(String userName) async {
     try {
       Map<String, dynamic> response =
-          await apiBaseHelper.getWithCache("/v1/api/user/$userName");
+      await apiBaseHelper.getWithCache("/v1/api/user/$userName");
       return User.fromJson(response['data']);
     } on FetchDataException catch (e) {
       print(e);
@@ -71,23 +71,23 @@ class UserRepository {
     var responseJson;
     try {
       final response =
-          await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
-              headers: {
-                "content-type": "application/json",
-                'Authorization': 'Bearer $token',
-              },
-              body: json.encode({
-                "username": user.username,
-                "mail": user.email,
-                "phone": user.phone,
-                "lastLogin": DateTime.now().toString(),
-                "firstname": user.firstname,
-                "lastname": user.lastname,
-                "surname": user.surname,
-                "avatar": user.avatar,
-                "isOnline": isOnline,
-                "isActive": user.isActive
-              }));
+      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
+          headers: {
+            "content-type": "application/json",
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode({
+            "username": user.username,
+            "mail": user.email,
+            "phone": user.phone,
+            "lastLogin": DateTime.now().toString(),
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "surname": user.surname,
+            "avatar": user.avatar,
+            "isOnline": isOnline,
+            "isActive": user.isActive
+          }));
       responseJson = json.encode(response.body);
     } on SocketException {
       print('No net');
@@ -99,11 +99,11 @@ class UserRepository {
 
   Future<List<PatientDTO>?> getPatientByDoctor() async {
     String? token = await Auth().getToken();
-    print('Api Get, url v1/api/patient-doctor/get-patient');
+    print('Api Get, url /v1/api/patient-doctor/get-patient');
     var responseJson;
     try {
       final response = await http.get(
-        Uri.parse(Api.authUrl + "v1/api/patient-doctor/get-patient"),
+        Uri.parse(Api.authUrl + "/v1/api/patient-doctor/get-patient"),
         headers: {
           "content-type": "application/json",
           'Authorization': 'Bearer $token',
@@ -121,12 +121,12 @@ class UserRepository {
   }
 
   Future<DoctorByPatientDTO> getDoctorByPatient() async {
-    print('Api Get, url v1/api/patient-doctor/get-doctor');
+    print('Api Get, url /v1/api/patient-doctor/get-doctor');
     String? token = await Auth().getToken();
     var responseJson;
     try {
       final response = await http.get(
-        Uri.parse(Api.authUrl + "v1/api/patient-doctor/get-doctor"),
+        Uri.parse(Api.authUrl + "/v1/api/patient-doctor/get-doctor"),
         headers: {
           "content-type": "application/json",
           'Authorization': 'Bearer $token',
@@ -135,7 +135,7 @@ class UserRepository {
       print('api get user online recieved!');
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       DoctorByPatientDTO doctorByPatientDTO =
-          DoctorByPatientDTO.fromJson(responseJson['data']);
+      DoctorByPatientDTO.fromJson(responseJson['data']);
       return doctorByPatientDTO;
     } on SocketException {
       print('No net');
@@ -147,21 +147,17 @@ class UserRepository {
     List<User>? users;
     DoctorByPatientDTO doctorByPatientDTO = await getDoctorByPatient();
     User? doctor = await getUserByUserId(doctorByPatientDTO.userId);
-    if (doctor != null) {
-      users!.add(doctor);
-      return users;
-    } else {
-      return null;
-    }
-  }
-
-  Future<List<User>?> getPatient() async {
-    List<PatientDTO>? patients = await getPatientByDoctor();
-    List<User>? users;
-    for (PatientDTO patient in patients!) {
-      User? user = await getUserByUserId(patient.userId);
-      users!.add(user!);
-    }
+    users!.add(doctor!);
     return users;
   }
-}
+
+
+Future<List<User>?> getPatient() async {
+  List<PatientDTO>? patients = await getPatientByDoctor();
+  List<User>? users;
+  await Future.forEach(patients!, (PatientDTO patient) async {
+    User? user = await getUserByUserId(patient.userId);
+    users!.add(user!);
+  });
+  return users;
+}}
