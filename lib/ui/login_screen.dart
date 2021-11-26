@@ -71,12 +71,12 @@ class _State extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
               child: Text(
-                "Health Care System\nFor COVID Patients At Home",
+                "Hệ Thống Chăm Sóc\n Sức Khoẻ Cho Bệnh Nhân COVID Tại Nhà",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
-                  fontSize: 25,
+                  fontSize: 22,
                 ),
               ),
             ),
@@ -89,7 +89,7 @@ class _State extends State<LoginPage> {
                 },
                 style: TextStyle(fontSize: 18, color: Colors.black),
                 decoration: InputDecoration(
-                    labelText: "USERNAME",
+                    labelText: "TÊN ĐĂNG NHẬP",
                     errorText: _userInvalid ? _userNameErr : null,
                     labelStyle:
                         TextStyle(color: Color(0xff888888), fontSize: 15)),
@@ -108,7 +108,7 @@ class _State extends State<LoginPage> {
                     style: TextStyle(fontSize: 18, color: Colors.black),
                     obscureText: !_showPass,
                     decoration: InputDecoration(
-                        labelText: "PASSWORD",
+                        labelText: "MẬT KHẨU",
                         errorText: _passInvalid ? _passNameErr : null,
                         labelStyle:
                             TextStyle(color: Color(0xff888888), fontSize: 15)),
@@ -116,7 +116,7 @@ class _State extends State<LoginPage> {
                   GestureDetector(
                     onTap: onToggleShowPass,
                     child: Text(
-                      _showPass ? "HIDE" : "SHOW",
+                      _showPass ? "ẨN" : "HIỆN MẬT KHẨU",
                       style: TextStyle(
                           color: Colors.blue,
                           fontSize: 13,
@@ -139,7 +139,7 @@ class _State extends State<LoginPage> {
                   // onPressed: onSignInClicked,
                   onPressed: save,
                   child: Text(
-                    "SIGN IN",
+                    "ĐĂNG NHẬP",
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
@@ -149,14 +149,23 @@ class _State extends State<LoginPage> {
               height: 130,
               width: double.infinity,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    "NEW USER? SIGN UP",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Color(0xff888888),
+                  // Text(
+                  //   "NEW USER? SIGN UP",
+                  //   style: TextStyle(
+                  //     fontSize: 15,
+                  //     color: Color(0xff888888),
+                  //   ),
+                  // ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(16.0),
+                      primary: Color(0xff888888),
+                      textStyle: const TextStyle(fontSize: 15),
                     ),
+                    onPressed: () {},
+                    child: const Text('Quên Mật Khẩu?'),
                   ),
                   // RaisedButton(
                   //   onPressed: () {

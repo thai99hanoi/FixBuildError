@@ -7,6 +7,7 @@ import 'package:heath_care/repository/exercise_repository.dart';
 import 'package:heath_care/repository/medicine_repository.dart';
 import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/repository/symptom_repository.dart';
+import 'package:heath_care/ui/main_screen.dart';
 
 import 'components/NavSideBar.dart';
 
@@ -39,6 +40,7 @@ class _ReportScreenState extends State<ReportScreen> {
   Future save() async {
     try {
       ReportDTORepository().createReport(reportDTO);
+      showAlertDialog(context);
     } catch (error) {
       print(error.toString());
     }
@@ -232,4 +234,32 @@ class _ReportScreenState extends State<ReportScreen> {
         ),
         drawer: NavDrawer());
   }
+}
+
+showAlertDialog(BuildContext context) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
+    },
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Thành Công"),
+    content: Text("Báo cáo đã được gửi thành công, quay lại trang chủ."),
+    actions: [
+      okButton,
+    ],
+  );
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
