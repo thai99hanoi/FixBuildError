@@ -78,147 +78,151 @@ class _DetailUserReportState extends State<DetailUserReport> {
           //     }),
           _buildResultPage
               ? Text("Daily Report")
-              : ListView.builder(
-                  itemCount: _results.length,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
-                      child: Container(
-                        height: 300,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            color: Color.fromRGBO(208, 146, 149, 0.5),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "Kết Quả xét nghiệm lần: " +
-                                    (index + 1).toString(),
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
+              : Expanded(
+                  child: ListView.builder(
+                      itemCount: _results.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+                          child: Container(
+                            height: 300,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                color: Color.fromRGBO(208, 146, 149, 0.5),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    "Kết Quả xét nghiệm lần: " +
+                                        (index + 1).toString(),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 20),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Đơn vị gửi mẫu (nếu có): ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text: _results[index]
+                                                .unit!
+                                                .name
+                                                .toString()),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Ngày lấy mẫu: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text: df.format(
+                                                _results[index].collectDate!)),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Ngày xét nghiệm: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text: df.format(
+                                                _results[index].testDate!)),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Loại bệnh phẩm: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text: _results[index]
+                                                .sampleType!
+                                                .name
+                                                .toString()),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Tình trạng mẫu: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        if (_results[index].status == 1)
+                                          TextSpan(text: 'Đạt')
+                                        else
+                                          TextSpan(text: 'Không Đạt')
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Kết quả xét nghiệm: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        if (_results[index].testResult == 1)
+                                          TextSpan(text: 'Dương tính')
+                                        else if (_results[index].testResult ==
+                                            0)
+                                          TextSpan(text: 'Âm tính')
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Ghi chú: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(text: _results[index].comment),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 20),
-                              RichText(
-                                text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'Đơn vị gửi mẫu (nếu có): ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(
-                                        text: _results[index]
-                                            .unit!
-                                            .name
-                                            .toString()),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              RichText(
-                                text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'Ngày lấy mẫu: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(
-                                        text: df.format(
-                                            _results[index].collectDate!)),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              RichText(
-                                text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'Ngày xét nghiệm: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(
-                                        text: df
-                                            .format(_results[index].testDate!)),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              RichText(
-                                text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'Loại bệnh phẩm: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(
-                                        text: _results[index]
-                                            .sampleType!
-                                            .name
-                                            .toString()),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              RichText(
-                                text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'Tình trạng mẫu: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    if (_results[index].status == 1)
-                                      TextSpan(text: 'Đạt')
-                                    else
-                                      TextSpan(text: 'Không Đạt')
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              RichText(
-                                text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'Kết quả xét nghiệm: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    if (_results[index].testResult == 1)
-                                      TextSpan(text: 'Dương tính')
-                                    else if (_results[index].testResult == 0)
-                                      TextSpan(text: 'Âm tính')
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              RichText(
-                                text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'Ghi chú: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(text: _results[index].comment),
-                                  ],
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                    // Text(_results[index].testResult.toString());
-                  })
+                        );
+                        // Text(_results[index].testResult.toString());
+                      }),
+                )
         ],
       ),
     );

@@ -7,6 +7,8 @@ import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/ui/components/item_image_avatar.dart';
 import 'package:heath_care/ui/excercise_screen.dart';
 import 'package:heath_care/ui/medicine_screen.dart';
+import 'package:heath_care/ui/patient_detail.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'components/NavSideBar.dart';
 
@@ -30,7 +32,7 @@ class _homeScreenState extends State<homeScreenDoctor> {
           _todayData = val;
         }));
   }
-
+  final df = new DateFormat('dd-MM-yyyy');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +40,7 @@ class _homeScreenState extends State<homeScreenDoctor> {
           title: Text("Trang Chủ"),
           backgroundColor: Color.fromRGBO(78, 159, 193, 1),
         ),
-        body: ListView(children: [
+        body: Column(children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text("TÌNH HÌNH DỊCH TẠI VIỆT NAM",
@@ -217,11 +219,12 @@ class _homeScreenState extends State<homeScreenDoctor> {
             indent: 20,
             endIndent: 20,
           ),
-          const Divider(
-            height: 20,
-            thickness: 5,
-            indent: 20,
-            endIndent: 20,
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Center(
+                child: Text("BỆNH NHÂN CẦN THEO DÕI",
+                    style:
+                        TextStyle(fontSize: 17, fontWeight: FontWeight.w600))),
           ),
           FutureBuilder<List<DailyCheckDTO>?>(
               future: ReportDTORepository().getTemperatureAndOxygen(),
@@ -229,74 +232,118 @@ class _homeScreenState extends State<homeScreenDoctor> {
                 if (userCheckSnapshot.hasData) {
                   return Expanded(
                     child: ListView.builder(
+                        physics: ScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: userCheckSnapshot.data!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
-                            child: Padding(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PattientDetail(
+                                        userName: userCheckSnapshot
+                                            .data![index].username!),
+                                  ),
+                                );
+                              },
+                              child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 8),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Stack(
+                                child: Container(
+                                  color: Color.fromRGBO(78, 159, 193, 0.1),
+                                  height: 60,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            13, 0, 0, 0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            // ItemAvatarNetworkImage(image: userOnline.avatar),
-                                            // Positioned(
-                                            //   right: 0,
-                                            //   bottom: 0,
-                                            //   child: Container(
-                                            //     height: 16,
-                                            //     width: 16,
-                                            //     decoration: BoxDecoration(
-                                            //       color: Colors.green,
-                                            //       shape: BoxShape.circle,
-                                            //       border: Border.all(color: Colors.white, width: 3),
-                                            //     ),
-                                            //   ),
-                                            // )
+                                            Text(userCheckSnapshot.data![index]
+                                                .getDisplayName()),
+                                            RichText(
+                                              text: TextSpan(
+                                                style:
+                                                    DefaultTextStyle.of(context)
+                                                        .style,
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: 'Ngày: ',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  TextSpan(
+                                                      text: df.format(
+                                                          userCheckSnapshot
+                                                              .data![index]
+                                                              .date!)),
+                                                ],
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                        SizedBox(
-                                          width: 16,
-                                        ),
-                                        Text(
-                                          userCheckSnapshot.data![index]
-                                              .getDisplayName(),
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        // Text(
-                                        //   userCheckSnapshot.data![index].oxygen
-                                        //       .toString(),
-                                        //   style: TextStyle(
-                                        //       fontSize: 14,
-                                        //       color: Colors.black,
-                                        //       fontWeight: FontWeight.bold),
-                                        // ),
-                                        // Text(
-                                        //   userCheckSnapshot
-                                        //       .data![index].temperature
-                                        //       .toString(),
-                                        //   style: TextStyle(
-                                        //       fontSize: 14,
-                                        //       color: Colors.black,
-                                        //       fontWeight: FontWeight.bold),
-                                        // ),
-                                      ],
-                                    ),
-                                    // Opacity(
-                                    //   opacity: 0.64,
-                                    //   child: Text("Online", style: TextStyle(fontSize: 12),),
-                                    // )
-                                  ],
-                                )),
-                          );
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 0, 13, 0),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              RichText(
+                                                text: TextSpan(
+                                                  style: DefaultTextStyle.of(
+                                                          context)
+                                                      .style,
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                        text: 'Nồng độ Oxy: ',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    TextSpan(
+                                                        text: userCheckSnapshot
+                                                            .data![index].oxygen
+                                                            .toString()),
+                                                  ],
+                                                ),
+                                              ),
+                                              RichText(
+                                                text: TextSpan(
+                                                  style: DefaultTextStyle.of(
+                                                          context)
+                                                      .style,
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                        text: 'Nhiệt độ: ',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    TextSpan(
+                                                        text: userCheckSnapshot
+                                                            .data![index]
+                                                            .temperature
+                                                            .toString()),
+                                                  ],
+                                                ),
+                                              ),
+                                            ]),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ));
                         }),
                   );
                 } else {

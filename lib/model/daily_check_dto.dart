@@ -51,9 +51,9 @@ class DailyCheckDTO {
         villageName: json['villageName'] as String?,
         districtName: json['districtName'] as String?,
         provinceName: json['provinceName'] as String?,
-        date: json['date'] != null
-            ? DateTime?.parse(json["date"])
-            : json['date'] as DateTime?,
+        date: json['dateReport'] != null
+            ? DateTime?.parse(json["dateReport"])
+            : json['dateReport'] as DateTime?,
         time: json['time'] as String?,
         temperature: json['temperature'] as double?,
         oxygen: json['oxygen'] as double?,

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
-import 'package:heath_care/ui/pattient_detail.dart';
+import 'package:heath_care/ui/patient_detail.dart';
 
 import '../chat_conversation.dart';
 import 'item_image_avatar.dart';
