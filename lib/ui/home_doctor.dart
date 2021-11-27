@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:heath_care/model/covid_analysis.dart';
+import 'package:heath_care/model/daily_check_dto.dart';
 import 'package:heath_care/repository/covid_analysis_repository.dart';
+import 'package:heath_care/repository/report_dto_repository.dart';
+import 'package:heath_care/ui/components/item_image_avatar.dart';
 import 'package:heath_care/ui/excercise_screen.dart';
 import 'package:heath_care/ui/medicine_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -220,6 +223,88 @@ class _homeScreenState extends State<homeScreenDoctor> {
             indent: 20,
             endIndent: 20,
           ),
+          FutureBuilder<List<DailyCheckDTO>?>(
+              future: ReportDTORepository().getTemperatureAndOxygen(),
+              builder: (context, userCheckSnapshot) {
+                if (userCheckSnapshot.hasData) {
+                  return Expanded(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: userCheckSnapshot.data!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return InkWell(
+                            child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            // ItemAvatarNetworkImage(image: userOnline.avatar),
+                                            // Positioned(
+                                            //   right: 0,
+                                            //   bottom: 0,
+                                            //   child: Container(
+                                            //     height: 16,
+                                            //     width: 16,
+                                            //     decoration: BoxDecoration(
+                                            //       color: Colors.green,
+                                            //       shape: BoxShape.circle,
+                                            //       border: Border.all(color: Colors.white, width: 3),
+                                            //     ),
+                                            //   ),
+                                            // )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 16,
+                                        ),
+                                        Text(
+                                          userCheckSnapshot.data![index]
+                                              .getDisplayName(),
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        // Text(
+                                        //   userCheckSnapshot.data![index].oxygen
+                                        //       .toString(),
+                                        //   style: TextStyle(
+                                        //       fontSize: 14,
+                                        //       color: Colors.black,
+                                        //       fontWeight: FontWeight.bold),
+                                        // ),
+                                        // Text(
+                                        //   userCheckSnapshot
+                                        //       .data![index].temperature
+                                        //       .toString(),
+                                        //   style: TextStyle(
+                                        //       fontSize: 14,
+                                        //       color: Colors.black,
+                                        //       fontWeight: FontWeight.bold),
+                                        // ),
+                                      ],
+                                    ),
+                                    // Opacity(
+                                    //   opacity: 0.64,
+                                    //   child: Text("Online", style: TextStyle(fontSize: 12),),
+                                    // )
+                                  ],
+                                )),
+                          );
+                        }),
+                  );
+                } else {
+                  return Center(
+                    child: Text("Chưa có bệnh nhân cần theo dõi đặc biệt"),
+                  );
+                }
+              })
         ]),
         drawer: NavDrawer());
   }

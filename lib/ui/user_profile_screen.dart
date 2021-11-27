@@ -81,12 +81,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       backgroundImage: AssetImage('assets/images/img_1.png')),
                 ),
               ),
-              Center(
-                  child: Text(_profile.firstname! +
-                      " " +
-                      _profile.surname! +
-                      " " +
-                      _profile.lastname!)),
+              Center(child: Text(_profile.getDisplayName())
+                  // Text(_profile.firstname! +
+                  //     " " +
+                  //     _profile.surname! +
+                  //     " " +
+                  //     _profile.lastname!)
+                  ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: const Divider(

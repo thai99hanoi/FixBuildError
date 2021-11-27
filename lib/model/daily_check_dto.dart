@@ -60,4 +60,13 @@ class DailyCheckDTO {
         comment: json['comment'] as String?,
         isActive: json['isActive'] as int?,
       );
+  String getDisplayName() {
+    if (firstname != null &&
+        lastname != null &&
+        firstname!.isNotEmpty &&
+        lastname!.isNotEmpty) {
+      return firstname.toString() + " ${surname ?? ""} " + lastname.toString();
+    }
+    return username.toString();
+  }
 }

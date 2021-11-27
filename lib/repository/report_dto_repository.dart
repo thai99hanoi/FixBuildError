@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-
 import 'package:heath_care/model/daily_check_dto.dart';
 import 'package:heath_care/model/list_report_dto.dart';
 import 'package:heath_care/model/report_dto.dart';
@@ -18,25 +17,25 @@ class ReportDTORepository {
     var user = await UserRepository().getCurrentUser();
     var responseJson;
     try {
-      final response = await http.post(Uri.parse(Api.authUrl + "/v1/api/report/create"),
-          headers: {
-            "content-type": "application/json",
-            'Authorization': 'Bearer $token',
-          },
-          body: json.encode({
-            "username": user.username,
-            "firstname": user.firstname,
-            "lastname": user.lastname,
-            "surname": user.surname,
-            "oxygen": report.oxygen,
-            "temperate": report.temperate,
-            "symptomId": report.symptomId,
-            "comment": report.comment,
-            "exerciseId": report.exerciseId,
-            "medicineId": report.medicineId
-          }));
+      final response =
+          await http.post(Uri.parse(Api.authUrl + "/v1/api/report/create"),
+              headers: {
+                "content-type": "application/json",
+                'Authorization': 'Bearer $token',
+              },
+              body: json.encode({
+                "username": user.username,
+                "firstname": user.firstname,
+                "lastname": user.lastname,
+                "surname": user.surname,
+                "oxygen": report.oxygen,
+                "temperate": report.temperate,
+                "symptomId": report.symptomId,
+                "comment": report.comment,
+                "exerciseId": report.exerciseId,
+                "medicineId": report.medicineId
+              }));
       responseJson = json.encode(response.body);
-
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
@@ -51,7 +50,9 @@ class ReportDTORepository {
     var responseJson;
     try {
       final response = await http.get(
-        Uri.parse(Api.authUrl + "/v1/api/report/get-report?userId="+userId.toString()),
+        Uri.parse(Api.authUrl +
+            "/v1/api/report/get-report?userId=" +
+            userId.toString()),
         headers: {
           "content-type": "application/json",
           'Authorization': 'Bearer $token',
@@ -59,7 +60,8 @@ class ReportDTORepository {
       );
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print('api get recieved!');
-      ListReportDTO listReportDTO = ListReportDTO.fromJson(responseJson['data']);
+      ListReportDTO listReportDTO =
+          ListReportDTO.fromJson(responseJson['data']);
       return listReportDTO;
     } on SocketException {
       print('No net');
@@ -83,7 +85,7 @@ class ReportDTORepository {
       print('api get recieved!');
       return (responseJson as List)
           .map((report) => DailyCheckDTO.fromJson(report))
-          .toList() ;
+          .toList();
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
