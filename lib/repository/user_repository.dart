@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:heath_care/model/doctor_by_patient_dto.dart';
 import 'package:heath_care/model/password_dto.dart';
 import 'package:heath_care/model/patient_dto.dart';
+import 'package:heath_care/model/reset_password.dart';
 import 'package:heath_care/model/send_otp_request.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/networks/api_base_helper.dart';
@@ -234,6 +235,28 @@ class UserRepository {
             "dob": user.dateOfBirth,
             "address": user.address,
             "gender": user.gender
+          }));
+      responseJson = json.encode(response.body);
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+    print('api post.');
+    return responseJson;
+  }
+
+  Future<void> resetPassword(ResetPassword password, String token) async {
+    print('Api Post, url /v1/api/user/reset-password/$token');
+    var responseJson;
+    try {
+      final response =
+      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/reset-password/$token"),
+          headers: {
+            "content-type": "application/json",
+            "accept": "application/json",
+          },
+          body: json.encode({
+            "password": password.password,
           }));
       responseJson = json.encode(response.body);
     } on SocketException {
