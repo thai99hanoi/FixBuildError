@@ -199,7 +199,7 @@ class UserRepository {
     var responseJson;
     try {
       final response =
-      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/send-otp/verify-otp/$otp"),
+      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/send-otp/verify/$otp"),
           headers: {
             "content-type": "application/json",
             "accept": "application/json",
@@ -233,6 +233,7 @@ class UserRepository {
             "identityCard": user.identityId,
             "dob": user.dateOfBirth,
             "address": user.address,
+            "gender": user.gender
           }));
       responseJson = json.encode(response.body);
     } on SocketException {
