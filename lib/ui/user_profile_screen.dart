@@ -19,11 +19,13 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   User _profile = new User();
   String? _selectedGender;
+  List<String> _gender = ["Nam", "Nữ"];
   List<District> _districts = [];
   List<Province> _allProvince = [];
   List<Village> _allVillage = [];
   District? selectedDistrict;
   Village? selectedVillage;
+  final df = new DateFormat('dd-MM-yyyy');
   _UserProfileScreenState() {
     UserRepository().getCurrentUser().then((val) => setState(() {
           _profile = val;
@@ -36,33 +38,36 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   DateTime? _selectedDate;
   TextEditingController _textDOBController = TextEditingController();
   TextEditingController _textNameController = TextEditingController();
-  TextEditingController _textPhoneController = TextEditingController();
+  TextEditingController _textAddressController = TextEditingController();
   TextEditingController _textIDCardController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    if (_profile.identityId == null) {
+      _textIDCardController.clear();
+    } else {
+      _textIDCardController.text = _profile.identityId.toString();
+    }
+    if (_profile.address == null) {
+      _textAddressController.clear();
+    } else {
+      _textAddressController.text = _profile.address.toString();
+    }
+    _textNameController.text = _profile.getDisplayName();
+    _selectedDate = _profile.dateOfBirth;
     if (_profile.dateOfBirth == null) {
       _textDOBController.text = 'Vui Lòng Cập Nhập Ngày Sinh';
     } else {
-      _textDOBController.text = DateFormat.yMd().format(_profile.dateOfBirth!);
+      _selectedDate = _profile.dateOfBirth;
+      _textDOBController.text = df.format(_profile.dateOfBirth!);
     }
-    if (_selectedProvince == null) {
-      _selectedProvince = _profile.province;
-    }
-    if (selectedDistrict == null) {
-      selectedDistrict = _profile.district;
-    }
-    if (selectedVillage == null) {
-      selectedVillage = _profile.village;
-    }
-
     _selectedGender = _profile.gender;
 
     if (_profile.firstname == null) {
       return Scaffold(
           appBar: AppBar(
             backgroundColor: const Color.fromRGBO(78, 159, 193, 1),
-            title: Text("Chi Tiết Bài Tập"),
+            title: Text("HỒ SƠ"),
           ),
           body: Center(child: CircularProgressIndicator()));
     } else {
@@ -81,13 +86,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       backgroundImage: AssetImage('assets/images/img_1.png')),
                 ),
               ),
-              Center(child: Text(_profile.getDisplayName())
-                  // Text(_profile.firstname! +
-                  //     " " +
-                  //     _profile.surname! +
-                  //     " " +
-                  //     _profile.lastname!)
-                  ),
+              Center(
+                  child: Text(_profile.getDisplayName(),
+                      style: TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.w500))),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: const Divider(
@@ -102,12 +104,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 child: Column(
                   children: [
                     TextFormField(
-                      controller: TextEditingController(
-                          text: _profile.firstname! +
-                              " " +
-                              _profile.surname! +
-                              " " +
-                              _profile.lastname!),
+                      controller:
+                          TextEditingController(text: _textNameController.text),
                       style: const TextStyle(fontSize: 16, color: Colors.black),
                       decoration: const InputDecoration(
                           labelText: "Họ và tên (*):",
@@ -139,19 +137,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     _selectedGender ??
                                         'Vui Lòng Chọn Giới Tính',
                                     style: TextStyle(fontSize: 12)),
-                                items:
-                                    <String>['Nam', 'Nữ'].map((String value) {
+                                items: _gender.map((String value) {
                                   return new DropdownMenuItem<String>(
                                     value: value,
                                     child: Text(value),
                                   );
                                 }).toList(),
-                                onChanged: (_) {},
+                                onChanged: (value) {
+                                  _selectedGender = value;
+                                  ;
+                                },
                               ),
                             ),
                           ],
                         )),
                     TextFormField(
+                      enabled: false,
                       controller: TextEditingController(text: _profile.phone),
                       style: const TextStyle(fontSize: 16, color: Colors.black),
                       decoration: const InputDecoration(
@@ -159,117 +160,47 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           labelStyle: TextStyle(fontSize: 18)),
                     ),
                     TextFormField(
-                      controller: TextEditingController(
-                          text: _profile.identityId.toString()),
+                      controller: _textIDCardController,
                       style: const TextStyle(fontSize: 16, color: Colors.black),
                       decoration: const InputDecoration(
                           labelText: "Căn Cước công dân/ hộ chiếu (*):",
+                          hintText: "Vui Lòng Cập Nhập",
                           labelStyle: TextStyle(fontSize: 18)),
                     ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-                          child: Text("Thành Phố:",
-                              style: TextStyle(fontSize: 16)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(20, 15, 0, 15),
-                          child: DropdownButton<Province>(
-                              hint: Text(
-                                  _selectedProvince?.name ?? 'Vui lòng chọn'),
-                              items: _allProvince.map((Province province) {
-                                return DropdownMenuItem<Province>(
-                                  value: province,
-                                  child: Text(province.name!),
-                                );
-                              }).toList(),
-                              onChanged: (province) async {
-                                setState(() {
-                                  _selectedProvince = province;
-                                });
-                                AddressRepository()
-                                    .getAllDistrictByProvinceId(
-                                        province!.provinceId)
-                                    .then((vall) => setState(() {
-                                          _selectedProvince = province;
-
-                                          _districts = vall!;
-                                        }));
-                              }),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-                          child: Text("Quận/ Huyện: ",
-                              style: TextStyle(fontSize: 16)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 0, 15),
-                          child: DropdownButton<District>(
-                            hint:
-                                Text(selectedDistrict?.name ?? 'Vui Lòng Chọn'),
-                            items: _districts.map((District district) {
-                              return DropdownMenuItem<District>(
-                                value: district,
-                                child: Text(district.name!),
-                              );
-                            }).toList(),
-                            onChanged: (district) {
-                              setState(() {
-                                selectedDistrict = district;
-                              });
-                              AddressRepository()
-                                  .getAllVillageByDistrictId(
-                                      district!.districtId)
-                                  .then((vall) => setState(() {
-                                        _allVillage = vall!;
-                                        selectedDistrict = district;
-                                      }));
-                              //tượng tự có districtId, làm tiếp
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-                          child: Text("Làng/ Xã: ",
-                              style: TextStyle(fontSize: 16)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 0, 15),
-                          child: DropdownButton<Village>(
-                            hint:
-                                Text(selectedVillage?.name ?? 'Vui Lòng Chọn'),
-                            items: _allVillage.map((Village village) {
-                              return DropdownMenuItem<Village>(
-                                value: village,
-                                child: Text(village.name!),
-                              );
-                            }).toList(),
-                            onChanged: (village) {
-                              print(village!.villageId);
-                              setState(() {
-                                selectedVillage = village;
-                              });
-                              //tượng tự có districtId, làm tiếp
-                            },
-                          ),
-                        ),
-                      ],
+                    TextFormField(
+                      enabled: false,
+                      controller: TextEditingController(
+                          text: _profile.province!.name.toString()),
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                      decoration: const InputDecoration(
+                          labelText: "Thành phố:",
+                          labelStyle: TextStyle(fontSize: 18)),
                     ),
                     TextFormField(
+                      enabled: false,
                       controller: TextEditingController(
-                          text: _profile.address.toString()),
+                        text: _profile.district!.name.toString(),
+                      ),
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                      decoration: const InputDecoration(
+                          labelText: "Quận/Huyện:",
+                          labelStyle: TextStyle(fontSize: 18)),
+                    ),
+                    TextFormField(
+                      enabled: false,
+                      controller: TextEditingController(
+                          text: _profile.village!.name.toString()),
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                      decoration: const InputDecoration(
+                          labelText: "Làng/xã:",
+                          labelStyle: TextStyle(fontSize: 18)),
+                    ),
+                    TextFormField(
+                      controller: _textAddressController,
                       style: const TextStyle(fontSize: 16, color: Colors.black),
                       decoration: const InputDecoration(
                           labelText: "Địa chỉ thường trú (*):",
+                          hintText: "Vui Lòng Cập Nhập",
                           labelStyle: TextStyle(fontSize: 18)),
                     ),
                     Padding(
@@ -293,30 +224,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   onPressed: () {},
                                   child: new Text(
                                     'Cập Nhập',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: SizedBox(
-                                width: 130.0,
-                                height: 40.0,
-                                // ignore: deprecated_member_use
-                                child: new RaisedButton(
-                                  color: Color.fromRGBO(78, 159, 193, 1),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  onPressed: () {},
-                                  child: new Text(
-                                    'Huỷ',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -351,7 +258,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if (newSelectedDate != null) {
       _selectedDate = newSelectedDate;
       _textDOBController
-        ..text = DateFormat.yMd().format(_selectedDate!)
+        ..text = df.format(_selectedDate!)
         ..selection = TextSelection.fromPosition(TextPosition(
             offset: _textDOBController.text.length,
             affinity: TextAffinity.upstream));

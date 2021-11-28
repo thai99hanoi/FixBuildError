@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/repository/user_repository.dart';
+import 'package:heath_care/ui/otp_screen.dart';
 // import 'package:heath_care/ui/otp_screen.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -164,7 +165,12 @@ class _State extends State<LoginPage> {
                       primary: Color(0xff888888),
                       textStyle: const TextStyle(fontSize: 15),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OTPScreen()),
+                      );
+                    },
                     child: const Text('Quên Mật Khẩu?'),
                   ),
                   // RaisedButton(

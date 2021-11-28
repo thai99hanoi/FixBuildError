@@ -1,12 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/list_report_dto.dart';
-import 'package:heath_care/model/report_dto.dart';
 import 'package:heath_care/model/result.dart';
-import 'package:heath_care/model/user.dart';
 import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/repository/result_repository.dart';
-import 'package:heath_care/repository/user_repository.dart';
 import 'package:intl/intl.dart';
 
 class DetailUserReport extends StatefulWidget {
@@ -253,27 +249,4 @@ class _DetailUserReportState extends State<DetailUserReport> {
       ),
     );
   }
-
-  //  _buildReportPage(
-  //   if (_report.hasData) {
-  //           return Expanded(
-  //             child: ListView.builder(
-  //                 shrinkWrap: true,
-  //                 itemCount: userOnlineSnapshot.data!.length,
-  //                 itemBuilder: (BuildContext context, int index) {
-  //                   return ItemUserOnline(userOnlineSnapshot.data![index],
-  //                       currentUser.data!.username!);
-  //                 }),
-  //           );
-  //         } else {
-  //           return Center(
-  //             child: CircularProgressIndicator(),
-  //           );
-  //         }
-
-  // }
-  //  StreamBuilder<QuerySnapshot<Map<String, dynamic>>> buildChats(
-  //     AsyncSnapshot<User> currentUser) {
-  //   return
-  // }
 }

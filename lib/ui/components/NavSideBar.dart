@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/login_screen.dart';
+import 'package:heath_care/ui/send_request.dart';
 import 'package:provider/provider.dart';
 
 class NavDrawer extends StatefulWidget {
@@ -50,7 +51,12 @@ class _NavDrawer extends State<NavDrawer> {
           ListTile(
             leading: Icon(Icons.help_center_outlined),
             title: Text('Liên hệ hỗ trợ'),
-            onTap: () => {},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SendRequest()),
+              )
+            },
           ),
           ListTile(
             leading: Icon(Icons.info_outline),

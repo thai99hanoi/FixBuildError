@@ -79,7 +79,8 @@ class _PattientDetailState extends State<PattientDetail> {
                       CollectionReference chats =
                           FirebaseFirestore.instance.collection('chats');
                       chats
-                          .where('participants', arrayContains: currentUserName)
+                          .where('participants',
+                              arrayContains: currentUserName.username)
                           .get()
                           .then((value) {
                         QueryDocumentSnapshot? chatDocument;
@@ -97,7 +98,7 @@ class _PattientDetailState extends State<PattientDetail> {
                               .add({
                                 'messages': [],
                                 'participants': [
-                                  currentUserName,
+                                  currentUserName.username,
                                   _user.username
                                 ],
                                 'updated_time': Timestamp.now(),
