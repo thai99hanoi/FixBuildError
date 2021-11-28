@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:heath_care/model/doctor_by_patient_dto.dart';
+import 'package:heath_care/model/password_dto.dart';
 import 'package:heath_care/model/patient_dto.dart';
+import 'package:heath_care/model/send_otp_request.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/networks/api_base_helper.dart';
 import 'package:heath_care/networks/auth.dart';
@@ -142,5 +144,102 @@ class UserRepository {
       print('No net');
       throw FetchDataException('No Internet connection');
     }
+  }
+
+  Future<void> changePassword(PasswordDTO passwordDTO) async {
+    print('Api Post, url /v1/api/user/change-password');
+    String token = await Auth().getToken();
+    var responseJson;
+    try {
+      final response =
+      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/change-password"),
+          headers: {
+            "content-type": "application/json",
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode({
+            "oldPassword": passwordDTO.oldPassword,
+            "newPassword": passwordDTO.newPassword,
+            "reEnterPassword": passwordDTO.reEnterPassword,
+          }));
+      responseJson = json.encode(response.body);
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+    print('api post.');
+    return responseJson;
+  }
+
+
+  Future<void> sendOtpForgotPassword(SendOtpRequest sendMess) async {
+    print('Api Post, url /v1/api/user/send-otp/forgot-password');
+    var responseJson;
+    try {
+      final response =
+      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/send-otp/forgot-password"),
+          headers: {
+            "content-type": "application/json",
+            "accept": "application/json",
+          },
+          body: json.encode({
+            "phone": sendMess.phone,
+          }));
+      responseJson = json.encode(response.body);
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+    print('api post.');
+    return responseJson;
+  }
+
+  Future<void> verifyOtp(int otp) async {
+    print('Api Post, url/send-otp/verify-otp/$otp');
+    var responseJson;
+    try {
+      final response =
+      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/send-otp/verify-otp/$otp"),
+          headers: {
+            "content-type": "application/json",
+            "accept": "application/json",
+          });
+      responseJson = json.encode(response.body);
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+    print('api post.');
+    return responseJson;
+  }
+
+  Future<void> updateUser(User user) async {
+    print('Api Post, url /v1/api/user/update');
+    String token = await Auth().getToken();
+    var responseJson;
+    try {
+      final response =
+      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
+          headers: {
+            "content-type": "application/json",
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode({
+            "mail": user.email,
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "surname": user.surname,
+            "avatar": user.avatar,
+            "identityCard": user.identityId,
+            "dob": user.dateOfBirth,
+            "address": user.address,
+          }));
+      responseJson = json.encode(response.body);
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+    print('api post.');
+    return responseJson;
   }
 }
