@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/model/password_dto.dart';
+import 'package:heath_care/repository/user_repository.dart';
+import 'package:heath_care/ui/login_screen.dart';
+import 'package:heath_care/utils/http_exception.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -38,6 +42,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: TextEditingController(
                     text: _textCurrentPasswordController.text),
                 style: const TextStyle(fontSize: 16, color: Colors.black),
+                obscureText: true,
                 decoration: const InputDecoration(
                     labelText: "Mật Khẩu Cũ (*):",
                     labelStyle: TextStyle(fontSize: 15)),
@@ -48,6 +53,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: TextFormField(
                 controller: TextEditingController(
                     text: _textNewPasswordController.text),
+                obscureText: true,
                 style: const TextStyle(fontSize: 16, color: Colors.black),
                 decoration: const InputDecoration(
                     labelText: "Mật Khẩu Mới (*):",
@@ -59,6 +65,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: TextFormField(
                 controller: TextEditingController(
                     text: _textReEnterNewPasswordController.text),
+                obscureText: true,
                 style: const TextStyle(fontSize: 16, color: Colors.black),
                 decoration: const InputDecoration(
                     labelText: "Nhập Lại Mật Khẩu Mới (*):",
@@ -83,7 +90,59 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15))),
-                          onPressed: () {},
+                          onPressed: () async {
+                            PasswordDTO password = new PasswordDTO(
+                                _textCurrentPasswordController.text,
+                                _textNewPasswordController.text,
+                                _textReEnterNewPasswordController.text);
+                            try {
+                              await UserRepository().changePassword(password);
+                            } on HttpException catch (e) {
+                              if (e
+                                  .toString()
+                                  .contains('CHANGE_PASSWORD_FAIL')) {
+                                _showerrorDialog("Xảy ra lỗi");
+                              } else if (e
+                                  .toString()
+                                  .contains('OLD_PASSWORD_DOESNT_MATCH')) {
+                                _showerrorDialog(
+                                    "Mật khẩu hiện tại không chính xác");
+                              } else if (e.toString().contains(
+                                  'REPASSWORD_DOESNT_MATCH_NEW_PASS')) {
+                                _showerrorDialog(
+                                    "Mật khẩu Nhập Lại Không Chính Xác");
+                              } else if (e
+                                  .toString()
+                                  .contains('USER_NOT_FOUND')) {
+                                _showerrorDialog("Không tìm thấy người dùng");
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: Text(
+                                      'Thành Công',
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
+                                    content: Text("Đổi Mật khẩu thành công"),
+                                    actions: <Widget>[
+                                      // ignore: deprecated_member_use
+                                      FlatButton(
+                                        child: Text('Okay'),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LoginPage()),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }
+                            }
+                          },
                           child: new Text(
                             'Đổi mật khẩu',
                             textAlign: TextAlign.center,
@@ -102,5 +161,27 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ),
           ],
         ));
+  }
+
+  void _showerrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'An Error Occurs',
+          style: TextStyle(color: Colors.blue),
+        ),
+        content: Text(message),
+        actions: <Widget>[
+          // ignore: deprecated_member_use
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
   }
 }

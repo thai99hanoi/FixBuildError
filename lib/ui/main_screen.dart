@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
     ReportScreen(),
     ListUser(),
     homeScreen(),
-    TestScreen(),
+    TestResultScreen(),
     UserProfileScreen()
   ];
 
