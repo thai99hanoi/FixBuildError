@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/repository/user_repository.dart';
-import 'package:heath_care/ui/components/change_password.dart';
+import 'package:heath_care/ui/change_password.dart';
 import 'package:heath_care/ui/login_screen.dart';
 import 'package:heath_care/ui/send_request.dart';
 import 'package:provider/provider.dart';

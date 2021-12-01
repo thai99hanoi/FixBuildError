@@ -1,4 +1,5 @@
 class Report {
+  int? dailyReportId;
   int? userId;
   String? firstname;
   String? surname;
@@ -13,7 +14,8 @@ class Report {
   String? comment;
 
   Report(
-      {this.userId,
+      {this.dailyReportId,
+        this.userId,
       this.firstname,
       this.surname,
       this.lastname,
@@ -27,6 +29,7 @@ class Report {
       this.medicines});
 
   factory Report.fromJson(Map<String, dynamic> json) => Report(
+      dailyReportId: json['dailyReportId'] as int?,
     userId: json['userId'] as int?,
     firstname: json["firstname"] as String?,
     surname: json["surname"] as String?,

@@ -15,7 +15,6 @@ import 'package:heath_care/utils/http_exception.dart';
 import 'package:heath_care/utils/navigation_util.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:oktoast/oktoast.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -99,7 +98,7 @@ class Auth with ChangeNotifier {
         ),
       );
     } catch (error) {
-      showToast('Đăng xuất lỗi');
+      print('Đăng xuất lỗi');
     }
   }
 
@@ -202,11 +201,11 @@ class Auth with ChangeNotifier {
           ),
         );
       } else {
-        showToast('Đăng nhập lỗi');
+        print('Đăng nhập lỗi');
       }
     } catch (e) {
       print(e.toString());
-      showToast('Đăng nhập lỗi');
+      print('Đăng nhập lỗi');
       throw e;
     }
   }

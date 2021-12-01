@@ -50,7 +50,7 @@ class ReportDTORepository {
     print('Api Get, url  /v1/api/report/get-report');
     var responseJson;
     try {
-      final response = await http.get(
+      final response = await http.post(
         Uri.parse(Api.authUrl +
             "/v1/api/report/get-report?userId=" +
             userId.toString()),
@@ -75,7 +75,7 @@ class ReportDTORepository {
     print('Api Get, url  /v1/api/report/get/user');
     var responseJson;
     try {
-      final response = await http.get(
+      final response = await http.post(
         Uri.parse(Api.authUrl +
             "/v1/api/report/get/user?userId=" +
             userId.toString()),
@@ -86,6 +86,7 @@ class ReportDTORepository {
       );
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print('api get recieved!');
+      print(responseJson);
       return (responseJson as List)
           .map((report) => Report.fromJson(report))
           .toList();

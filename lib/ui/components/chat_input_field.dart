@@ -37,73 +37,71 @@ class _ChatInputFieldState extends State<ChatInputField> {
         ]),
         child: SafeArea(
             child: Row(children: [
-              IconButton(
-                  onPressed: () async {
-                    try {
-                      image = await _picker.pickImage(
-                          source: ImageSource.camera, imageQuality: 70);
-                      await progressImage();
-                      widget.onDone!();
-                    } catch (e) {
-                      widget.onErrorImage!();
-                      print(e);
-                    }
-                  },
-                  icon: Icon(Icons.camera_alt_outlined, color: Colors.blue)),
-              IconButton(
-                  onPressed: () async {
-                    try {
-                      image = await _picker.pickImage(
-                          source: ImageSource.gallery, imageQuality: 70);
-                      await progressImage();
-                      widget.onDone!();
-                    } catch (e) {
-                      widget.onErrorImage!();
-                      print(e);
-                    }
-                  },
-                  icon: Icon(Icons.image, color: Colors.blue)),
-              Expanded(
-                  child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20 * 0.75),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: Row(children: [
-                        Icon(Icons.sentiment_satisfied_alt_outlined,
-                            color: Colors.blue.withOpacity(0.64)),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: TextField(
-                              onChanged: (_) {
-                                setState(() {});
-                              },
-                              controller: textEditingController,
-                              enabled: image == null,
-                              decoration: InputDecoration(
-                                hintText: "Type message",
-                                border: InputBorder.none,
-                              )),
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              if (textEditingController.text.isNotEmpty) {
-                                widget.onSendMessage(textEditingController.text);
-                              }
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              textEditingController.text = '';
-                              setState(() {});
-                            },
-                            icon: Icon(Icons.send,
-                                color: textEditingController.text.isEmpty &&
+          IconButton(
+              onPressed: () async {
+                try {
+                  image = await _picker.pickImage(
+                      source: ImageSource.camera, imageQuality: 70);
+                  await progressImage();
+                  widget.onDone!();
+                } catch (e) {
+                  widget.onErrorImage!();
+                  print(e);
+                }
+              },
+              icon: Icon(Icons.camera_alt_outlined, color: Colors.blue)),
+          IconButton(
+              onPressed: () async {
+                try {
+                  image = await _picker.pickImage(
+                      source: ImageSource.gallery, imageQuality: 70);
+                  await progressImage();
+                  widget.onDone!();
+                } catch (e) {
+                  widget.onErrorImage!();
+                  print(e);
+                }
+              },
+              icon: Icon(Icons.image, color: Colors.blue)),
+          Expanded(
+              child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20 * 0.75),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: Row(children: [
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                      child: TextField(
+                          onChanged: (_) {
+                            setState(() {});
+                          },
+                          controller: textEditingController,
+                          enabled: image == null,
+                          decoration: InputDecoration(
+                            hintText: "Type message",
+                            border: InputBorder.none,
+                          )),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          if (textEditingController.text.isNotEmpty) {
+                            widget.onSendMessage(textEditingController.text);
+                          }
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          textEditingController.text = '';
+                          setState(() {});
+                        },
+                        icon: Icon(Icons.send,
+                            color: textEditingController.text.isEmpty &&
                                     image == null
-                                    ? Colors.grey.shade400
-                                    : Colors.blue.withOpacity(0.64))),
-                      ])))
-            ])));
+                                ? Colors.grey.shade400
+                                : Colors.blue.withOpacity(0.64))),
+                  ])))
+        ])));
   }
 
   Future<void> progressImage() async {
