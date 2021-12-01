@@ -87,7 +87,7 @@ class User {
         lastname != null &&
         firstname!.isNotEmpty &&
         lastname!.isNotEmpty) {
-      return firstname.toString() + " ${surname ?? ""} " + lastname.toString();
+      return lastname.toString() + " ${surname ?? ""} " + firstname.toString();
     }
     return username.toString();
   }
