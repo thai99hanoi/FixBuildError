@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:heath_care/model/list_report_dto.dart';
+import 'package:heath_care/model/report.dart';
 import 'package:heath_care/model/result.dart';
 import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/repository/result_repository.dart';
@@ -15,18 +15,16 @@ class DetailUserReport extends StatefulWidget {
 }
 
 class _DetailUserReportState extends State<DetailUserReport> {
-  ListReportDTO _report = new ListReportDTO();
+  List<Report> _report = [];
   List<Result> _results = [];
   int? currentUserId;
   bool _buildResultPage = false;
   final df = new DateFormat('dd-MM-yyyy');
 
   _DetailUserReportState(this.currentUserId) {
-    ReportDTORepository()
-        .getReportByUser(currentUserId!)
-        .then((val) => setState(() {
-              _report = val;
-            }));
+    ReportDTORepository().getReport(currentUserId!).then((val) => setState(() {
+          _report = val;
+        }));
     ResultRepository()
         .getAllResultByUserId(currentUserId)
         .then((val) => setState(() {
@@ -73,7 +71,108 @@ class _DetailUserReportState extends State<DetailUserReport> {
           //       }
           //     }),
           _buildResultPage
-              ? Text("Daily Report")
+              ? Expanded(
+                  child: ListView.builder(
+                      itemCount: _report.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+                          child: Container(
+                            height: 300,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                color: Color.fromRGBO(208, 146, 149, 0.5),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+
+                                  SizedBox(height: 20),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Nhiệt độ: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text: _report[index]
+                                                .temperature
+                                                .toString()),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Nồng độ Oxi:  ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text:
+                                                _report[index].oxygen!.toString()),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Thuốc sử dụng: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text:
+                                            _report[index].medicines.toString()),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Bài tập hàng ngày: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text: _report[index].exercises.toString()),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: DefaultTextStyle.of(context).style,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Ghi Chú ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text: _report[index].comment.toString()),
+                                      ],
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }))
               : Expanded(
                   child: ListView.builder(
                       itemCount: _results.length,
