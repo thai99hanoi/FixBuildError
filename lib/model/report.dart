@@ -7,9 +7,9 @@ class Report {
   String? time;
   double? temperature;
   double? oxygen;
-  String? medicine;
-  String? symptom;
-  String? exercise;
+  List<String>? medicines;
+  List<String>? symptoms;
+  List<String>? exercises;
   String? comment;
 
   Report(
@@ -22,9 +22,9 @@ class Report {
       this.temperature,
       this.oxygen,
       this.comment,
-      this.symptom,
-      this.exercise,
-      this.medicine});
+      this.symptoms,
+      this.exercises,
+      this.medicines});
 
   factory Report.fromJson(Map<String, dynamic> json) => Report(
     userId: json['userId'] as int?,
@@ -38,8 +38,8 @@ class Report {
     temperature: json['temperature'] as double?,
     oxygen: json['oxygen'] as double?,
     comment: json['comment'] as String?,
-    medicine: json['medicine'] as String?,
-    symptom: json['symptom'] as String?,
-    exercise: json['exercise'] as String?
+    medicines: json['medicines'] as List<String>?,
+    symptoms: json['symptoms'] as List<String>?,
+    exercises: json['exercises'] as List<String>?
   );
 }

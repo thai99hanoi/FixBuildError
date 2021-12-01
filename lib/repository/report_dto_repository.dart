@@ -72,12 +72,12 @@ class ReportDTORepository {
 
   Future<List<Report>> getReport(int userId) async {
     String? token = await Auth().getToken();
-    print('Api Get, url  /v1/api/report/get-report-by-user');
+    print('Api Get, url  /v1/api/report/get/user');
     var responseJson;
     try {
       final response = await http.get(
         Uri.parse(Api.authUrl +
-            "/v1/api/report/get-report-by-user?userId=" +
+            "/v1/api/report/get/user?userId=" +
             userId.toString()),
         headers: {
           "content-type": "application/json",
@@ -93,63 +93,6 @@ class ReportDTORepository {
       print('No net');
       throw FetchDataException('No Internet connection');
     }
-  }
-
-  Future<List<Report>> getDetail(int userId) async {
-    var dailyReports = [];
-    var listReport = await getReport(userId);
-    for (Report report in listReport) {
-      final isExist = dailyReports.indexWhere((dailyReport) =>
-          dailyReport.userId == report.userId &&
-          dailyReport.firstname == report.firstname &&
-          dailyReport.surname == report.surname &&
-          dailyReport.lastname == report.lastname &&
-          dailyReport.oxygen == report.oxygen &&
-          dailyReport.temperature == report.temperature &&
-          dailyReport.comment == report.comment &&
-          dailyReport.date == report.date &&
-          dailyReport.time == report.time);
-      if (isExist < 0) {
-        dailyReports = [
-          ...dailyReports,
-          {
-            "user": report.userId,
-            "firstname": report.firstname,
-            "surname": report.surname,
-            "lastname": report.lastname,
-            "date": report.date,
-            "time": report.time,
-            "oxygen": report.oxygen,
-            "temperature": report.temperature,
-            "comment": report.comment,
-            "symptoms": [report.symptom],
-            "medicines": [report.medicine],
-            "exercises": [report.exercise]
-          }
-        ];
-      } else {
-        if (!dailyReports[isExist].medicines.where((value) => value == report.medicine).length){
-          dailyReports[isExist] = {
-            ...dailyReports[isExist],
-            "medicines": [...dailyReports[isExist].medicines, report.medicine]
-          };
-        }
-        if (!dailyReports[isExist].symptoms.where((value) => value == report.symptom).length){
-          dailyReports[isExist] = {
-            ...dailyReports[isExist],
-            "symptoms": [...dailyReports[isExist].symptoms, report.symptom]
-          };
-        }
-        if (!dailyReports[isExist].exercises.where((value) => value == report.exercise).length){
-          dailyReports[isExist] = {
-            ...dailyReports[isExist],
-            "exercises": [...dailyReports[isExist].exercises, report.exercise]
-          };
-        }
-      }
-    }
-
-    return dailyReports.map((report) => Report.fromJson(report)).toList();
   }
 
   Future<List<DailyCheckDTO>> getTemperatureAndOxygen() async {
