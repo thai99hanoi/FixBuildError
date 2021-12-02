@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/chat_conversation.dart';
+import 'package:heath_care/ui/detail_patient_report.dart';
+import 'package:heath_care/ui/detail_patient_result.dart';
 import 'package:heath_care/ui/doctor_pattient_detail_report.dart';
 
 class PattientDetail extends StatefulWidget {
@@ -183,43 +185,75 @@ class _PattientDetailState extends State<PattientDetail> {
               SizedBox(
                 height: 20.0,
               ),
-              Center(
-                child: SizedBox(
-                  width: 200.0,
-                  height: 40.0,
-                  // ignore: deprecated_member_use
-                  child: new RaisedButton(
-                    color: Color.fromRGBO(78, 159, 193, 1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              DetailUserReport(currentUserId: _user.userId),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.report, color: Colors.white),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                          child: Text(
-                            'Báo cáo sức khoẻ',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 15,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: SizedBox(
+                      width: 130.0,
+                      height: 40.0,
+                      // ignore: deprecated_member_use
+                      child: new RaisedButton(
+                        color: Color.fromRGBO(78, 159, 193, 1),
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailPatientReportScreen(
+                                  currentUserId: _user.userId),
                             ),
+                          );
+                        },
+                        child: new Text(
+                          'Báo cáo',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 13,
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: SizedBox(
+                      width: 130.0,
+                      height: 40.0,
+                      // ignore: deprecated_member_use
+                      child: new RaisedButton(
+                        color: Color.fromRGBO(78, 159, 193, 1),
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailPatientResultScreen(
+                                  currentUserId: _user.userId),
+                            ),
+                          );
+                        },
+                        child: new Text(
+                          'Xét Nghiệm',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ));
