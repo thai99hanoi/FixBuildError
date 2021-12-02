@@ -33,7 +33,7 @@ class RequestRepository{
     }
   }
 
-  Future<void> createReport(RequestDTO requestDTO) async {
+  Future<void> createRequest(RequestDTO requestDTO) async {
     print('Api Post, url /v1/api/request/create');
     String token = await Auth().getToken();
     var responseJson;
