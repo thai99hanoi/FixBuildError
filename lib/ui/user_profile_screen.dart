@@ -20,9 +20,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   User _profile = new User();
   String? _selectedGender;
   List<String> _gender = ["Nam", "Nữ"];
-  List<District> _districts = [];
-  List<Province> _allProvince = [];
-  List<Village> _allVillage = [];
   District? selectedDistrict;
   Village? selectedVillage;
   final df = new DateFormat('dd-MM-yyyy');
@@ -30,11 +27,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     UserRepository().getCurrentUser().then((val) => setState(() {
           _profile = val;
         }));
-    AddressRepository().getAllProvince().then((vall) => setState(() {
-          _allProvince = vall;
-        }));
   }
-  Province? _selectedProvince;
   DateTime? _selectedDate;
   TextEditingController _textDOBController = TextEditingController();
   TextEditingController _textNameController = TextEditingController();
@@ -61,7 +54,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       _selectedDate = _profile.dateOfBirth;
       _textDOBController.text = df.format(_profile.dateOfBirth!);
     }
-    _selectedGender = _profile.gender;
 
     if (_profile.firstname == null) {
       return Scaffold(
@@ -133,10 +125,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: DropdownButton<String>(
-                                hint: Text(
-                                    _selectedGender ??
-                                        'Vui Lòng Chọn Giới Tính',
-                                    style: TextStyle(fontSize: 12)),
+                                hint: _selectedGender != null
+                                    ? Text(
+                                        _selectedGender!.toString(),
+                                        style: TextStyle(color: Colors.grey),
+                                      )
+                                    : Text(
+                                        _profile.gender.toString(),
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
                                 items: _gender.map((String value) {
                                   return new DropdownMenuItem<String>(
                                     value: value,
@@ -144,7 +141,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   );
                                 }).toList(),
                                 onChanged: (value) {
-                                  _selectedGender = value;
+                                  setState(() {
+                                    _selectedGender = value!;
+                                  });
+
                                   ;
                                 },
                               ),

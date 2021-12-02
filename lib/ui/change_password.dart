@@ -12,6 +12,7 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  PasswordDTO password = new PasswordDTO();
   TextEditingController _textCurrentPasswordController =
       TextEditingController();
   TextEditingController _textNewPasswordController = TextEditingController();
@@ -41,6 +42,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: TextFormField(
                 controller: TextEditingController(
                     text: _textCurrentPasswordController.text),
+                onChanged: (val) {
+                  password.oldPassword = val;
+                },
                 style: const TextStyle(fontSize: 16, color: Colors.black),
                 obscureText: true,
                 decoration: const InputDecoration(
@@ -54,6 +58,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: TextEditingController(
                     text: _textNewPasswordController.text),
                 obscureText: true,
+                onChanged: (val) {
+                  password.newPassword = val;
+                },
                 style: const TextStyle(fontSize: 16, color: Colors.black),
                 decoration: const InputDecoration(
                     labelText: "Mật Khẩu Mới (*):",
@@ -65,6 +72,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: TextFormField(
                 controller: TextEditingController(
                     text: _textReEnterNewPasswordController.text),
+                onChanged: (val) {
+                  password.reEnterPassword = val;
+                },
                 obscureText: true,
                 style: const TextStyle(fontSize: 16, color: Colors.black),
                 decoration: const InputDecoration(
@@ -91,12 +101,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15))),
                           onPressed: () async {
-                            PasswordDTO password = new PasswordDTO(
-                                _textCurrentPasswordController.text,
-                                _textNewPasswordController.text,
-                                _textReEnterNewPasswordController.text);
                             try {
-                              await UserRepository().changePassword(password);
+                              await UserRepository().changePassword(password!);
                             } on HttpException catch (e) {
                               if (e
                                   .toString()

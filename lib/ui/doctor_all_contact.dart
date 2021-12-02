@@ -13,7 +13,8 @@ class ListAllPattients extends StatefulWidget {
 
 class _ListAllPattientsState extends State<ListAllPattients> {
   User _currentUser = new User();
-  Future<List<User>?> _listPattients = new UserRepository().getPatientByDoctor();
+  Future<List<User>?> _listPattients =
+      new UserRepository().getPatientByDoctor();
   _ListAllPattientsState() {
     UserRepository().getCurrentUser().then((val) => setState(() {
           _currentUser = val;
@@ -45,15 +46,8 @@ class _ListAllPattientsState extends State<ListAllPattients> {
                     child: Align(
                       alignment: Alignment.center,
                       child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                          "Bạn chưa có bệnh nhân chỉ định, vui lòng gửi yêu cầu để được hỗ trợ",
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                          padding: const EdgeInsets.all(12.0),
+                          child: Center(child: CircularProgressIndicator())),
                     ),
                   );
                 }

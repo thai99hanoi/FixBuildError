@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/model/request_dto.dart';
+import 'package:heath_care/model/request_type.dart';
+import 'package:heath_care/repository/request_repository.dart';
+import 'package:heath_care/ui/main_screen.dart';
 
 class SendRequest extends StatefulWidget {
   const SendRequest({Key? key}) : super(key: key);
@@ -7,16 +11,33 @@ class SendRequest extends StatefulWidget {
   _SendRequestState createState() => _SendRequestState();
 }
 
-List<String> _requestType = ["Đưa đi cấp cứu", "Tài khoản"];
+List<RequestType> _requestType = [
+  RequestType(id: 1, requestTypeName: "Chỉnh sửa thông tin cá nhân"),
+  RequestType(id: 2, requestTypeName: "Hỗ trợ đặc biệt"),
+  RequestType(id: 3, requestTypeName: "Cấp cứu"),
+  RequestType(id: 4, requestTypeName: "Thay đổi nơi làm việc"),
+  RequestType(id: 5, requestTypeName: "Cấp lại mật khẩu"),
+  RequestType(id: 6, requestTypeName: "Cấp lại tài khoản khác"),
+];
 
 class _SendRequestState extends State<SendRequest> {
-  String? _selectedRequestType;
+  RequestType? _selectedRequestType;
+  Future save() async {
+    try {
+      RequestRepository().createRequest(_request);
+      showAlertDialog(context);
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  RequestDTO _request = new RequestDTO();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(78, 159, 193, 1),
-          title: Text("Chi tiết các báo cáo"),
+          title: Text("GỬI YÊU CẦU"),
         ),
         body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -28,19 +49,23 @@ class _SendRequestState extends State<SendRequest> {
                   Text("Loại Yêu Cầu:", style: TextStyle(fontSize: 16)),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: DropdownButton<String>(
-                      hint: Text(
-                          _selectedRequestType ?? 'Vui Lòng Chọn Yêu Cầu',
-                          style: TextStyle(fontSize: 16)),
-                      items: _requestType.map((String value) {
-                        return new DropdownMenuItem<String>(
+                    child: DropdownButton<RequestType>(
+                      hint: _selectedRequestType != null
+                          ? Text(
+                              _selectedRequestType!.requestTypeName.toString())
+                          : Text('Vui Lòng Chọn Yêu Cầu'),
+                      items: _requestType.map((RequestType value) {
+                        return new DropdownMenuItem<RequestType>(
                           value: value,
-                          child: Text(value),
+                          child: Text(value.requestTypeName.toString(),
+                              style: TextStyle(fontSize: 13)),
                         );
                       }).toList(),
                       onChanged: (value) {
-                        _selectedRequestType = value;
-                        ;
+                        setState(() {
+                          _request.requestTypeId = value!.id;
+                          _selectedRequestType = value;
+                        });
                       },
                     ),
                   ),
@@ -60,7 +85,11 @@ class _SendRequestState extends State<SendRequest> {
                             padding: EdgeInsets.all(8.0),
                             child: TextField(
                               controller: TextEditingController(),
-                              onChanged: (val) {},
+                              onChanged: (val) {
+                                setState(() {
+                                  _request.description = val;
+                                });
+                              },
                               maxLines: 8,
                               decoration: InputDecoration.collapsed(
                                   hintText: "Ghi Chú"),
@@ -71,7 +100,9 @@ class _SendRequestState extends State<SendRequest> {
                     color: Color.fromRGBO(78, 159, 193, 1),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15))),
-                    onPressed: () {},
+                    onPressed: () {
+                      save();
+                    },
                     child: Text(
                       'Gửi',
                       textAlign: TextAlign.center,
@@ -86,4 +117,32 @@ class _SendRequestState extends State<SendRequest> {
               )
             ]));
   }
+}
+
+showAlertDialog(BuildContext context) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
+    },
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Thành Công"),
+    content: Text("Yêu cầu đã được gửi thành công, quay lại trang chủ."),
+    actions: [
+      okButton,
+    ],
+  );
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

@@ -4,13 +4,13 @@ class Report {
   String? firstname;
   String? surname;
   String? lastname;
-  DateTime? date;
+  String? date;
   String? time;
   double? temperature;
   double? oxygen;
   List<dynamic>? medicines;
   List<dynamic>? symptoms;
-  List<dynamic>?  exercises;
+  List<dynamic>? exercises;
   String? comment;
 
   Report(
@@ -34,9 +34,7 @@ class Report {
       firstname: json["firstname"] as String?,
       surname: json["surname"] as String?,
       lastname: json["lastname"] as String?,
-      date: json['dateReport'] != null
-          ? DateTime?.parse(json["dateReport"])
-          : json['dateReport'] as DateTime?,
+      date: json['date'] as String?,
       time: json['time'] as String?,
       temperature: json['temperature'] as double?,
       oxygen: json['oxygen'] as double?,

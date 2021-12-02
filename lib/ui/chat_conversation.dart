@@ -21,6 +21,7 @@ class ConversationChat extends StatelessWidget {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+        backgroundColor: const Color.fromRGBO(78, 159, 193, 1),
         titleSpacing: 0,
         title: Row(children: [
           CircleAvatar(

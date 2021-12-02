@@ -5,6 +5,7 @@ import 'package:heath_care/model/daily_check_dto.dart';
 import 'package:heath_care/repository/covid_analysis_repository.dart';
 import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/ui/components/item_image_avatar.dart';
+import 'package:heath_care/ui/doctor_all_request.dart';
 import 'package:heath_care/ui/excercise_screen.dart';
 import 'package:heath_care/ui/medicine_screen.dart';
 import 'package:heath_care/ui/patient_detail.dart';
@@ -219,6 +220,43 @@ class _homeScreenState extends State<homeScreenDoctor> {
             indent: 20,
             endIndent: 20,
           ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: SizedBox(
+                width: 210.0,
+                height: 60.0,
+                // ignore: deprecated_member_use
+                child: new RaisedButton(
+                  color: Color.fromRGBO(78, 159, 193, 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => GetAllRequestScreen()),
+                    );
+                  },
+                  child: new Text(
+                    'DANH SÁCH YÊU CẦU',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const Divider(
+            height: 20,
+            thickness: 5,
+            indent: 20,
+            endIndent: 20,
+          ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Center(
@@ -266,8 +304,13 @@ class _homeScreenState extends State<homeScreenDoctor> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(userCheckSnapshot.data![index]
-                                                .getDisplayName()),
+                                            Text(
+                                                userCheckSnapshot.data![index]
+                                                    .getDisplayName(),
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500)),
                                             RichText(
                                               text: TextSpan(
                                                 style:
