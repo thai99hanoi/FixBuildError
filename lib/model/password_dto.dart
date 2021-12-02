@@ -3,5 +3,5 @@ class PasswordDTO {
   String? newPassword;
   String? reEnterPassword;
 
-  PasswordDTO(this.oldPassword, this.newPassword, this.reEnterPassword);
+  PasswordDTO({this.oldPassword, this.newPassword, this.reEnterPassword});
 }

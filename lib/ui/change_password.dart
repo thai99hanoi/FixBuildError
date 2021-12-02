@@ -102,7 +102,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   BorderRadius.all(Radius.circular(15))),
                           onPressed: () async {
                             try {
-                              await UserRepository().changePassword(password!);
+                              await UserRepository().changePassword(password);
                             } on HttpException catch (e) {
                               if (e
                                   .toString()
