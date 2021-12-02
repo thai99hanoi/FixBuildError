@@ -10,13 +10,13 @@ import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
 
 class RequestRepository{
-  Future<List<Request>> getAllRequest(int? doctorId) async {
+  Future<List<Request>> getAllRequest() async {
     String? token = await Auth().getToken();
-    print('Api Get, url /v1/api/request/get-by-doctor/$doctorId');
+    print('Api Get, url /v1/api/request/get-by-doctor');
     var responseJson;
     try {
       final response = await http.post(
-        Uri.parse(Api.authUrl + "/v1/api/request/get-by-doctor/$doctorId"),
+        Uri.parse(Api.authUrl + "/v1/api/request/get-by-doctor"),
         headers: {
           "content-type": "application/json",
           'Authorization': 'Bearer $token',
