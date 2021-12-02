@@ -7,7 +7,7 @@ class Request {
   RequestType? requestType;
   String? description;
   String? note;
-  String? status;
+  int? status;
 
   Request(
       {this.id,
@@ -23,6 +23,6 @@ class Request {
         requestType: RequestType.fromJson(json['requestType']),
         description: json['description'] as String?,
         note: json['note'] as String?,
-        status: json['status'] as String?,
+        status: json['status'] as int?,
       );
 }

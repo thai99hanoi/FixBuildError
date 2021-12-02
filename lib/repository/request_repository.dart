@@ -9,7 +9,7 @@ import 'package:heath_care/utils/api.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
 
-class RequestRepository{
+class RequestRepository {
   Future<List<Request>> getAllRequest() async {
     String? token = await Auth().getToken();
     print('Api Get, url /v1/api/request/get-by-doctor');
@@ -24,7 +24,7 @@ class RequestRepository{
       );
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print('api get recieved!');
-      return (responseJson['data'] as List)
+      return (responseJson as List)
           .map((request) => Request.fromJson(request))
           .toList();
     } on SocketException {
@@ -38,8 +38,8 @@ class RequestRepository{
     String token = await Auth().getToken();
     var responseJson;
     try {
-      final response =
-      await http.post(Uri.parse(Api.authUrl + "/v1/api/request/create"),
+      final response = await http.post(
+          Uri.parse(Api.authUrl + "/v1/api/request/create"),
           headers: {
             "content-type": "application/json",
             'Authorization': 'Bearer $token',
@@ -57,7 +57,6 @@ class RequestRepository{
     return responseJson;
   }
 
-
   Future<List<RequestType>> getAllRequestType() async {
     String? token = await Auth().getToken();
     print('Api Get, url /v1/api/request/request-type');
@@ -72,7 +71,7 @@ class RequestRepository{
       );
       responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print('api get recieved!');
-      return (responseJson['data'] as List)
+      return (responseJson as List)
           .map((request) => RequestType.fromJson(request))
           .toList();
     } on SocketException {
