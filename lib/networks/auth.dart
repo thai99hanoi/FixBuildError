@@ -188,7 +188,7 @@ class Auth with ChangeNotifier {
       String role = responseData['data']['roles'][0];
       prefs.setString('role', role);
 
-      if (role == 'F0' || role == 'F1') {
+      if (role == 'Bệnh nhân') {
         NavigationUtil.pushReplacement(
           MaterialPageRoute(
             builder: (context) => MainScreen(),
