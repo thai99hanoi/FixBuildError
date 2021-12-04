@@ -76,7 +76,7 @@ class Auth with ChangeNotifier {
 
   Future<void> logout() async {
     try {
-      await userRepository.updateUserOnline(0);
+      await userRepository.updateUserOnline(0,tokenTmp: _token);
       _token = null;
       _userEmail = null;
       _userId = null;
@@ -184,7 +184,7 @@ class Auth with ChangeNotifier {
       prefs.setString('userData', userData);
       setToken(_token);
       setExpiryDate(_expiryDate.toString());
-      await userRepository.updateUserOnline(1);
+      await userRepository.updateUserOnline(1,tokenTmp: _token);
       String role = responseData['data']['roles'][0];
       prefs.setString('role', role);
 

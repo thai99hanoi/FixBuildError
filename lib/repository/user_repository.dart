@@ -12,6 +12,7 @@ import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/utils/api.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class UserRepository {
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
@@ -67,31 +68,35 @@ class UserRepository {
     return parsed.map<User>((json) => User.fromJson(json)).toList();
   }
 
-  Future<void> updateUserOnline(int isOnline) async {
-    var user = await getCurrentUser();
+  Future<void> updateUserOnline(int isOnline,{String? tokenTmp}) async {
+    User user = await getCurrentUser();
     print('Api Post, url /v1/api/user/update');
-    String token = await Auth().getToken();
+    final f = new DateFormat('yyyy-MM-dd hh:mm:ss');
     var responseJson;
     try {
       final response =
           await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
               headers: {
                 "content-type": "application/json",
-                'Authorization': 'Bearer $token',
+                'Authorization': 'Bearer $tokenTmp',
               },
               body: json.encode({
                 "username": user.username,
                 "mail": user.email,
                 "phone": user.phone,
-                "lastLogin": DateTime.now().toString(),
+                "identityCard":user.identityId,
+                "lastLogin": f.format(DateTime.now()),
                 "firstname": user.firstname,
                 "lastname": user.lastname,
                 "surname": user.surname,
                 "avatar": user.avatar,
+                "gender": user.gender,
+                "address": user.address,
+                "dob": f.format(user.dateOfBirth!),
                 "isOnline": isOnline,
                 "isActive": user.isActive
               }));
-      responseJson = json.encode(response.body);
+      responseJson = json.encode(utf8.decode(response.bodyBytes));
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
@@ -236,7 +241,7 @@ class UserRepository {
             "address": user.address,
             "gender": user.gender
           }));
-      responseJson = json.encode(response.body);
+      responseJson = json.encode(utf8.decode(response.bodyBytes));
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
