@@ -67,6 +67,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       width: 100,
                       height: 20,
                       child: TextField(
+                          keyboardType: TextInputType.number,
                           controller:
                               TextEditingController(text: reportDTO.oxygen),
                           onChanged: (val) {
@@ -88,6 +89,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       width: 100,
                       height: 20,
                       child: TextField(
+                          keyboardType: TextInputType.number,
                           controller:
                               TextEditingController(text: reportDTO.temperate),
                           onChanged: (val) {

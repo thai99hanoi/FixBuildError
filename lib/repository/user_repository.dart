@@ -152,13 +152,13 @@ class UserRepository {
     }
   }
 
-  Future<void> changePassword(PasswordDTO passwordDTO) async {
+  Future<String> changePassword(PasswordDTO passwordDTO) async {
     print('Api Post, url /v1/api/user/change-password');
     String token = await Auth().getToken();
     var responseJson;
     try {
-      final response =
-      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/change-password"),
+      final response = await http.post(
+          Uri.parse(Api.authUrl + "/v1/api/user/change-password"),
           headers: {
             "content-type": "application/json",
             'Authorization': 'Bearer $token',
@@ -177,13 +177,12 @@ class UserRepository {
     return responseJson;
   }
 
-
   Future<void> sendOtpForgotPassword(SendOtpRequest sendMess) async {
     print('Api Post, url /v1/api/user/send-otp/forgot-password');
     var responseJson;
     try {
-      final response =
-      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/send-otp/forgot-password"),
+      final response = await http.post(
+          Uri.parse(Api.authUrl + "/v1/api/user/send-otp/forgot-password"),
           headers: {
             "content-type": "application/json",
             "accept": "application/json",
@@ -204,8 +203,8 @@ class UserRepository {
     print('Api Post, url/send-otp/verify-otp/$otp');
     var responseJson;
     try {
-      final response =
-      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/send-otp/verify/$otp"),
+      final response = await http.post(
+          Uri.parse(Api.authUrl + "/v1/api/user/send-otp/verify/$otp"),
           headers: {
             "content-type": "application/json",
             "accept": "application/json",
@@ -254,8 +253,8 @@ class UserRepository {
     print('Api Post, url /v1/api/user/reset-password/$token');
     var responseJson;
     try {
-      final response =
-      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/reset-password/$token"),
+      final response = await http.post(
+          Uri.parse(Api.authUrl + "/v1/api/user/reset-password/$token"),
           headers: {
             "content-type": "application/json",
             "accept": "application/json",
