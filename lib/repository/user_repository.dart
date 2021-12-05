@@ -68,7 +68,7 @@ class UserRepository {
     return parsed.map<User>((json) => User.fromJson(json)).toList();
   }
 
-  Future<void> updateUserOnline(int isOnline,{String? tokenTmp}) async {
+  Future<void> updateUserOnline(int isOnline, {String? tokenTmp}) async {
     User user = await getCurrentUser();
     print('Api Post, url /v1/api/user/update');
     final f = new DateFormat('yyyy-MM-dd hh:mm:ss');
@@ -84,7 +84,7 @@ class UserRepository {
                 "username": user.username,
                 "mail": user.email,
                 "phone": user.phone,
-                "identityCard":user.identityId,
+                "identityCard": user.identityId,
                 "lastLogin": f.format(DateTime.now()),
                 "firstname": user.firstname,
                 "lastname": user.lastname,
@@ -177,7 +177,7 @@ class UserRepository {
     return responseJson;
   }
 
-  Future<void> sendOtpForgotPassword(SendOtpRequest sendMess) async {
+  Future<String> sendOtpForgotPassword(SendOtpRequest sendMess) async {
     print('Api Post, url /v1/api/user/send-otp/forgot-password');
     var responseJson;
     try {
@@ -199,7 +199,7 @@ class UserRepository {
     return responseJson;
   }
 
-  Future<void> verifyOtp(int otp) async {
+  Future<String> verifyOtp(int otp) async {
     print('Api Post, url/send-otp/verify-otp/$otp');
     var responseJson;
     try {
@@ -218,28 +218,27 @@ class UserRepository {
     return responseJson;
   }
 
-  Future<void> updateUser(User user) async {
+  Future<String> updateUser(User user) async {
     print('Api Post, url /v1/api/user/update');
+    final f = new DateFormat('yyyy-MM-dd hh:mm:ss');
     String token = await Auth().getToken();
     var responseJson;
     try {
       final response =
-      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
-          headers: {
-            "content-type": "application/json",
-            'Authorization': 'Bearer $token',
-          },
-          body: json.encode({
-            "mail": user.email,
-            "firstname": user.firstname,
-            "lastname": user.lastname,
-            "surname": user.surname,
-            "avatar": user.avatar,
-            "identityCard": user.identityId,
-            "dob": user.dateOfBirth,
-            "address": user.address,
-            "gender": user.gender
-          }));
+          await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
+              headers: {
+                "content-type": "application/json",
+                'Authorization': 'Bearer $token',
+              },
+              body: json.encode({
+                "firstname": user.firstname,
+                "lastname": user.lastname,
+                "surname": user.surname,
+                "identityCard": user.identityId,
+                "dob": f.format(user.dateOfBirth!),
+                "address": user.address,
+                "gender": user.gender
+              }));
       responseJson = json.encode(utf8.decode(response.bodyBytes));
     } on SocketException {
       print('No net');
@@ -249,7 +248,7 @@ class UserRepository {
     return responseJson;
   }
 
-  Future<void> resetPassword(ResetPassword password, String token) async {
+  Future<String> resetPassword(ResetPassword password, String token) async {
     print('Api Post, url /v1/api/user/reset-password/$token');
     var responseJson;
     try {

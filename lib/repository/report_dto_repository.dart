@@ -12,7 +12,7 @@ import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
 
 class ReportDTORepository {
-  Future<void> createReport(ReportDTO report) async {
+  Future<String> createReport(ReportDTO report) async {
     print('Api Post, url /v1/api/report/create');
     String token = await Auth().getToken();
     var user = await UserRepository().getCurrentUser();

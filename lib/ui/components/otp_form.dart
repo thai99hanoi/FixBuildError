@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/model/send_otp_request.dart';
+import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/components/default_button.dart';
+import 'package:heath_care/ui/new_password.dart';
 
 class OtpForm extends StatefulWidget {
   const OtpForm({
@@ -11,6 +14,14 @@ class OtpForm extends StatefulWidget {
 }
 
 class _OtpFormState extends State<OtpForm> {
+  int? _otp;
+  TextEditingController _text1Controller = TextEditingController();
+  TextEditingController _text2Controller = TextEditingController();
+  TextEditingController _text3Controller = TextEditingController();
+  TextEditingController _text4Controller = TextEditingController();
+  TextEditingController _text5Controller = TextEditingController();
+  TextEditingController _text6Controller = TextEditingController();
+
   FocusNode? pin2FocusNode;
   FocusNode? pin3FocusNode;
   FocusNode? pin4FocusNode;
@@ -57,6 +68,7 @@ class _OtpFormState extends State<OtpForm> {
                 child: TextFormField(
                   autofocus: true,
                   obscureText: true,
+                  controller: _text1Controller,
                   style: TextStyle(fontSize: 24),
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
@@ -71,6 +83,7 @@ class _OtpFormState extends State<OtpForm> {
                 child: TextFormField(
                   focusNode: pin2FocusNode,
                   obscureText: true,
+                  controller: _text2Controller,
                   style: TextStyle(fontSize: 24),
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
@@ -82,6 +95,7 @@ class _OtpFormState extends State<OtpForm> {
                 width: 40,
                 child: TextFormField(
                   focusNode: pin3FocusNode,
+                  controller: _text3Controller,
                   obscureText: true,
                   style: TextStyle(fontSize: 24),
                   keyboardType: TextInputType.number,
@@ -94,6 +108,7 @@ class _OtpFormState extends State<OtpForm> {
                 width: 40,
                 child: TextFormField(
                   focusNode: pin4FocusNode,
+                  controller: _text4Controller,
                   obscureText: true,
                   style: TextStyle(fontSize: 24),
                   keyboardType: TextInputType.number,
@@ -106,6 +121,7 @@ class _OtpFormState extends State<OtpForm> {
                 width: 40,
                 child: TextFormField(
                   focusNode: pin5FocusNode,
+                  controller: _text5Controller,
                   obscureText: true,
                   style: TextStyle(fontSize: 24),
                   keyboardType: TextInputType.number,
@@ -120,6 +136,7 @@ class _OtpFormState extends State<OtpForm> {
                 width: 40,
                 child: TextFormField(
                   focusNode: pin6FocusNode,
+                  controller: _text6Controller,
                   obscureText: true,
                   style: TextStyle(fontSize: 24),
                   keyboardType: TextInputType.number,
@@ -138,7 +155,53 @@ class _OtpFormState extends State<OtpForm> {
           SizedBox(height: 200 * 0.15),
           DefaultButton(
             text: "Tiếp Tục",
-            press: () {},
+            press: () async {
+              _otp = int.parse(_text1Controller.text +
+                  _text2Controller.text +
+                  _text3Controller.text +
+                  _text4Controller.text +
+                  _text5Controller.text +
+                  _text6Controller.text);
+              // var response = UserRepository().sendOtpForgotPassword();
+              print(_otp);
+              var _response = await UserRepository().verifyOtp(_otp!);
+              print(_response);
+              if (_response.contains("true")) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewPasswordScreen(_otp!)),
+                );
+              } else if (_response.contains("RESET_PASSWORD_INVALID_TOKEN")) {
+                _showerrorDialog("OTP không hợp lệ");
+              } else if (_response.contains("EXPIRE_TOKEN")) {
+                _showerrorDialog("OTP đã hết hạn");
+              } else {
+                _showerrorDialog("Đã xảy ra lỗi");
+              }
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  void _showerrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'An Error Occurs',
+          style: TextStyle(color: Colors.blue),
+        ),
+        content: Text(message),
+        actions: <Widget>[
+          // ignore: deprecated_member_use
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           )
         ],
       ),

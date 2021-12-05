@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/model/send_otp_request.dart';
 import 'package:heath_care/ui/components/otp_form.dart';
 
 class OTPScreen extends StatefulWidget {
-  const OTPScreen({Key? key}) : super(key: key);
-
+  const OTPScreen(this.phoneNumber);
+  final SendOtpRequest phoneNumber;
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
@@ -28,7 +29,9 @@ class _OTPScreenState extends State<OTPScreen> {
                     "OTP Verification",
                     style: headingStyle,
                   ),
-                  Text("We sent your code to +1 898 860 ***"),
+                  Text("We sent your code to " +
+                      widget.phoneNumber.phone.toString() +
+                      " ***"),
                   buildTimer(),
                   OtpForm(),
                   SizedBox(height: 200 * 0.1),
@@ -55,10 +58,10 @@ Row buildTimer() {
     children: [
       Text("This code will expired in "),
       TweenAnimationBuilder(
-        tween: Tween(begin: 30.0, end: 0.0),
-        duration: Duration(seconds: 30),
+        tween: Tween(begin: 120.0, end: 0.0),
+        duration: Duration(seconds: 120),
         builder: (_, dynamic value, child) => Text(
-          "00:${value.toInt()}",
+          value.toInt().toString() + "s",
           style: TextStyle(color: Colors.black),
         ),
       ),

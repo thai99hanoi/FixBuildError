@@ -19,6 +19,7 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   User _profile = new User();
   String? _selectedGender;
+  List<String?> nameList = [];
   List<String> _gender = ["Nam", "Nữ"];
   District? selectedDistrict;
   Village? selectedVillage;
@@ -99,6 +100,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       controller:
                           TextEditingController(text: _textNameController.text),
                       style: const TextStyle(fontSize: 16, color: Colors.black),
+                      onChanged: (val) {
+                        String _surname = "";
+                        nameList = val.split(" ");
+                        print(val.split(" "));
+                        if (nameList.length > 2) {
+                          _profile.firstname = nameList.first;
+                          for (int i = 1; i < nameList.length - 1; i++) {
+                            _surname += (nameList[i]! + " ");
+                          }
+                          _profile.surname = _surname.trim();
+
+                          _profile.lastname = nameList.last;
+                        }
+                        if (nameList.length > 1) {
+                          _profile.firstname = nameList.first;
+                          _profile.lastname = nameList.last;
+                        } else {
+                          _profile.firstname = val;
+                        }
+                      },
                       decoration: const InputDecoration(
                           labelText: "Họ và tên (*):",
                           labelStyle: TextStyle(fontSize: 18)),
@@ -118,6 +139,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 controller: _textDOBController,
                                 onTap: () {
                                   _selectDate(context);
+                                  _profile.dateOfBirth = _selectedDate;
                                 },
                               ),
                             ),
@@ -143,6 +165,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     _selectedGender = value!;
+                                    _profile.gender = value;
                                   });
 
                                   ;
@@ -162,6 +185,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     TextFormField(
                       controller: _textIDCardController,
                       style: const TextStyle(fontSize: 16, color: Colors.black),
+                      onChanged: (val) {
+                        _profile.identityId = val;
+                      },
                       decoration: const InputDecoration(
                           labelText: "Căn Cước công dân/ hộ chiếu (*):",
                           hintText: "Vui Lòng Cập Nhập",
@@ -198,6 +224,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     TextFormField(
                       controller: _textAddressController,
                       style: const TextStyle(fontSize: 16, color: Colors.black),
+                      onChanged: (val) {
+                        _profile.address = val;
+                      },
                       decoration: const InputDecoration(
                           labelText: "Địa chỉ thường trú (*):",
                           hintText: "Vui Lòng Cập Nhập",
@@ -221,7 +250,46 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15))),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    var _respone = await UserRepository()
+                                        .updateUser(_profile);
+                                    print(_respone);
+                                    if (_respone
+                                        .toString()
+                                        .contains("UPDATE_USER_SUCCESS")) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title: Text(
+                                            'Thành Công',
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
+                                          content: Text(
+                                              "Cập nhập thông tin thành công"),
+                                          actions: <Widget>[
+                                            // ignore: deprecated_member_use
+                                            FlatButton(
+                                              child: Text('Okay'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                setState(() {});
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                    if (_respone
+                                        .toString()
+                                        .contains("UPDATE_USER_FAIL")) {
+                                      _showerrorDialog(
+                                          "Cập Nhập Thông Tin Không Thành Công");
+                                    } else {
+                                      print(_respone);
+                                      _showerrorDialog("Đã Xảy Ra Lỗi");
+                                    }
+                                  },
                                   child: new Text(
                                     'Cập Nhập',
                                     textAlign: TextAlign.center,
@@ -245,6 +313,28 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           drawer: NavDrawer());
     }
+  }
+
+  void _showerrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'An Error Occurs',
+          style: TextStyle(color: Colors.blue),
+        ),
+        content: Text(message),
+        actions: <Widget>[
+          // ignore: deprecated_member_use
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
   }
 
   _selectDate(BuildContext context) async {

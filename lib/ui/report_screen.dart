@@ -38,11 +38,15 @@ class _ReportScreenState extends State<ReportScreen> {
         }));
   }
   Future save() async {
-    try {
-      ReportDTORepository().createReport(reportDTO);
+    var _respone = await ReportDTORepository().createReport(reportDTO);
+
+    print(_respone);
+    if (_respone.toString().contains("CREATE_REPORT_SUCCESS")) {
       showAlertDialog(context);
-    } catch (error) {
-      print(error.toString());
+    } else if (_respone.toString().contains("FAIL")) {
+      _showerrorDialog("Gửi Báo Cáo Không Thành Công");
+    } else {
+      _showerrorDialog("Xảy ra lỗi");
     }
   }
 
@@ -235,6 +239,28 @@ class _ReportScreenState extends State<ReportScreen> {
           ],
         ),
         drawer: NavDrawer());
+  }
+
+  void _showerrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'An Error Occurs',
+          style: TextStyle(color: Colors.blue),
+        ),
+        content: Text(message),
+        actions: <Widget>[
+          // ignore: deprecated_member_use
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
   }
 }
 

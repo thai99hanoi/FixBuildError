@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:heath_care/model/password_dto.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:heath_care/model/reset_password.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/login_screen.dart';
-import 'package:heath_care/utils/http_exception.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 
-class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({Key? key}) : super(key: key);
-
+class NewPasswordScreen extends StatefulWidget {
+  const NewPasswordScreen(this.token);
+  final int token;
   @override
-  _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
+  _NewPasswordScreenState createState() => _NewPasswordScreenState();
 }
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+class _NewPasswordScreenState extends State<NewPasswordScreen> {
   GlobalKey<FormState> keyForm = new GlobalKey<FormState>();
-  PasswordDTO password = new PasswordDTO();
-  TextEditingController _textCurrentPasswordController =
-      TextEditingController();
+  ResetPassword password = new ResetPassword();
   TextEditingController _textNewPasswordController = TextEditingController();
   TextEditingController _textReEnterNewPasswordController =
       TextEditingController();
@@ -44,27 +41,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 25, 30, 0),
-                  child: TextFormField(
-                    controller: TextEditingController(
-                        text: _textCurrentPasswordController.text),
-                    onChanged: (val) {
-                      _textCurrentPasswordController.text = val;
-                      password.oldPassword = val;
-                    },
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: "Vui lòng nhập mật khẩu cũ"),
-                      MinLengthValidator(6,
-                          errorText: "Mật khẩu phải nhiều hơn 6 kí tự")
-                    ]),
-                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                        labelText: "Mật Khẩu Cũ (*):",
-                        labelStyle: TextStyle(fontSize: 15)),
-                  ),
-                ),
-                Padding(
                   padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
                   child: TextFormField(
                     controller: TextEditingController(
@@ -79,7 +55,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ]),
                     onChanged: (val) {
                       _textNewPasswordController.text = val;
-                      password.newPassword = val;
+                      // password.password = val;
                     },
                     // validator:
                     style: const TextStyle(fontSize: 16, color: Colors.black),
@@ -95,7 +71,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         text: _textReEnterNewPasswordController.text),
                     onChanged: (val) {
                       _textReEnterNewPasswordController.text = val;
-                      password.reEnterPassword = val;
+                      password.password = val;
                     },
                     validator: (val) {
                       if (val != _textNewPasswordController.text) {
@@ -155,7 +131,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   );
                                 } else if (keyForm.currentState!.validate()) {
                                   var response = await UserRepository()
-                                      .changePassword(password);
+                                      .resetPassword(
+                                          password, widget.token.toString());
 
                                   print(response.toString());
                                   if (response.toString().contains(
@@ -167,8 +144,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                           'Thành Công',
                                           style: TextStyle(color: Colors.blue),
                                         ),
-                                        content:
-                                            Text("Đổi Mật khẩu thành công"),
+                                        content: Text(
+                                            "Khôi phục Mật khẩu thành công"),
                                         actions: <Widget>[
                                           // ignore: deprecated_member_use
                                           FlatButton(
@@ -185,26 +162,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         ],
                                       ),
                                     );
-                                  } else if (response
-                                      .toString()
-                                      .contains('CHANGE_PASSWORD_FAIL')) {
-                                    _showerrorDialog("Xảy ra lỗi");
-                                  } else if (response
-                                      .toString()
-                                      .contains('OLD_PASSWORD_DOESNT_MATCH')) {
-                                    _showerrorDialog(
-                                        "Mật khẩu hiện tại không chính xác");
                                   } else if (response.toString().contains(
-                                      'REPASSWORD_DOESNT_MATCH_NEW_PASS')) {
+                                      'RESET_PASSWORD_INVALID_TOKEN')) {
                                     _showerrorDialog(
-                                        "Mật khẩu Nhập Lại Không Chính Xác");
-                                  } else if (response
-                                      .toString()
-                                      .contains('USER_NOT_FOUND')) {
-                                    _showerrorDialog(
-                                        "Không tìm thấy người dùng");
-                                  } else {
-                                    _showerrorDialog("Xảy ra lỗi");
+                                        "Khôi phục mật khẩu không thành công");
                                   }
                                 }
                               },

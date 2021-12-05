@@ -1,5 +1,5 @@
-class ResetPassword{
+class ResetPassword {
   String? password;
 
-  ResetPassword(this.password);
+  ResetPassword({this.password});
 }

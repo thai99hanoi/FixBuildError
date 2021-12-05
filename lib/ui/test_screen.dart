@@ -29,43 +29,46 @@ class _TestResultScreenState extends State<TestResultScreen> {
               title: Text("KẾT QUẢ XÉT NGHIỆM"),
             ),
             body: ListView(children: [
-              Card(
-                  elevation: 1,
-                  margin: EdgeInsets.only(bottom: 3),
-                  child: ListTile(
-                      title: Text("Lần xét nghiệm: "),
-                      contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      trailing: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                        isExpanded: false,
-                        items: _resultsList!.map((Result value) {
-                          return DropdownMenuItem<Result>(
-                            value: value,
-                            child: Text(
-                              value.numberTest.toString(),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (Result? value) {
-                          setState(() {
-                            _selectedResult = value!;
-                          });
-                        },
-                        hint: Align(
-                          alignment: Alignment.centerRight,
-                          child: _selectedResult!.numberTest != null
-                              ? Text(
-                                  _selectedResult!.numberTest.toString(),
-                                  style: TextStyle(color: Colors.grey),
-                                )
-                              : Text(
-                                  "Chọn lần xét nghiệm",
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                        ),
-                        style: TextStyle(
-                            color: Colors.black, decorationColor: Colors.red),
-                      )))),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                    elevation: 1,
+                    margin: EdgeInsets.only(bottom: 3),
+                    child: ListTile(
+                        title: Text("Lần xét nghiệm: "),
+                        contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        trailing: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                          isExpanded: false,
+                          items: _resultsList!.map((Result value) {
+                            return DropdownMenuItem<Result>(
+                              value: value,
+                              child: Text(
+                                value.numberTest.toString(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (Result? value) {
+                            setState(() {
+                              _selectedResult = value!;
+                            });
+                          },
+                          hint: Align(
+                            alignment: Alignment.centerRight,
+                            child: _selectedResult!.numberTest != null
+                                ? Text(
+                                    _selectedResult!.numberTest.toString(),
+                                    style: TextStyle(color: Colors.grey),
+                                  )
+                                : Text(
+                                    "Chọn lần xét nghiệm",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                          ),
+                          style: TextStyle(
+                              color: Colors.black, decorationColor: Colors.red),
+                        )))),
+              ),
               _selectedResult!.numberTest != null
                   ? Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -73,7 +76,7 @@ class _TestResultScreenState extends State<TestResultScreen> {
                         height: 300,
                         width: 100,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(208, 146, 149, 0.5),
+                            color: Color.fromRGBO(78, 159, 193, 0.3),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
