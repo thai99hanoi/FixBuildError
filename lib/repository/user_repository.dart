@@ -104,6 +104,42 @@ class UserRepository {
     print('api post.');
     return responseJson;
   }
+  Future<String> updateUser(User user) async {
+    print('Api Post, url /v1/api/user/update');
+    final f = new DateFormat('yyyy-MM-dd hh:mm:ss');
+    String token = await Auth().getToken();
+    var responseJson;
+    try {
+      final response =
+      await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
+          headers: {
+            "content-type": "application/json",
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode({
+            "username": user.username,
+            "mail": user.email,
+            "phone": user.phone,
+            "firstname": user.firstname,
+            "lastLogin": f.format(user.lastLogin!),
+            "lastname": user.lastname,
+            "surname": user.surname,
+            "identityCard": user.identityId,
+            "dob": f.format(user.dateOfBirth!),
+            "address": user.address,
+            "gender": user.gender,
+            "avatar": user.avatar,
+            "isOnline": user.isOnline,
+            "isActive": user.isActive
+          }));
+      responseJson = json.encode(utf8.decode(response.bodyBytes));
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+    print('api post.');
+    return responseJson;
+  }
 
   Future<List<User>?> getPatientByDoctor() async {
     String? token = await Auth().getToken();
@@ -218,35 +254,7 @@ class UserRepository {
     return responseJson;
   }
 
-  Future<String> updateUser(User user) async {
-    print('Api Post, url /v1/api/user/update');
-    final f = new DateFormat('yyyy-MM-dd hh:mm:ss');
-    String token = await Auth().getToken();
-    var responseJson;
-    try {
-      final response =
-          await http.post(Uri.parse(Api.authUrl + "/v1/api/user/update"),
-              headers: {
-                "content-type": "application/json",
-                'Authorization': 'Bearer $token',
-              },
-              body: json.encode({
-                "firstname": user.firstname,
-                "lastname": user.lastname,
-                "surname": user.surname,
-                "identityCard": user.identityId,
-                "dob": f.format(user.dateOfBirth!),
-                "address": user.address,
-                "gender": user.gender
-              }));
-      responseJson = json.encode(utf8.decode(response.bodyBytes));
-    } on SocketException {
-      print('No net');
-      throw FetchDataException('No Internet connection');
-    }
-    print('api post.');
-    return responseJson;
-  }
+
 
   Future<String> resetPassword(ResetPassword password, String token) async {
     print('Api Post, url /v1/api/user/reset-password/$token');
