@@ -29,7 +29,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
         body: SingleChildScrollView(
           child: Form(
-            autovalidateMode: AutovalidateMode.always,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             key: keyForm,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:heath_care/model/request_dto.dart';
 import 'package:heath_care/model/request_type.dart';
 import 'package:heath_care/repository/request_repository.dart';
-import 'package:heath_care/ui/main_screen.dart';
 
 class SendRequest extends StatefulWidget {
   const SendRequest({Key? key}) : super(key: key);
@@ -124,16 +123,13 @@ showAlertDialog(BuildContext context) {
   Widget okButton = FlatButton(
     child: Text("OK"),
     onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MainScreen()),
-      );
+      Navigator.pop(context);
     },
   );
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("Thành Công"),
-    content: Text("Yêu cầu đã được gửi thành công, quay lại trang chủ."),
+    content: Text("Yêu cầu đã được gửi thành công"),
     actions: [
       okButton,
     ],
