@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/password_dto.dart';
+import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/login_screen.dart';
 import 'package:heath_care/utils/http_exception.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -20,6 +22,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   TextEditingController _textNewPasswordController = TextEditingController();
   TextEditingController _textReEnterNewPasswordController =
       TextEditingController();
+
+  Future logout() async {
+    try {
+      await Provider.of<Auth>(context, listen: false).logout();
+      Route route = MaterialPageRoute(builder: (context) => LoginPage());
+      Navigator.push(context, route);
+    } catch (error) {
+      var errorMessage = 'Please try again later';
+      print(error.toString());
+      _showerrorDialog(errorMessage);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,7 +173,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
                                   print(response.toString());
                                   if (response.toString().contains(
-                                      'Reset password successfully')) {
+                                      'CHANGE_PASSWORD_SUCCES')) {
                                     showDialog(
                                       context: context,
                                       builder: (ctx) => AlertDialog(
@@ -173,13 +187,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                           // ignore: deprecated_member_use
                                           FlatButton(
                                             child: Text('Okay'),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LoginPage()),
-                                              );
+                                            onPressed: () {logout();
                                             },
                                           )
                                         ],

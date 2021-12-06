@@ -9,7 +9,7 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable(explicitToJson: true)
 class User {
   int? userId;
-  int? roleId;
+  Role? roleId;
   Village? village;
   District? district;
   Province? province;
@@ -55,7 +55,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
       userId: json['userId'] as int?,
-      roleId: json['role']['roleId'] as int?,
+      roleId: Role.fromJson(json['role']),
       village: Village.fromJson(json['village']),
       district: District.fromJson(json['village']["district"]),
       province: Province.fromJson(json['village']["district"]['province']),

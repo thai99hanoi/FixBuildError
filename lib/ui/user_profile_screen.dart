@@ -25,7 +25,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Village? selectedVillage;
   final df = new DateFormat('dd-MM-yyyy');
   _UserProfileScreenState() {
-    UserRepository().getCurrentUser().then((val) => setState(() {
+    UserRepository().getCurrentUserWithoutCache().then((val) => setState(() {
           _profile = val;
         }));
   }
@@ -277,7 +277,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                         ),
                                       );
                                     }
-                                    if (_respone
+                                   else if (_respone
                                         .toString()
                                         .contains("UPDATE_USER_FAIL")) {
                                       _showerrorDialog(

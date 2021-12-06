@@ -23,8 +23,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Future<User> currentUser = UserRepository().getCurrentUser();
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(

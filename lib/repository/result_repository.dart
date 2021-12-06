@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:heath_care/model/result.dart';
 import 'package:heath_care/networks/auth.dart';
+import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/utils/api.dart';
 import 'package:heath_care/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
@@ -34,7 +35,7 @@ class ResultRepository {
   }
 
   Future<List<Result>?> getAllResultCurrentUserId() async {
-    var _userID = await Auth().getCurrentUserCache();
+    var _userID = await UserRepository().getCurrentUser();
     String? token = await Auth().getToken();
     print('Api Get, url /v1/api/result/get-result');
     var responseJson;
