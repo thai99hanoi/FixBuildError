@@ -48,13 +48,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       _textAddressController.text = _profile.address.toString();
     }
     _textNameController.text = _profile.getDisplayName();
-    _selectedDate = _profile.dateOfBirth;
-    if (_profile.dateOfBirth == null) {
-      _textDOBController.text = 'Vui Lòng Cập Nhập Ngày Sinh';
-    } else {
-      _selectedDate = _profile.dateOfBirth;
-      _textDOBController.text = df.format(_profile.dateOfBirth!);
-    }
 
     if (_profile.firstname == null) {
       return Scaffold(
@@ -64,6 +57,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           body: Center(child: CircularProgressIndicator()));
     } else {
+      _textDOBController
+        ..text = df.format(_profile.dateOfBirth!)
+        ..selection = TextSelection.fromPosition(TextPosition(
+            offset: _textDOBController.text.length,
+            affinity: TextAffinity.upstream));
       return Scaffold(
           appBar: AppBar(
             backgroundColor: const Color.fromRGBO(78, 159, 193, 1),
@@ -139,7 +137,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 controller: _textDOBController,
                                 onTap: () {
                                   _selectDate(context);
-                                  _profile.dateOfBirth = _selectedDate;
                                 },
                               ),
                             ),
@@ -338,21 +335,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   _selectDate(BuildContext context) async {
-    DateTime? newSelectedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate!,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-
-    if (newSelectedDate != null) {
-      _selectedDate = newSelectedDate;
-      _textDOBController
-        ..text = df.format(_selectedDate!)
-        ..selection = TextSelection.fromPosition(TextPosition(
-            offset: _textDOBController.text.length,
-            affinity: TextAffinity.upstream));
-    }
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _profile.dateOfBirth!,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2101));
+    _textDOBController
+      ..text = df.format(_profile.dateOfBirth!)
+      ..selection = TextSelection.fromPosition(TextPosition(
+          offset: _textDOBController.text.length,
+          affinity: TextAffinity.upstream));
+    if (picked != null && picked != _profile.dateOfBirth!)
+      setState(() {
+        _profile.dateOfBirth = picked;
+      });
   }
 }
 
