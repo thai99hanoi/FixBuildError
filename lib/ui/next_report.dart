@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/exercise.dart';
 import 'package:heath_care/model/medicine.dart';
+import 'package:heath_care/model/report.dart';
 import 'package:heath_care/model/report_dto.dart';
+import 'package:heath_care/model/user.dart';
 import 'package:heath_care/repository/exercise_repository.dart';
 import 'package:heath_care/repository/medicine_repository.dart';
 import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/repository/symptom_repository.dart';
+import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/main_screen.dart';
+import 'package:intl/intl.dart';
 import 'components/NavSideBar.dart';
 
 class NextScreenReport extends StatefulWidget {
@@ -22,7 +26,16 @@ class _NextScreenReportState extends State<NextScreenReport> {
   List<Exercise> _allExercise = [];
   List<int?>? _selectedMedicine = [];
   List<Medicine> _allMedicine = [];
+  User _profile = new User();
+  List<Report> reports = [];
   ReportDTO reportDTO;
+  DateFormat f = new DateFormat('hh:mm:ss');
+  DateFormat sdf = new DateFormat('yyyy-MM-dd');
+  DateTime? startTime;
+  DateTime? midTime;
+  DateTime? endTime;
+  DateTime? now;
+  DateTime? today;
   _NextScreenReportState(this.reportDTO) {
     ExerciseRepository().getAllExercises().then((val) => setState(() {
           _allExercise = val!;
@@ -30,14 +43,38 @@ class _NextScreenReportState extends State<NextScreenReport> {
     MedicineRepository().getAllMedicine().then((val) => setState(() {
           _allMedicine = val!;
         }));
+    UserRepository().getCurrentUserWithoutCache().then((val) => setState(() {
+      _profile = val;
+    }));
+    ReportDTORepository().getReport(_profile.userId!).then((val) => setState(() {
+      reports = val;
+    }));
+    startTime = f.parse("00:00:00");
+    midTime = f.parse("12:00:00");
+    endTime = f.parse("24.00.00");
+    now = f.parse(DateTime.now().toString());
+    today = f.parse(DateTime.now().toString());
   }
   Future save() async {
-    var _respone = await ReportDTORepository().createReport(reportDTO);
-
-    print(_respone);
-    if (_respone.toString().contains("CREATE_REPORT_SUCCESS")) {
+    Report report = reports.last;
+    var _response;
+    DateTime dateReport = sdf.parse(report.date.toString());
+    DateTime timeReport = f.parse(report.time.toString());
+    if (dateReport.isAtSameMomentAs(today!)){
+      if ((timeReport.isAfter(startTime!) && timeReport.isBefore(midTime!)) && (now!.isAfter(startTime!) && now!.isBefore(midTime!))) {
+        _showerrorDialog("Bạn đã gửi báo cáo vào buổi sáng!");
+      } else if ((timeReport.isAfter(midTime!) && timeReport.isBefore(endTime!)) && (now!.isAfter(midTime!) && now!.isBefore(endTime!))) {
+        _showerrorDialog("Bạn đã gửi báo cáo vào buổi chiều!");
+      } else {
+        _response = await ReportDTORepository().createReport(reportDTO);
+      }
+    } else {
+      _response = await ReportDTORepository().createReport(reportDTO);
+    }
+    print(_response);
+    if (_response.toString().contains("CREATE_REPORT_SUCCESS")) {
       showAlertDialog(context);
-    } else if (_respone.toString().contains("FAIL")) {
+    } else if (_response.toString().contains("FAIL")) {
       _showerrorDialog("Gửi Báo Cáo Không Thành Công");
     } else {
       _showerrorDialog("Xảy ra lỗi");

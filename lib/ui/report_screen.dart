@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:heath_care/model/report.dart';
 import 'package:heath_care/model/report_dto.dart';
 import 'package:heath_care/model/symptom.dart';
+import 'package:heath_care/model/user.dart';
+import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/repository/symptom_repository.dart';
+import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/main_screen.dart';
 import 'package:heath_care/ui/next_report.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:intl/intl.dart';
 
 import 'components/NavSideBar.dart';
 
@@ -21,10 +26,12 @@ class _ReportScreenState extends State<ReportScreen> {
   List<int?>? _selectedSymptom = [];
   List<Symptom> _allSymptom = [];
 
+
   _ReportScreenState() {
     SymptomRepository().getAllSymptom().then((val) => setState(() {
           _allSymptom = val!;
         }));
+
   }
   GlobalKey<FormState> keyForm = new GlobalKey<FormState>();
   TextEditingController _textOxygenController = TextEditingController();
