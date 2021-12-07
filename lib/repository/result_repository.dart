@@ -43,7 +43,7 @@ class ResultRepository {
       final response = await http.get(
         Uri.parse(Api.authUrl +
             "/v1/api/result/get-result?userId=" +
-            _userID.toString()),
+            _userID.userId.toString()),
         headers: {
           "content-type": "application/json",
           'Authorization': 'Bearer $token',
