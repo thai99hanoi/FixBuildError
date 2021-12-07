@@ -16,6 +16,7 @@ import 'components/NavSideBar.dart';
 class NextScreenReport extends StatefulWidget {
   final ReportDTO reportDTO;
   final Report? lastReport;
+
   const NextScreenReport({Key? key, required this.reportDTO, this.lastReport})
       : super(key: key);
 
@@ -41,6 +42,7 @@ class _NextScreenReportState extends State<NextScreenReport> {
   DateTime? today;
   String? formatted;
   String? formattedDate;
+
   _NextScreenReportState(this.reportDTO, this.lastReport) {
     ExerciseRepository().getAllExercises().then((val) => setState(() {
           _allExercise = val!;
@@ -49,9 +51,11 @@ class _NextScreenReportState extends State<NextScreenReport> {
           _allMedicine = val!;
         }));
   }
+
   Future save() async {
+    // String mid = "11:59:59";
     startTime = f.parse("00:00:00");
-    midTime = f.parse("12:00:00");
+    midTime = f.parse("11:59:59");
     endTime = f.parse("24:00:00");
     formatted = f.format(DateTime.now());
     formattedDate = sdf.format(DateTime.now());
@@ -74,19 +78,26 @@ class _NextScreenReportState extends State<NextScreenReport> {
           _showerrorDialog("Bạn đã gửi báo cáo vào buổi chiều!");
         } else {
           _response = await ReportDTORepository().createReport(reportDTO);
+          print(_response);
+          if (_response.toString().contains("CREATE_REPORT_SUCCESS")) {
+            showAlertDialog(context);
+          } else if (_response.toString().contains("FAIL")) {
+            _showerrorDialog("Gửi Báo Cáo Không Thành Công");
+          } else {
+            _showerrorDialog("Xảy ra lỗi");
+          }
         }
       } else {
         _response = await ReportDTORepository().createReport(reportDTO);
+        print(_response);
+        if (_response.toString().contains("CREATE_REPORT_SUCCESS")) {
+          showAlertDialog(context);
+        } else if (_response.toString().contains("FAIL")) {
+          _showerrorDialog("Gửi Báo Cáo Không Thành Công");
+        } else {
+          _showerrorDialog("Xảy ra lỗi");
+        }
       }
-    }
-
-    print(_response);
-    if (_response.toString().contains("CREATE_REPORT_SUCCESS")) {
-      showAlertDialog(context);
-    } else if (_response.toString().contains("FAIL")) {
-      _showerrorDialog("Gửi Báo Cáo Không Thành Công");
-    } else {
-      _showerrorDialog("Xảy ra lỗi");
     }
   }
 
