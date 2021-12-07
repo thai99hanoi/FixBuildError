@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/medicine.dart';
 import 'package:heath_care/repository/medicine_repository.dart';
+import 'package:heath_care/utils/api.dart';
 
 class DetailScreenMedicine extends StatefulWidget {
   const DetailScreenMedicine({Key? key, required this.MedicineId})
@@ -44,10 +45,15 @@ class _DetailMedicineState extends State<DetailScreenMedicine> {
               alignment: AlignmentDirectional.center,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
-                child: Image.asset(
-                  "assets/images/ex.jpeg",
-                  fit: BoxFit.cover,
-                ),
+                child: medicine.thumbnail != null
+                    ? Image.network(
+                        Api.imageUrl + medicine.thumbnail.toString(),
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        "assets/images/ex.jpeg",
+                        fit: BoxFit.cover,
+                      ),
               ),
             ),
           ),
@@ -66,7 +72,7 @@ class _DetailMedicineState extends State<DetailScreenMedicine> {
             padding: const EdgeInsets.all(20.0),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text(medicine.description.toString(),
+              child: Text(medicine.detail.toString(),
                   style: TextStyle(
                     fontSize: 16,
                   )),

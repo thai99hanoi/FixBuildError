@@ -86,6 +86,7 @@ class _State extends State<LoginPage> {
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
               child: TextFormField(
                 controller: TextEditingController(text: user.username),
+                keyboardType: TextInputType.number,
                 onChanged: (val) {
                   user.username = val;
                 },
