@@ -76,13 +76,13 @@ class _MedicineScreenState extends State<MedicineScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(78, 159, 193, 1),
-        title: const Text("BÀI TẬP PHỤC HỒI"),
+        title: const Text("DANH SÁCH THUỐC"),
       ),
       body: Column(
         children: [
           const Padding(
             padding: EdgeInsets.all(20.20),
-            child: Text("CÁC BÀI TẬP",
+            child: Text("THUỐC ĐIỀU TRỊ",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           ),
           Expanded(

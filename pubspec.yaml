@@ -33,6 +33,7 @@ dependencies:
   url_launcher: ^6.0.12
   get: ^4.3.8
   oktoast: ^3.1.5
+  advance_pdf_viewer: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -48,6 +49,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/file/
     - assets/images/
     - assets/audio/
     - assets/icons/

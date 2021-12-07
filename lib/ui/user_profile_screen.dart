@@ -271,14 +271,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                               child: Text('Okay'),
                                               onPressed: () {
                                                 Navigator.pop(context);
-                                                setState(() {
-                                                  Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (BuildContext
-                                                                  context) =>
-                                                              super.widget));
-                                                });
                                               },
                                             )
                                           ],
