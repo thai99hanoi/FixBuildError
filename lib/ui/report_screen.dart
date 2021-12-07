@@ -14,10 +14,11 @@ import 'package:intl/intl.dart';
 import 'components/NavSideBar.dart';
 
 class ReportScreen extends StatefulWidget {
-  const ReportScreen({Key? key}) : super(key: key);
+  final Report? lastReport;
+  const ReportScreen({Key? key, this.lastReport}) : super(key: key);
 
   @override
-  State<ReportScreen> createState() => _ReportScreenState();
+  State<ReportScreen> createState() => _ReportScreenState(lastReport);
 }
 
 class _ReportScreenState extends State<ReportScreen> {
@@ -26,12 +27,12 @@ class _ReportScreenState extends State<ReportScreen> {
   List<int?>? _selectedSymptom = [];
   List<Symptom> _allSymptom = [];
 
+  Report? lastReport;
 
-  _ReportScreenState() {
+  _ReportScreenState(this.lastReport) {
     SymptomRepository().getAllSymptom().then((val) => setState(() {
           _allSymptom = val!;
         }));
-
   }
   GlobalKey<FormState> keyForm = new GlobalKey<FormState>();
   TextEditingController _textOxygenController = TextEditingController();
@@ -201,6 +202,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       MaterialPageRoute(
                           builder: (context) => NextScreenReport(
                                 reportDTO: reportDTO,
+                                lastReport: lastReport,
                               )),
                     );
                   }

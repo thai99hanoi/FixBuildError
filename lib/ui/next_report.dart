@@ -15,10 +15,13 @@ import 'components/NavSideBar.dart';
 
 class NextScreenReport extends StatefulWidget {
   final ReportDTO reportDTO;
-  const NextScreenReport({Key? key, required this.reportDTO}) : super(key: key);
+  final Report? lastReport;
+  const NextScreenReport({Key? key, required this.reportDTO, this.lastReport})
+      : super(key: key);
 
   @override
-  State<NextScreenReport> createState() => _NextScreenReportState(reportDTO);
+  State<NextScreenReport> createState() =>
+      _NextScreenReportState(reportDTO, lastReport);
 }
 
 class _NextScreenReportState extends State<NextScreenReport> {
@@ -26,9 +29,10 @@ class _NextScreenReportState extends State<NextScreenReport> {
   List<Exercise> _allExercise = [];
   List<int?>? _selectedMedicine = [];
   List<Medicine> _allMedicine = [];
-  User _profile = new User();
+  User? _profile = new User();
   List<Report> reports = [];
   ReportDTO reportDTO;
+  Report? lastReport;
   DateFormat f = new DateFormat('hh:mm:ss');
   DateFormat sdf = new DateFormat('yyyy-MM-dd');
   DateTime? startTime;
@@ -36,41 +40,42 @@ class _NextScreenReportState extends State<NextScreenReport> {
   DateTime? endTime;
   DateTime? now;
   DateTime? today;
-  _NextScreenReportState(this.reportDTO) {
+  _NextScreenReportState(this.reportDTO, this.lastReport) {
     ExerciseRepository().getAllExercises().then((val) => setState(() {
           _allExercise = val!;
         }));
     MedicineRepository().getAllMedicine().then((val) => setState(() {
           _allMedicine = val!;
         }));
-    UserRepository().getCurrentUserWithoutCache().then((val) => setState(() {
-      _profile = val;
-    }));
-    ReportDTORepository().getReport(_profile.userId!).then((val) => setState(() {
-      reports = val;
-    }));
+  }
+  Future save() async {
     startTime = f.parse("00:00:00");
     midTime = f.parse("12:00:00");
     endTime = f.parse("24.00.00");
     now = f.parse(DateTime.now().toString());
     today = f.parse(DateTime.now().toString());
-  }
-  Future save() async {
-    Report report = reports.last;
     var _response;
-    DateTime dateReport = sdf.parse(report.date.toString());
-    DateTime timeReport = f.parse(report.time.toString());
-    if (dateReport.isAtSameMomentAs(today!)){
-      if ((timeReport.isAfter(startTime!) && timeReport.isBefore(midTime!)) && (now!.isAfter(startTime!) && now!.isBefore(midTime!))) {
-        _showerrorDialog("Bạn đã gửi báo cáo vào buổi sáng!");
-      } else if ((timeReport.isAfter(midTime!) && timeReport.isBefore(endTime!)) && (now!.isAfter(midTime!) && now!.isBefore(endTime!))) {
-        _showerrorDialog("Bạn đã gửi báo cáo vào buổi chiều!");
+    DateTime dateReport = sdf.parse(lastReport!.date.toString());
+    DateTime timeReport = f.parse(lastReport!.time.toString());
+    if (lastReport == null) {
+      _response = await ReportDTORepository().createReport(reportDTO);
+    } else {
+      if (dateReport.isAtSameMomentAs(today!)) {
+        if ((timeReport.isAfter(startTime!) && timeReport.isBefore(midTime!)) &&
+            (now!.isAfter(startTime!) && now!.isBefore(midTime!))) {
+          _showerrorDialog("Bạn đã gửi báo cáo vào buổi sáng!");
+        } else if ((timeReport.isAfter(midTime!) &&
+                timeReport.isBefore(endTime!)) &&
+            (now!.isAfter(midTime!) && now!.isBefore(endTime!))) {
+          _showerrorDialog("Bạn đã gửi báo cáo vào buổi chiều!");
+        } else {
+          _response = await ReportDTORepository().createReport(reportDTO);
+        }
       } else {
         _response = await ReportDTORepository().createReport(reportDTO);
       }
-    } else {
-      _response = await ReportDTORepository().createReport(reportDTO);
     }
+
     print(_response);
     if (_response.toString().contains("CREATE_REPORT_SUCCESS")) {
       showAlertDialog(context);
@@ -172,8 +177,7 @@ class _NextScreenReportState extends State<NextScreenReport> {
               ),
             )),
           ),
-        ]),
-        drawer: NavDrawer());
+        ]));
   }
 
   void _showerrorDialog(String message) {

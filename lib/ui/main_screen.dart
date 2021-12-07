@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:heath_care/firebase/call_firebase.dart';
 import 'package:heath_care/firebase/chat_firebase.dart';
 import 'package:heath_care/model/message.dart';
+import 'package:heath_care/model/report.dart';
 import 'package:heath_care/model/request_call.dart';
+import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/report_screen.dart';
 import 'package:heath_care/ui/test_screen.dart';
@@ -20,14 +22,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  Report? _report;
   int pageIndex = 2;
-  List<Widget> pageList = <Widget>[
-    ReportScreen(),
-    ListUser(),
-    homeScreen(),
-    TestResultScreen(),
-    UserProfileScreen()
-  ];
+  // List<Widget> pageList = <Widget>[
+  //   ReportScreen(lastReport: _report,),
+  //   ListUser(),
+  //   homeScreen(),
+  //   TestResultScreen(),
+  //   UserProfileScreen()
+  // ];
 
   bool isInCall = false;
 
@@ -80,6 +83,14 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  getLastReport() {
+    UserRepository().getCurrentUser().then((currentUser) {
+      ReportDTORepository()
+          .getReport(currentUser.userId!)
+          .then((lastReport) => _report = lastReport.last);
+    });
+  }
+
   void navigatorPage(Widget page) {
     isInCall = true;
     Route route = MaterialPageRoute(builder: (context) => page);
@@ -89,6 +100,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     listenerCall();
+    getLastReport();
     super.initState();
   }
 
@@ -99,7 +111,15 @@ class _MainScreenState extends State<MainScreen> {
 
   Scaffold buildUIApp() {
     return Scaffold(
-      body: pageList[pageIndex],
+      body: <Widget>[
+        ReportScreen(
+          lastReport: _report,
+        ),
+        ListUser(),
+        homeScreen(),
+        TestResultScreen(),
+        UserProfileScreen()
+      ][pageIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: pageIndex,
         onTap: (value) {

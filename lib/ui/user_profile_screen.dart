@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/district.dart';
-import 'package:heath_care/model/province.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/model/village.dart';
-import 'package:heath_care/repository/address_repository.dart';
 
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/components/NavSideBar.dart';
@@ -26,6 +24,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final df = new DateFormat('dd-MM-yyyy');
   _UserProfileScreenState() {
     UserRepository().getCurrentUserWithoutCache().then((val) => setState(() {
+          _profile = val;
+        }));
+    UserRepository().getCurrentUser().then((val) => setState(() {
           _profile = val;
         }));
   }
@@ -270,14 +271,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                               child: Text('Okay'),
                                               onPressed: () {
                                                 Navigator.pop(context);
-                                                setState(() {});
+                                                setState(() {
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              super.widget));
+                                                });
                                               },
                                             )
                                           ],
                                         ),
                                       );
-                                    }
-                                   else if (_respone
+                                    } else if (_respone
                                         .toString()
                                         .contains("UPDATE_USER_FAIL")) {
                                       _showerrorDialog(
