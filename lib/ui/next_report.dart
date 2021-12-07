@@ -29,7 +29,6 @@ class _NextScreenReportState extends State<NextScreenReport> {
   List<Exercise> _allExercise = [];
   List<int?>? _selectedMedicine = [];
   List<Medicine> _allMedicine = [];
-  User? _profile = new User();
   List<Report> reports = [];
   ReportDTO reportDTO;
   Report? lastReport;
@@ -40,6 +39,8 @@ class _NextScreenReportState extends State<NextScreenReport> {
   DateTime? endTime;
   DateTime? now;
   DateTime? today;
+  String? formatted;
+  String? formattedDate;
   _NextScreenReportState(this.reportDTO, this.lastReport) {
     ExerciseRepository().getAllExercises().then((val) => setState(() {
           _allExercise = val!;
@@ -51,15 +52,18 @@ class _NextScreenReportState extends State<NextScreenReport> {
   Future save() async {
     startTime = f.parse("00:00:00");
     midTime = f.parse("12:00:00");
-    endTime = f.parse("24.00.00");
-    now = f.parse(DateTime.now().toString());
-    today = f.parse(DateTime.now().toString());
+    endTime = f.parse("24:00:00");
+    formatted = f.format(DateTime.now());
+    formattedDate = sdf.format(DateTime.now());
+    now = f.parse(formatted!);
+    today = sdf.parse(formattedDate!);
     var _response;
-    DateTime dateReport = sdf.parse(lastReport!.date.toString());
-    DateTime timeReport = f.parse(lastReport!.time.toString());
+
     if (lastReport == null) {
       _response = await ReportDTORepository().createReport(reportDTO);
     } else {
+      DateTime dateReport = sdf.parse(lastReport!.date.toString());
+      DateTime timeReport = f.parse(lastReport!.time.toString());
       if (dateReport.isAtSameMomentAs(today!)) {
         if ((timeReport.isAfter(startTime!) && timeReport.isBefore(midTime!)) &&
             (now!.isAfter(startTime!) && now!.isBefore(midTime!))) {
