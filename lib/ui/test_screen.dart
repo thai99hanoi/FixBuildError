@@ -95,7 +95,7 @@ class _TestResultScreenState extends State<TestResultScreen> {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     TextSpan(
-                                        text: _selectedResult!.unit!.name
+                                        text: _selectedResult!.unitName!
                                             .toString()),
                                   ],
                                 ),

@@ -6,7 +6,7 @@ class Result {
   int? resultId;
   String? resultCode;
   User? user;
-  Unit? unit;
+  String? unitName;
   int? numberTest;
   DateTime? startDate;
   DateTime? collectDate;
@@ -22,7 +22,7 @@ class Result {
       {this.resultId,
       this.resultCode,
       this.user,
-      this.unit,
+      this.unitName,
       this.numberTest,
       this.startDate,
       this.collectDate,
@@ -38,7 +38,7 @@ class Result {
       resultId: json['resultId'] as int?,
       resultCode: json['resultCode'] as String?,
       user: User.fromJson(json['user']),
-      unit: Unit.fromJson(json['unit']),
+      unitName: json['unit'] as String?,
       numberTest: json['numberTest'] as int?,
       startDate: json["startDate"] != null ? DateTime?.parse(json["startDate"]) : json["startDate"] as DateTime?,
       collectDate: json["collectDate"] != null ? DateTime?.parse(json["collectDate"]) : json["collectDate"] as DateTime?,

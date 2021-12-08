@@ -211,8 +211,7 @@ class _DetailUserReportState extends State<DetailUserReport> {
                                                 fontWeight: FontWeight.bold)),
                                         TextSpan(
                                             text: _results[index]
-                                                .unit!
-                                                .name
+                                                .unitName!
                                                 .toString()),
                                       ],
                                     ),
