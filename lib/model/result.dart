@@ -38,16 +38,23 @@ class Result {
       resultId: json['resultId'] as int?,
       resultCode: json['resultCode'] as String?,
       user: User.fromJson(json['user']),
-      unitName: json['unit'] as String?,
+      unitName: json['unitSendName'] as String?,
       numberTest: json['numberTest'] as int?,
-      startDate: json["startDate"] != null ? DateTime?.parse(json["startDate"]) : json["startDate"] as DateTime?,
-      collectDate: json["collectDate"] != null ? DateTime?.parse(json["collectDate"]) : json["collectDate"] as DateTime?,
-      testDate: json["testDate"] != null ? DateTime?.parse(json["testDate"]) : json["testDate"] as DateTime?,
-      receiveDate: json["receiveDate"] != null ? DateTime?.parse(json["receiveDate"]) : json["receiveDate"] as DateTime?,
+      startDate: json["startDate"] != null
+          ? DateTime?.parse(json["startDate"])
+          : json["startDate"] as DateTime?,
+      collectDate: json["collectDate"] != null
+          ? DateTime?.parse(json["collectDate"])
+          : json["collectDate"] as DateTime?,
+      testDate: json["testDate"] != null
+          ? DateTime?.parse(json["testDate"])
+          : json["testDate"] as DateTime?,
+      receiveDate: json["receiveDate"] != null
+          ? DateTime?.parse(json["receiveDate"])
+          : json["receiveDate"] as DateTime?,
       sampleType: SampleType.fromJson(json['sampleType']),
       status: json['status'] as int?,
       testResult: json['testResult'] as int?,
       comment: json['comment'] as String?,
       isActive: json['isActive'] as int?);
-
 }

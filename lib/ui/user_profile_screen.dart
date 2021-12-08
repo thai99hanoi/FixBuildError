@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/district.dart';
 import 'package:heath_care/model/user.dart';
@@ -5,6 +8,8 @@ import 'package:heath_care/model/village.dart';
 
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/components/NavSideBar.dart';
+import 'package:heath_care/utils/api.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -15,8 +20,11 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  XFile? image;
+  final ImagePicker _picker = ImagePicker();
   User _profile = new User();
   String? _selectedGender;
+  var _image;
   List<String?> nameList = [];
   List<String> _gender = ["Nam", "Nữ"];
   District? selectedDistrict;
@@ -70,14 +78,82 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
           body: ListView(
             children: [
-              const Center(
+              Center(
                 child: Padding(
                   padding: EdgeInsets.all(20.0),
-                  child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage('assets/images/img_1.png')),
+                  child: InkWell(
+                    onTap: () async {
+                      try {
+                        image = await _picker.pickImage(
+                            source: ImageSource.gallery, imageQuality: 70);
+                      } catch (e) {
+                        print(e);
+                      }
+                      if (image != null) {
+                        setState(() {
+                          _image = File(image!.path).readAsBytesSync();
+                        });
+                      }
+                      List<int> imageBytes =
+                          File(image!.path).readAsBytesSync();
+                      // final bytes = File(image!.path).readAsBytesSync();
+
+                      if (_image == null) {
+                        _showerrorDialog("Xảy ra lỗi");
+                      } else {
+                        String base64Image = "data:image/jpg;base64,"+base64Encode(_image);
+                        print(_image);
+                        _profile.avatar = base64Image;
+                        Image.memory(_image);
+                        var _respone =
+                            await UserRepository().updateUser(_profile);
+                        print(_respone);
+                        if (_respone
+                            .toString()
+                            .contains("UPDATE_USER_SUCCESS")) {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text(
+                                'Thành Công',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                              content: Text("Cập nhập thông tin thành công"),
+                              actions: <Widget>[
+                                // ignore: deprecated_member_use
+                                FlatButton(
+                                  child: Text('Okay'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              ],
+                            ),
+                          );
+                        } else if (_respone
+                            .toString()
+                            .contains("UPDATE_USER_FAIL")) {
+                          _showerrorDialog(
+                              "Cập Nhập Thông Tin Không Thành Công");
+                        } else {
+                          print(_respone);
+                          _showerrorDialog("Đã Xảy Ra Lỗi");
+                        }
+                      }
+                    },
+                    child: _profile.avatar == null
+                     ? CircleAvatar(
+                        radius: 50,
+                        backgroundImage:
+                         AssetImage('assets/images/img_1.png'))
+                    : CircleAvatar(
+                        radius: 50,
+                        backgroundImage:
+                        NetworkImage( Api.imageUrl + _profile.avatar!)),
+                  ),
                 ),
               ),
+
               Center(
                   child: Text(_profile.getDisplayName(),
                       style: TextStyle(
@@ -331,6 +407,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ],
       ),
     );
+    progressImage() {
+      final bytes = File(image!.path).readAsBytesSync();
+      String img64 = base64Encode(bytes);
+      if (img64 == null) {
+        _showerrorDialog("Xảy ra lỗi");
+      } else {}
+    }
   }
 
   _selectDate(BuildContext context) async {
