@@ -210,13 +210,14 @@ class UserRepository {
   }
 
   Future<List<User>?> getDoctorByPatient() async {
+    User user = await getCurrentUser();
     print('Api Get, url /v1/api/patient-doctor/get-doctor');
     String? token = await Auth().getToken();
     List<User>? users;
     var responseJson;
     try {
       final response = await http.get(
-        Uri.parse(Api.authUrl + "/v1/api/patient-doctor/get-doctor"),
+        Uri.parse(Api.authUrl + "/v1/api/patient-doctor/get-doctor?patientId="+user.userId.toString()),
         headers: {
           "content-type": "application/json",
           'Authorization': 'Bearer $token',
