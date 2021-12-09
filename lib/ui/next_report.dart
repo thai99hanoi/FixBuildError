@@ -16,16 +16,19 @@ import 'components/NavSideBar.dart';
 class NextScreenReport extends StatefulWidget {
   final ReportDTO reportDTO;
   final Report? lastReport;
+  final int count;
 
-  const NextScreenReport({Key? key, required this.reportDTO, this.lastReport})
+  const NextScreenReport(
+      {Key? key, required this.reportDTO, this.lastReport, required this.count})
       : super(key: key);
 
   @override
   State<NextScreenReport> createState() =>
-      _NextScreenReportState(reportDTO, lastReport);
+      _NextScreenReportState(reportDTO, lastReport, count);
 }
 
 class _NextScreenReportState extends State<NextScreenReport> {
+  int count;
   List<int?>? _selectedExercise = [];
   List<Exercise> _allExercise = [];
   List<int?>? _selectedMedicine = [];
@@ -43,13 +46,13 @@ class _NextScreenReportState extends State<NextScreenReport> {
   String? formatted;
   String? formattedDate;
 
-  _NextScreenReportState(this.reportDTO, this.lastReport) {
+  _NextScreenReportState(this.reportDTO, this.lastReport, this.count) {
     ExerciseRepository().getAllExercises().then((val) => setState(() {
-          _allExercise = val!;
-        }));
+      _allExercise = val!;
+    }));
     MedicineRepository().getAllMedicine().then((val) => setState(() {
-          _allMedicine = val!;
-        }));
+      _allMedicine = val!;
+    }));
   }
 
   Future save() async {
@@ -73,7 +76,7 @@ class _NextScreenReportState extends State<NextScreenReport> {
             (now!.isAfter(startTime!) && now!.isBefore(midTime!))) {
           _showerrorDialog("Bạn đã gửi báo cáo vào buổi sáng!");
         } else if ((timeReport.isAfter(midTime!) &&
-                timeReport.isBefore(endTime!)) &&
+            timeReport.isBefore(endTime!)) &&
             (now!.isAfter(midTime!) && now!.isBefore(endTime!))) {
           _showerrorDialog("Bạn đã gửi báo cáo vào buổi chiều!");
         } else {
@@ -120,23 +123,26 @@ class _NextScreenReportState extends State<NextScreenReport> {
             itemCount: _allExercise.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                      title: Text(_allExercise[index].name.toString()),
-                      trailing: Checkbox(
-                          value: _allExercise[index].isCheck,
-                          onChanged: (bool? val) {
-                            setState(() {
-                              _allExercise[index].isCheck =
-                                  !_allExercise[index].isCheck;
-                              if (_allExercise[index].isCheck) {
-                                _selectedExercise!.add(_allExercise[index].id);
-                                reportDTO.exerciseId = _selectedExercise;
-                              } else {
-                                _selectedExercise!.remove(
-                                    _allExercise[index].name.toString());
-                              }
-                            });
-                          }))
-                  // Text(symptomAll.data![index].name.toString())
+                  title: Text(_allExercise[index].name.toString()),
+                  trailing: Checkbox(
+                      value: _allExercise[index].isCheck,
+                      onChanged: (bool? val) {
+                        setState(() {
+                          _allExercise[index].isCheck =
+                          !_allExercise[index].isCheck;
+                          if (_allExercise[index].isCheck) {
+                            _selectedExercise!.add(_allExercise[index].id);
+                            reportDTO.exerciseId = _selectedExercise;
+                          } else {
+                            _selectedExercise!.remove(
+                                _allExercise[index].name.toString());
+                          }
+                          if (_selectedExercise!.isEmpty) {
+                            count++;
+                          }
+                        });
+                      }))
+              // Text(symptomAll.data![index].name.toString())
                   ;
             },
           ),
@@ -151,23 +157,26 @@ class _NextScreenReportState extends State<NextScreenReport> {
             itemCount: _allMedicine.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                      title: Text(_allMedicine[index].name.toString()),
-                      trailing: Checkbox(
-                          value: _allMedicine[index].isCheck,
-                          onChanged: (bool? val) {
-                            setState(() {
-                              _allMedicine[index].isCheck =
-                                  !_allMedicine[index].isCheck;
-                              if (_allMedicine[index].isCheck) {
-                                _selectedMedicine!.add(_allMedicine[index].id);
-                                reportDTO.medicineId = _selectedMedicine;
-                              } else {
-                                _selectedMedicine!.remove(
-                                    _allMedicine[index].name.toString());
-                              }
-                            });
-                          }))
-                  // Text(symptomAll.data![index].name.toString())
+                  title: Text(_allMedicine[index].name.toString()),
+                  trailing: Checkbox(
+                      value: _allMedicine[index].isCheck,
+                      onChanged: (bool? val) {
+                        setState(() {
+                          _allMedicine[index].isCheck =
+                          !_allMedicine[index].isCheck;
+                          if (_allMedicine[index].isCheck) {
+                            _selectedMedicine!.add(_allMedicine[index].id);
+                            reportDTO.medicineId = _selectedMedicine;
+                          } else {
+                            _selectedMedicine!.remove(
+                                _allMedicine[index].name.toString());
+                          }
+                          if (_selectedMedicine!.isEmpty) {
+                            count++;
+                          }
+                        });
+                      }))
+              // Text(symptomAll.data![index].name.toString())
                   ;
             },
           ),
@@ -175,22 +184,22 @@ class _NextScreenReportState extends State<NextScreenReport> {
             padding: const EdgeInsets.all(15.0),
             child: Center(
                 child: RaisedButton(
-              color: Color.fromRGBO(78, 159, 193, 1),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15))),
-              onPressed: () {
-                save();
-              },
-              child: Text(
-                'Gửi',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 13,
-                ),
-              ),
-            )),
+                  color: Color.fromRGBO(78, 159, 193, 1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                  onPressed: () {
+                    save();
+                  },
+                  child: Text(
+                    'Gửi',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                  ),
+                )),
           ),
         ]));
   }

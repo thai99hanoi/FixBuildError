@@ -22,6 +22,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  int count = 0;
   Report? _report;
   int pageIndex = 2;
   // List<Widget> pageList = <Widget>[
@@ -61,17 +62,17 @@ class _MainScreenState extends State<MainScreen> {
           if (firstRequest.from == currentUser.username) {
             navigatorPage(CallPage(firstRequest.isVoiceCall, true,
                 datas.first.reference, currentUser.username, () {
-              isInCall = false;
-            }));
+                  isInCall = false;
+                }));
           } else if (firstRequest.inComingCall == false) {
             navigatorPage(CallPage(firstRequest.isVoiceCall, false,
                 datas.first.reference, currentUser.username, () {
-              isInCall = false;
-            }));
+                  isInCall = false;
+                }));
           } else if (firstRequest.roomId?.isNotEmpty == true) {
             navigatorPage(ReceiveCallPage(
               datas.first.reference,
-              () {
+                  () {
                 isInCall = false;
               },
               fullNameFrom: firstRequest.fullNameFrom,
@@ -104,6 +105,12 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
+  void onDataChange(val) {
+    setState(() {
+      count = val;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return buildUIApp();
@@ -112,9 +119,7 @@ class _MainScreenState extends State<MainScreen> {
   Scaffold buildUIApp() {
     return Scaffold(
       body: <Widget>[
-        ReportScreen(
-          lastReport: _report,
-        ),
+        ReportScreen(lastReport: _report, callback: (val) => onDataChange(val)),
         ListUser(),
         homeScreen(),
         TestResultScreen(),
@@ -124,8 +129,31 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: pageIndex,
         onTap: (value) {
           setState(() {
-            pageIndex = value;
-          });
+            if (count > 0) {
+              showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: Text(
+                    'Lỗi',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                  content: Text("Vui Lòng Kiểm Tra Lại"),
+                  actions: <Widget>[
+                    // ignore: deprecated_member_use
+                    FlatButton(
+                      child: Text('Okay'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                ),
+              );
+            } else {
+              pageIndex = value;
+            }
+          }
+          );
         },
         type: BottomNavigationBarType.fixed,
         items: [
