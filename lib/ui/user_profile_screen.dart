@@ -9,6 +9,7 @@ import 'package:heath_care/model/village.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/components/NavSideBar.dart';
 import 'package:heath_care/utils/api.dart';
+import 'package:heath_care/utils/image_util.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -101,7 +102,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       if (_image == null) {
                         _showerrorDialog("Xảy ra lỗi");
                       } else {
-                        String base64Image = "data:image/jpg;base64,"+base64Encode(_image);
+                        String base64Image = base64String(image!.path, _image);
                         print(_image);
                         _profile.avatar = base64Image;
                         Image.memory(_image);
