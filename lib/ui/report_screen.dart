@@ -26,20 +26,20 @@ class ReportScreen extends StatefulWidget {
 class _ReportScreenState extends State<ReportScreen> {
   void firedA() {
     print("A click was triggered in the subcomponent");
-    widget.callback(count);
+    widget.callback(_continue);
   }
 
   ReportDTO reportDTO = new ReportDTO();
 
   List<int?> _selectedSymptom = [];
   List<Symptom> _allSymptom = [];
-  int count = 0;
+  bool _continue = false;
   Report? lastReport;
 
   _ReportScreenState(this.lastReport) {
     SymptomRepository().getAllSymptom().then((val) => setState(() {
-      _allSymptom = val!;
-    }));
+          _allSymptom = val!;
+        }));
   }
   GlobalKey<FormState> keyForm = new GlobalKey<FormState>();
   TextEditingController _textOxygenController = TextEditingController();
@@ -62,7 +62,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 child: Row(children: [
                   Text("Nồng độ Oxy",
                       style:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: SizedBox(
@@ -84,12 +84,15 @@ class _ReportScreenState extends State<ReportScreen> {
                               _textOxygenController.text = val;
                               reportDTO.oxygen = val;
                               if (_textOxygenController.text.length > 0) {
-                                count++;
+                                _continue = true;
+                                firedA();
+                              } else {
+                                _continue = false;
                                 firedA();
                               }
                             },
                             style:
-                            TextStyle(fontSize: 14, color: Colors.black))),
+                                TextStyle(fontSize: 14, color: Colors.black))),
                   )
                 ]),
               ),
@@ -98,7 +101,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 child: Row(children: [
                   Text("Nhiệt độ",
                       style:
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: SizedBox(
@@ -122,11 +125,15 @@ class _ReportScreenState extends State<ReportScreen> {
                               _textTemperatureController.text = val;
                               reportDTO.temperate = val;
                               if (_textTemperatureController.text.length > 0) {
-                                count++;
+                                _continue = true;
+                                firedA();
+                              } else {
+                                _continue = false;
+                                firedA();
                               }
                             },
                             style:
-                            TextStyle(fontSize: 14, color: Colors.black))),
+                                TextStyle(fontSize: 14, color: Colors.black))),
                   )
                 ]),
               ),
@@ -134,7 +141,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 padding: EdgeInsets.all(20.10),
                 child: Text("Tình trạng sức khoẻ",
                     style:
-                    TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
+                        TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
               ),
               ListView.builder(
                   physics: ScrollPhysics(),
@@ -142,34 +149,34 @@ class _ReportScreenState extends State<ReportScreen> {
                   itemCount: _allSymptom.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                        title: Text(_allSymptom[index].name.toString()),
-                        trailing: Checkbox(
-                            value: _allSymptom[index].isCheck,
-                            onChanged: (bool? val) {
-                              setState(() {
-                                _allSymptom[index].isCheck =
-                                !_allSymptom[index].isCheck;
-                                if (_allSymptom[index].isCheck) {
-                                  _selectedSymptom
-                                      .add(_allSymptom[index].symptomId);
-                                  reportDTO.symptomId = _selectedSymptom;
-                                } else {
-                                  _selectedSymptom
-                                      .remove(_allSymptom[index].symptomId);
-                                }
-                                if (_selectedSymptom.isEmpty) {
-                                  count++;
-                                }
-                              });
-                            }))
-                    // Text(symptomAll.data![index].name.toString())
+                            title: Text(_allSymptom[index].name.toString()),
+                            trailing: Checkbox(
+                                value: _allSymptom[index].isCheck,
+                                onChanged: (bool? val) {
+                                  setState(() {
+                                    _allSymptom[index].isCheck =
+                                        !_allSymptom[index].isCheck;
+                                    if (_allSymptom[index].isCheck) {
+                                      _selectedSymptom
+                                          .add(_allSymptom[index].symptomId);
+                                      reportDTO.symptomId = _selectedSymptom;
+                                    } else {
+                                      _selectedSymptom
+                                          .remove(_allSymptom[index].symptomId);
+                                    }
+
+                                    _continue = true;
+                                    firedA();
+                                  });
+                                }))
+                        // Text(symptomAll.data![index].name.toString())
                         ;
                   }),
               const Padding(
                 padding: EdgeInsets.all(28.0),
                 child: Text("Ghi chú khác",
                     style:
-                    TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
+                        TextStyle(fontSize: 19, fontWeight: FontWeight.w600)),
               ),
               Center(
                 child: Card(
@@ -181,9 +188,6 @@ class _ReportScreenState extends State<ReportScreen> {
                           onChanged: (val) {
                             _textCommentController.text = val;
                             reportDTO.comment = val;
-                            if (_textCommentController.text.length > 0) {
-                              count++;
-                            }
                           },
                           maxLines: 8,
                           decoration: InputDecoration.collapsed(
@@ -192,52 +196,51 @@ class _ReportScreenState extends State<ReportScreen> {
               ),
               Center(
                   child: RaisedButton(
-                    color: Color.fromRGBO(78, 159, 193, 1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    onPressed: () {
-                      if (keyForm.currentState == null) {
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            title: Text(
-                              'Lỗi',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            content: Text("Vui Lòng Kiểm Tra Lại"),
-                            actions: <Widget>[
-                              // ignore: deprecated_member_use
-                              FlatButton(
-                                child: Text('Okay'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              )
-                            ],
-                          ),
-                        );
-                      } else if (keyForm.currentState!.validate()) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NextScreenReport(
-                                reportDTO: reportDTO,
-                                lastReport: lastReport,
-                                count: count,
-                              )),
-                        );
-                      }
-                    },
-                    child: Text(
-                      'Tiếp Theo',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 13,
+                color: Color.fromRGBO(78, 159, 193, 1),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15))),
+                onPressed: () {
+                  if (keyForm.currentState == null) {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text(
+                          'Lỗi',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                        content: Text("Vui Lòng Kiểm Tra Lại"),
+                        actions: <Widget>[
+                          // ignore: deprecated_member_use
+                          FlatButton(
+                            child: Text('Okay'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
                       ),
-                    ),
-                  )),
+                    );
+                  } else if (keyForm.currentState!.validate()) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NextScreenReport(
+                              reportDTO: reportDTO,
+                              lastReport: lastReport,
+                              continueEdit: _continue)),
+                    );
+                  }
+                },
+                child: Text(
+                  'Tiếp Theo',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 13,
+                  ),
+                ),
+              )),
             ],
           ),
         ),
