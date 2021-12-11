@@ -57,12 +57,12 @@ class Auth with ChangeNotifier {
     if (_token == null) {
       _token = await getToken();
     }
-    _expiryDate = await getExpiryDate();
-    if (_expiryDate != null &&
-        _expiryDate.isAfter(DateTime.now()) &&
-        _token != null) {
-      return _token;
-    }
+    // _expiryDate = await getExpiryDate();
+    // if (_expiryDate != null &&
+    //     _expiryDate.isAfter(DateTime.now()) &&
+    //     _token != null) {
+    //   return _token;
+    // }
     return null;
   }
 
@@ -80,12 +80,12 @@ class Auth with ChangeNotifier {
       _token = null;
       _userEmail = null;
       _userId = null;
-      _expiryDate = null;
+      // _expiryDate = null;
 
-      if (_authTimer != null) {
-        _authTimer.cancel();
-        _authTimer = null;
-      }
+      // if (_authTimer != null) {
+      //   _authTimer.cancel();
+      //   _authTimer = null;
+      // }
 
       notifyListeners();
 
@@ -102,14 +102,14 @@ class Auth with ChangeNotifier {
     }
   }
 
-  void _autologout() {
-    if (_authTimer != null) {
-      _authTimer.cancel();
-    }
-    final timetoExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
-    _authTimer = Timer(Duration(seconds: timetoExpiry), logout);
-    DioCacheManager(CacheConfig(baseUrl: Api.authUrl)).clearAll();
-  }
+  // void _autologout() {
+  //   if (_authTimer != null) {
+  //     _authTimer.cancel();
+  //   }
+  //   final timetoExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
+  //   _authTimer = Timer(Duration(seconds: timetoExpiry), logout);
+  //   DioCacheManager(CacheConfig(baseUrl: Api.authUrl)).clearAll();
+  // }
 
   Future<bool> tryautoLogin() async {
     print('tryLogin');
@@ -122,19 +122,19 @@ class Auth with ChangeNotifier {
     final extractedUserData =
         json.decode(pref.getString('userData') ?? "") as Map<String, Object>;
 
-    final expiryDate =
-        DateTime.parse(extractedUserData['expiryDate'].toString());
-    if (expiryDate.isBefore(DateTime.now())) {
-      return false;
-    }
+    // final expiryDate =
+    //     DateTime.parse(extractedUserData['expiryDate'].toString());
+    // if (expiryDate.isBefore(DateTime.now())) {
+    //   return false;
+    // }
     _token = extractedUserData['token'];
     User user = await userRepository.getCurrentUser(tokenTmp: _token);
     setCurrentUser(user);
     // _userId = extractedUserData['userId'];
     // _userEmail = extractedUserData['userEmail'];
-    _expiryDate = expiryDate;
+    // _expiryDate = expiryDate;
     notifyListeners();
-    _autologout();
+    // _autologout();
 
     return true;
   }
@@ -169,21 +169,21 @@ class Auth with ChangeNotifier {
       User user = await userRepository.getCurrentUser(tokenTmp: _token);
       setCurrentUserCache(user.userId);
       setCurrentUser(user);
-      _expiryDate = DateTime.now().add(Duration(seconds: 600));
+      // _expiryDate = DateTime.now().add(Duration(seconds: 600));
 
-      _autologout();
+      // _autologout();
       notifyListeners();
 
       final userData = json.encode({
         'token': _token,
         // 'userId': _userId,
         // 'userEmail': _userEmail,
-        'expiryDate': _expiryDate.toIso8601String(),
+        // 'expiryDate': _expiryDate.toIso8601String(),
       });
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('userData', userData);
       setToken(_token);
-      setExpiryDate(_expiryDate.toString());
+      // setExpiryDate(_expiryDate.toString());
       await userRepository.updateUserOnline(tokenTmp: _token);
       String role = responseData['data']['roles'][0];
       prefs.setString('role', role);
@@ -210,10 +210,10 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<bool> setExpiryDate(String value) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString('expiryDate', value);
-  }
+  // Future<bool> setExpiryDate(String value) async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   return prefs.setString('expiryDate', value);
+  // }
 
   Future<bool> setToken(String value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -235,16 +235,16 @@ class Auth with ChangeNotifier {
     return prefs.getString('userId') ?? "";
   }
 
-  Future<DateTime?> getExpiryDate() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? dateTime = prefs.getString('expiryDate');
-    try {
-      print(dateTime);
-      return DateFormat("yyyy-MM-dd hh:mm:ss.SSSS").parse(dateTime ?? "");
-    } catch (e) {
-      return null;
-    }
-  }
+  // Future<DateTime?> getExpiryDate() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? dateTime = prefs.getString('expiryDate');
+  //   try {
+  //     print(dateTime);
+  //     return DateFormat("yyyy-MM-dd hh:mm:ss.SSSS").parse(dateTime ?? "");
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 
   Future<void> login(User user) {
     return Authentication(user);
