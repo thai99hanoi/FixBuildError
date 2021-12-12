@@ -76,10 +76,37 @@ class _NavDrawer extends State<NavDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.logout_outlined),
-            title: Text('Đăng xuất'),
-            onTap: () => {logout()},
-          ),
+              leading: Icon(Icons.logout_outlined),
+              title: Text('Đăng xuất'),
+              onTap: () => {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text(
+                          'Đăng xuất',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                        content: Text("Bạn có muốn đăng xuất"),
+                        actions: <Widget>[
+                          // ignore: deprecated_member_use
+                          FlatButton(
+                            child: Text('Okay'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text('Okay'),
+                            onPressed: () {
+                              logout();
+                            },
+                          )
+                        ],
+                      ),
+                    )
+                  }
+              // onTap: () => {logout()},
+              ),
         ],
       ),
     );
