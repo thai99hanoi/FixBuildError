@@ -55,7 +55,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           errorText: "Vui lòng nhập số điện thoại hợp lệ")
                     ]),
                     style: const TextStyle(fontSize: 16, color: Colors.black),
-                    obscureText: true,
                     decoration: const InputDecoration(
                         labelText: "Số điện thoại(*):",
                         labelStyle: TextStyle(fontSize: 15)),
@@ -126,7 +125,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 }
                               },
                               child: new Text(
-                                'Khôi phục mật khẩu',
+                                'Tiếp tục',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,

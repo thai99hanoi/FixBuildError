@@ -26,12 +26,11 @@ class _OTPScreenState extends State<OTPScreen> {
                 children: [
                   SizedBox(height: 200 * 0.05),
                   Text(
-                    "OTP Verification",
+                    "Xác thực OTP",
                     style: headingStyle,
                   ),
-                  Text("We sent your code to " +
-                      widget.phoneNumber.phone.toString() +
-                      " ***"),
+                  Text("Chúng tôi đã gửi OTP đến số " +
+                      widget.phoneNumber.phone.toString()),
                   buildTimer(),
                   OtpForm(),
                   SizedBox(height: 200 * 0.1),
@@ -40,7 +39,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       // OTP code resend
                     },
                     child: Text(
-                      "Resend OTP Code",
+                      "Gửi lại mã OTP",
                       style: TextStyle(decoration: TextDecoration.underline),
                     ),
                   )
@@ -56,7 +55,7 @@ Row buildTimer() {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Text("This code will expired in "),
+      Text("Mã hết hạn sau: "),
       TweenAnimationBuilder(
         tween: Tween(begin: 120.0, end: 0.0),
         duration: Duration(seconds: 120),

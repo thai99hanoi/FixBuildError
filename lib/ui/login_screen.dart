@@ -92,7 +92,7 @@ class _State extends State<LoginPage> {
                 },
                 style: TextStyle(fontSize: 18, color: Colors.black),
                 decoration: InputDecoration(
-                    labelText: "TÊN ĐĂNG NHẬP",
+                    labelText: "SỐ ĐIỆN THOẠI",
                     errorText: _userInvalid ? _userNameErr : null,
                     labelStyle:
                         TextStyle(color: Color(0xff888888), fontSize: 15)),
