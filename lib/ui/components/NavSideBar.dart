@@ -90,13 +90,13 @@ class _NavDrawer extends State<NavDrawer> {
                         actions: <Widget>[
                           // ignore: deprecated_member_use
                           FlatButton(
-                            child: Text('Okay'),
+                            child: Text('Không'),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
                           ),
                           FlatButton(
-                            child: Text('Okay'),
+                            child: Text('Đăng xuất'),
                             onPressed: () {
                               logout();
                             },
