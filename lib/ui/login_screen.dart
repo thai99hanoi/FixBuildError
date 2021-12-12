@@ -239,7 +239,7 @@ class _State extends State<LoginPage> {
         actions: <Widget>[
           // ignore: deprecated_member_use
           FlatButton(
-            child: Text('Okay'),
+            child: Text('Xác nhận'),
             onPressed: () {
               Navigator.of(context).pop();
             },

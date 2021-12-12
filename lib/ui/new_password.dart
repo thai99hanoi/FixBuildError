@@ -121,7 +121,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                       actions: <Widget>[
                                         // ignore: deprecated_member_use
                                         FlatButton(
-                                          child: Text('Okay'),
+                                          child: Text('Xác nhận'),
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
@@ -149,7 +149,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                         actions: <Widget>[
                                           // ignore: deprecated_member_use
                                           FlatButton(
-                                            child: Text('Okay'),
+                                            child: Text('Xác nhận'),
                                             onPressed: () {
                                               Navigator.push(
                                                 context,
@@ -203,7 +203,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         actions: <Widget>[
           // ignore: deprecated_member_use
           FlatButton(
-            child: Text('Okay'),
+            child: Text('Xác nhận'),
             onPressed: () {
               Navigator.of(context).pop();
             },
