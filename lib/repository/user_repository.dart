@@ -77,6 +77,7 @@ class UserRepository {
     String token = await Auth().getToken();
     print('Api Post, url /v1/api/user/update');
     final f = new DateFormat('yyyy-MM-dd hh:mm:ss');
+    final fDob = new DateFormat('yyyy-MM-dd');
     var responseJson;
     try {
       final response =
@@ -98,7 +99,7 @@ class UserRepository {
             "avatar": user.avatar,
             "gender": user.gender,
             "address": user.address,
-            "dob": f.format(user.dateOfBirth!),
+            "dob": fDob.format(user.dateOfBirth!),
             "isOnline": 0,
             "isActive": user.isActive
           }));
@@ -115,6 +116,7 @@ class UserRepository {
     User user = await getCurrentUser();
     print('Api Post, url /v1/api/user/update');
     final f = new DateFormat('yyyy-MM-dd hh:mm:ss');
+    final fDob = new DateFormat('yyyy-MM-dd');
     var responseJson;
     try {
       final response =
@@ -136,7 +138,7 @@ class UserRepository {
                 "avatar": user.avatar,
                 "gender": user.gender,
                 "address": user.address,
-                "dob": f.format(user.dateOfBirth!),
+                "dob": fDob.format(user.dateOfBirth!),
                 "isOnline": 1,
                 "isActive": user.isActive
               }));
@@ -151,6 +153,7 @@ class UserRepository {
   Future<String> updateUser(User user) async {
     print('Api Post, url /v1/api/user/update');
     final f = new DateFormat('yyyy-MM-dd hh:mm:ss');
+    final fDob = new DateFormat('yyyy-MM-dd');
     String token = await Auth().getToken();
     var responseJson;
     try {
@@ -170,7 +173,7 @@ class UserRepository {
             "lastname": user.lastname,
             "surname": user.surname,
             "identityCard": user.identityId,
-            "dob": f.format(user.dateOfBirth!),
+            "dob": fDob.format(user.dateOfBirth!),
             "address": user.address,
             "gender": user.gender,
             "avatar": user.avatar,
