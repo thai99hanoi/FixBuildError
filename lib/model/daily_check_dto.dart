@@ -1,5 +1,6 @@
 class DailyCheckDTO {
   int? dailyReportId;
+  int? patientId;
   int? userId;
   String? username;
   String? firstname;
@@ -20,6 +21,7 @@ class DailyCheckDTO {
 
   DailyCheckDTO(
       {this.dailyReportId,
+      this.patientId,
       this.userId,
       this.username,
       this.firstname,
@@ -40,6 +42,7 @@ class DailyCheckDTO {
 
   factory DailyCheckDTO.fromJson(Map<String, dynamic> json) => DailyCheckDTO(
         dailyReportId: json['dailyReportId'] as int?,
+        patientId: json['patientId'] as int?,
         userId: json['userId'] as int?,
         username: json["username"] as String?,
         firstname: json["firstname"] as String?,
@@ -60,6 +63,7 @@ class DailyCheckDTO {
         comment: json['comment'] as String?,
         isActive: json['isActive'] as int?,
       );
+
   String getDisplayName() {
     if (firstname != null &&
         lastname != null &&
