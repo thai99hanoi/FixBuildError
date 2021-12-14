@@ -111,7 +111,7 @@ class _GetAllRequestScreenState extends State<GetAllRequestScreen> {
                                       ),
                                     ),
                                     requestAllSnapshot.data![index].status == 1
-                                        ? Text("Approve",
+                                        ? Text("Chấp thuận",
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
@@ -119,12 +119,12 @@ class _GetAllRequestScreenState extends State<GetAllRequestScreen> {
                                         : (requestAllSnapshot
                                                     .data![index].status ==
                                                 2
-                                            ? Text("Pending",
+                                            ? Text("Đang chờ",
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.yellow))
-                                            : Text("Reject",
+                                            : Text("Từ chối",
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
