@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/ui/patient_detail.dart';
+import 'package:heath_care/utils/api.dart';
 
 import '../chat_conversation.dart';
 import 'item_image_avatar.dart';
@@ -34,7 +35,23 @@ class ItemPatttients extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      ItemAvatarNetworkImage(image: pattients.avatar),
+                      pattients.avatar == null
+                          ? (pattients.gender == "Nam"
+                              ? CircleAvatar(
+                                  radius: 24,
+                                  backgroundImage:
+                                      AssetImage("assets/images/ava_male.png"),
+                                )
+                              : CircleAvatar(
+                                  radius: 24,
+                                  backgroundImage: AssetImage(
+                                      "assets/images/ava_female.png"),
+                                ))
+                          : CircleAvatar(
+                              radius: 24,
+                              backgroundImage: NetworkImage(
+                                  Api.imageUrl + pattients.avatar!),
+                            ),
                     ],
                   ),
                   SizedBox(

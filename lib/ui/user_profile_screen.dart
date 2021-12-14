@@ -143,18 +143,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       }
                     },
                     child: _profile.avatar == null
-                     ? CircleAvatar(
-                        radius: 50,
-                        backgroundImage:
-                         AssetImage('assets/images/img_1.png'))
-                    : CircleAvatar(
-                        radius: 50,
-                        backgroundImage:
-                        NetworkImage( Api.imageUrl + _profile.avatar!)),
+                        ? (_profile.gender == "Nam"
+                            ? CircleAvatar(
+                                radius: 50,
+                                backgroundImage:
+                                    AssetImage('assets/images/ava_male.png'))
+                            : CircleAvatar(
+                                radius: 50,
+                                backgroundImage:
+                                    AssetImage('assets/images/ava_female.png')))
+                        : CircleAvatar(
+                            radius: 50,
+                            backgroundImage:
+                                NetworkImage(Api.imageUrl + _profile.avatar!)),
                   ),
                 ),
               ),
-
               Center(
                   child: Text(_profile.getDisplayName(),
                       style: TextStyle(

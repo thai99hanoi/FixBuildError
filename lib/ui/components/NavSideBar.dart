@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/change_password.dart';
@@ -33,18 +34,43 @@ class _NavDrawer extends State<NavDrawer> {
       child: ListView(
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: new Color.fromRGBO(107, 157, 177, 1.0),
-            ),
-            child:
-                // Image.asset("assets/images/Health Care System-logos_white.png"),
-                ClipRRect(
-                    child: Image.asset(
-                        "assets/images/Health Care System-logos_white.png",
-                        width: 200,
-                        height: 100,
-                        fit: BoxFit.fill)),
-          ),
+              decoration: BoxDecoration(
+                color: new Color.fromRGBO(107, 157, 177, 1.0),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("   FOR COVID PATIENT AT HOME",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'RobotoMono',
+                            color: Colors.white)),
+                    Text("HEALTH CARE",
+                        style: TextStyle(
+                            fontSize: 34,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white)),
+                    Text("SYSTEM",
+                        style: TextStyle(
+                            fontSize: 34,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white)),
+                  ],
+                ),
+              )
+              // Image.asset("assets/images/Health Care System-logos_white.png"),
+              //     Container(
+              //   width: 150,
+              //   height: 200,
+              //   child: ClipRRect(
+              //       child: Image.asset(
+              //           "assets/images/Health Care System-logos_white.png",
+              //           fit: BoxFit.fill)),
+              // ),
+              ),
           ListTile(
             leading: Icon(Icons.security_outlined),
             title: Text('Thay đổi mật khẩu'),

@@ -6,6 +6,7 @@ import 'package:heath_care/ui/chat_conversation.dart';
 import 'package:heath_care/ui/detail_patient_report.dart';
 import 'package:heath_care/ui/detail_patient_result.dart';
 import 'package:heath_care/ui/doctor_pattient_detail_report.dart';
+import 'package:heath_care/utils/api.dart';
 
 class PattientDetail extends StatefulWidget {
   const PattientDetail({Key? key, required this.userName}) : super(key: key);
@@ -51,9 +52,20 @@ class _PattientDetailState extends State<PattientDetail> {
               Center(
                 child: Padding(
                   padding: EdgeInsets.all(20.0),
-                  child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage('assets/images/img_1.png')),
+                  child: _user.avatar == null
+                      ? (_user.gender == "Nam"
+                          ? CircleAvatar(
+                              radius: 50,
+                              backgroundImage:
+                                  AssetImage('assets/images/ava_male.png'))
+                          : CircleAvatar(
+                              radius: 50,
+                              backgroundImage:
+                                  AssetImage('assets/images/ava_female.png')))
+                      : CircleAvatar(
+                          radius: 50,
+                          backgroundImage:
+                              NetworkImage(Api.imageUrl + _user.avatar!)),
                 ),
               ),
               Center(

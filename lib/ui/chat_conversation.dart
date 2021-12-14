@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:heath_care/firebase/call_firebase.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/repository/user_repository.dart';
+import 'package:heath_care/utils/api.dart';
 import 'components/body.dart';
 
 class ConversationChat extends StatelessWidget {
@@ -24,9 +25,18 @@ class ConversationChat extends StatelessWidget {
         backgroundColor: const Color.fromRGBO(78, 159, 193, 1),
         titleSpacing: 0,
         title: Row(children: [
-          CircleAvatar(
-            backgroundImage: AssetImage("assets/images/img_1.png"),
-          ),
+          friend.avatar == null
+              ? (friend.gender == "Nam"
+                  ? CircleAvatar(
+                      backgroundImage: AssetImage("assets/images/ava_male.png"),
+                    )
+                  : CircleAvatar(
+                      backgroundImage:
+                          AssetImage("assets/images/ava_female.png"),
+                    ))
+              : CircleAvatar(
+                  backgroundImage: NetworkImage(Api.imageUrl + friend.avatar!),
+                ),
           SizedBox(
             width: 4,
           ),

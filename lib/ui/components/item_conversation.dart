@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/components/item_image_avatar.dart';
+import 'package:heath_care/utils/api.dart';
 import 'package:heath_care/utils/time_util.dart';
 
 import '../chat_conversation.dart';
@@ -34,9 +35,8 @@ class ItemConversation extends StatelessWidget {
   }
 
   Padding buildItem(BuildContext context, User user) {
-    String prefix = lastMessage['from'] == friendName
-        ? user.getLastName() + ": "
-        : "Bạn: ";
+    String prefix =
+        lastMessage['from'] == friendName ? user.getLastName() + ": " : "Bạn: ";
     bool isSeen = this.isSeen || lastMessage['from'] != friendName;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20 * 0.75),
@@ -49,7 +49,20 @@ class ItemConversation extends StatelessWidget {
         },
         child: Row(
           children: [
-            ItemAvatarNetworkImage(image: user.avatar),
+            user.avatar == null
+                ? (user.gender == "Nam"
+                    ? CircleAvatar(
+                        radius: 24,
+                        backgroundImage:
+                            AssetImage('assets/images/ava_male.png'))
+                    : CircleAvatar(
+                        radius: 24,
+                        backgroundImage:
+                            AssetImage('assets/images/ava_female.png')))
+                : CircleAvatar(
+                    radius: 24,
+                    backgroundImage: NetworkImage(Api.imageUrl + user.avatar!)),
+            // ItemAvatarNetworkImage(image: user.avatar),
             Expanded(
                 child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -64,10 +77,8 @@ class ItemConversation extends StatelessWidget {
                     height: 8,
                   ),
                   Text(
-                    lastMessage['content']
-                            .toString()
-                            .contains("data:image;")
-                        ?prefix+ "Đã gửi 1 hình ảnh"
+                    lastMessage['content'].toString().contains("data:image;")
+                        ? prefix + "Đã gửi 1 hình ảnh"
                         : prefix + lastMessage['content'],
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

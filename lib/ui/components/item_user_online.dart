@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heath_care/model/user.dart';
+import 'package:heath_care/utils/api.dart';
 
 import '../chat_conversation.dart';
 import 'item_image_avatar.dart';
@@ -52,7 +53,21 @@ class ItemUserOnline extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      ItemAvatarNetworkImage(image: userOnline.avatar),
+                      userOnline.avatar == null
+                          ? (userOnline.gender == "Nam"
+                              ? CircleAvatar(
+                                  radius: 24,
+                                  backgroundImage:
+                                      AssetImage('assets/images/ava_male.png'))
+                              : CircleAvatar(
+                                  radius: 24,
+                                  backgroundImage: AssetImage(
+                                      'assets/images/ava_female.png')))
+                          : CircleAvatar(
+                              radius: 24,
+                              backgroundImage: NetworkImage(
+                                  Api.imageUrl + userOnline.avatar!)),
+                      // ItemAvatarNetworkImage(image: userOnline.avatar),
                       Positioned(
                         right: 0,
                         bottom: 0,
@@ -82,7 +97,10 @@ class ItemUserOnline extends StatelessWidget {
               ),
               Opacity(
                 opacity: 0.64,
-                child: Text("Online", style: TextStyle(fontSize: 12),),
+                child: Text(
+                  "Online",
+                  style: TextStyle(fontSize: 12),
+                ),
               )
             ],
           )),
