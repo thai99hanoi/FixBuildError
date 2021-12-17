@@ -24,10 +24,10 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreenState extends State<ReportScreen> {
-  void firedA() {
-    print("A click was triggered in the subcomponent");
-    widget.callback(_continue);
-  }
+  // void firedA() {
+  //   print("A click was triggered in the subcomponent");
+  //   widget.callback(_continue);
+  // }
 
   ReportDTO reportDTO = new ReportDTO();
 
@@ -83,13 +83,13 @@ class _ReportScreenState extends State<ReportScreen> {
                             onChanged: (val) {
                               _textOxygenController.text = val;
                               reportDTO.oxygen = val;
-                              if (_textOxygenController.text.length > 0) {
-                                _continue = true;
-                                firedA();
-                              } else {
-                                _continue = false;
-                                firedA();
-                              }
+                              // if (_textOxygenController.text.length > 0) {
+                              //   _continue = true;
+                              //   firedA();
+                              // } else {
+                              //   _continue = false;
+                              //   firedA();
+                              // }
                             },
                             style:
                                 TextStyle(fontSize: 14, color: Colors.black))),
@@ -124,13 +124,13 @@ class _ReportScreenState extends State<ReportScreen> {
                             onChanged: (val) {
                               _textTemperatureController.text = val;
                               reportDTO.temperate = val;
-                              if (_textTemperatureController.text.length > 0) {
-                                _continue = true;
-                                firedA();
-                              } else {
-                                _continue = false;
-                                firedA();
-                              }
+                              // if (_textTemperatureController.text.length > 0) {
+                              //   _continue = true;
+                              //   firedA();
+                              // } else {
+                              //   _continue = false;
+                              //   firedA();
+                              // }
                             },
                             style:
                                 TextStyle(fontSize: 14, color: Colors.black))),
@@ -165,8 +165,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                           .remove(_allSymptom[index].symptomId);
                                     }
 
-                                    _continue = true;
-                                    firedA();
+                                    // _continue = true;
+                                    // firedA();
                                   });
                                 }))
                         // Text(symptomAll.data![index].name.toString())
@@ -212,7 +212,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         actions: <Widget>[
                           // ignore: deprecated_member_use
                           FlatButton(
-                            child: Text('Okay'),
+                            child: Text('Xác Nhận'),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -225,9 +225,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => NextScreenReport(
-                              reportDTO: reportDTO,
-                              lastReport: lastReport,
-                              continueEdit: _continue)),
+                              reportDTO: reportDTO, lastReport: lastReport)),
                     );
                   }
                 },

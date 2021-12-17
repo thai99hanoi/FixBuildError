@@ -18,6 +18,7 @@ List<RequestType> _requestType = [
   RequestType(id: 5, requestTypeName: "Cấp lại mật khẩu"),
   RequestType(id: 6, requestTypeName: "Cấp lại tài khoản khác"),
 ];
+TextEditingController _descriptionController = new TextEditingController();
 
 class _SendRequestState extends State<SendRequest> {
   RequestType? _selectedRequestType;
@@ -83,11 +84,11 @@ class _SendRequestState extends State<SendRequest> {
                         child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: TextField(
-                              controller: TextEditingController(),
+                              controller: TextEditingController(
+                                  text: _descriptionController.text),
                               onChanged: (val) {
-                                setState(() {
-                                  _request.description = val;
-                                });
+                                _descriptionController.text = val;
+                                _request.description = val;
                               },
                               maxLines: 8,
                               decoration: InputDecoration.collapsed(

@@ -21,10 +21,13 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  static final RegExp nameRegExp = RegExp(
+      r'^([a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀẾỂưăạảấầẩẫậắằẳẵặẹẻẽếềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$');
   XFile? image;
   final ImagePicker _picker = ImagePicker();
   User _profile = new User();
   String? _selectedGender;
+  User _profileAva = new User();
   var _image;
   List<String?> nameList = [];
   List<String> _gender = ["Nam", "Nữ"];
@@ -37,6 +40,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         }));
     UserRepository().getCurrentUser().then((val) => setState(() {
           _profile = val;
+          _profileAva = val;
         }));
   }
   DateTime? _selectedDate;
@@ -44,6 +48,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   TextEditingController _textNameController = TextEditingController();
   TextEditingController _textAddressController = TextEditingController();
   TextEditingController _textIDCardController = TextEditingController();
+  GlobalKey<FormState> keyForm = new GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -104,10 +109,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       } else {
                         String base64Image = base64String(image!.path, _image);
                         print(_image);
-                        _profile.avatar = base64Image;
+                        _profileAva.avatar = base64Image;
                         Image.memory(_image);
                         var _respone =
-                            await UserRepository().updateUser(_profile);
+                            await UserRepository().updateUser(_profileAva);
                         print(_respone);
                         if (_respone
                             .toString()
@@ -119,7 +124,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 'Thành Công',
                                 style: TextStyle(color: Colors.blue),
                               ),
-                              content: Text("Cập nhập thông tin thành công"),
+                              content: Text("Cập nhập ảnh đại diện thành công"),
                               actions: <Widget>[
                                 // ignore: deprecated_member_use
                                 FlatButton(
@@ -135,15 +140,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             .toString()
                             .contains("UPDATE_USER_FAIL")) {
                           _showerrorDialog(
-                              "Cập Nhập Thông Tin Không Thành Công");
+                              "Cập Nhập ảnh đại diện Không Thành Công");
                         } else {
                           print(_respone);
                           _showerrorDialog("Đã Xảy Ra Lỗi");
                         }
                       }
                     },
-                    child: _profile.avatar == null
-                        ? (_profile.gender == "Nam"
+                    child: _profileAva.avatar == null
+                        ? (_profileAva.gender == "Nam"
                             ? CircleAvatar(
                                 radius: 50,
                                 backgroundImage:
@@ -154,8 +159,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     AssetImage('assets/images/ava_female.png')))
                         : CircleAvatar(
                             radius: 50,
-                            backgroundImage:
-                                NetworkImage(Api.imageUrl + _profile.avatar!)),
+                            backgroundImage: NetworkImage(
+                                Api.imageUrl + _profileAva.avatar!)),
                   ),
                 ),
               ),
@@ -174,216 +179,240 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller:
-                          TextEditingController(text: _textNameController.text),
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                      onChanged: (val) {
-                        String _surname = "";
-                        nameList = val.split(" ");
-                        print(val.split(" "));
-                        if (nameList.length > 2) {
-                          _profile.firstname = nameList.first;
-                          for (int i = 1; i < nameList.length - 1; i++) {
-                            _surname += (nameList[i]! + " ");
+                child: Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: keyForm,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: TextEditingController(
+                            text: _textNameController.text),
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                        onChanged: (val) {
+                          String _surname = "";
+                          nameList = val.split(" ");
+                          print(val.split(" "));
+                          if (nameList.length > 2) {
+                            _profile.firstname = nameList.first;
+                            for (int i = 1; i < nameList.length - 1; i++) {
+                              _surname += (nameList[i]! + " ");
+                            }
+                            _profile.surname = _surname.trim();
+
+                            _profile.lastname = nameList.last;
                           }
-                          _profile.surname = _surname.trim();
-
-                          _profile.lastname = nameList.last;
-                        }
-                        if (nameList.length > 1) {
-                          _profile.firstname = nameList.first;
-                          _profile.lastname = nameList.last;
-                        } else {
-                          _profile.firstname = val;
-                        }
-                      },
-                      decoration: const InputDecoration(
-                          labelText: "Họ và tên (*):",
-                          labelStyle: TextStyle(fontSize: 18)),
-                    ),
-                    Container(
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 150,
-                              child: TextField(
-                                decoration: const InputDecoration(
-                                    labelText: "Ngày Sinh (*):",
-                                    labelStyle: TextStyle(fontSize: 18)),
-                                focusNode: AlwaysDisabledFocusNode(),
-                                controller: _textDOBController,
-                                onTap: () {
-                                  _selectDate(context);
-                                },
-                              ),
-                            ),
-                            Text("Giới tính", style: TextStyle(fontSize: 16)),
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: DropdownButton<String>(
-                                hint: _selectedGender != null
-                                    ? Text(
-                                        _selectedGender!.toString(),
-                                        style: TextStyle(color: Colors.grey),
-                                      )
-                                    : Text(
-                                        _profile.gender.toString(),
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                items: _gender.map((String value) {
-                                  return new DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedGender = value!;
-                                    _profile.gender = value;
-                                  });
-
-                                  ;
-                                },
-                              ),
-                            ),
-                          ],
-                        )),
-                    TextFormField(
-                      enabled: false,
-                      controller: TextEditingController(text: _profile.phone),
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                      decoration: const InputDecoration(
-                          labelText: "Số Điện Thoại (*):",
-                          labelStyle: TextStyle(fontSize: 18)),
-                    ),
-                    TextFormField(
-                      controller: _textIDCardController,
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                      onChanged: (val) {
-                        _profile.identityId = val;
-                      },
-                      decoration: const InputDecoration(
-                          labelText: "Căn Cước công dân/ hộ chiếu (*):",
-                          hintText: "Vui Lòng Cập Nhập",
-                          labelStyle: TextStyle(fontSize: 18)),
-                    ),
-                    TextFormField(
-                      enabled: false,
-                      controller: TextEditingController(
-                          text: _profile.province!.name.toString()),
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                      decoration: const InputDecoration(
-                          labelText: "Thành phố:",
-                          labelStyle: TextStyle(fontSize: 18)),
-                    ),
-                    TextFormField(
-                      enabled: false,
-                      controller: TextEditingController(
-                        text: _profile.district!.name.toString(),
+                          if (nameList.length > 1) {
+                            _profile.firstname = nameList.first;
+                            _profile.lastname = nameList.last;
+                          } else {
+                            _profile.firstname = val;
+                          }
+                        },
+                        validator: (value) => value == null
+                            ? 'Enter Your Name'
+                            : (nameRegExp.hasMatch(value)
+                                ? null
+                                : 'Enter a Valid Name'),
+                        decoration: const InputDecoration(
+                            labelText: "Họ và tên (*):",
+                            labelStyle: TextStyle(fontSize: 18)),
                       ),
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                      decoration: const InputDecoration(
-                          labelText: "Quận/Huyện:",
-                          labelStyle: TextStyle(fontSize: 18)),
-                    ),
-                    TextFormField(
-                      enabled: false,
-                      controller: TextEditingController(
-                          text: _profile.village!.name.toString()),
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                      decoration: const InputDecoration(
-                          labelText: "Làng/xã:",
-                          labelStyle: TextStyle(fontSize: 18)),
-                    ),
-                    TextFormField(
-                      controller: _textAddressController,
-                      style: const TextStyle(fontSize: 16, color: Colors.black),
-                      onChanged: (val) {
-                        _profile.address = val;
-                      },
-                      decoration: const InputDecoration(
-                          labelText: "Địa chỉ thường trú (*):",
-                          hintText: "Vui Lòng Cập Nhập",
-                          labelStyle: TextStyle(fontSize: 18)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Center(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: SizedBox(
-                                width: 130.0,
-                                height: 40.0,
-                                // ignore: deprecated_member_use
-                                child: new RaisedButton(
-                                  color: Color.fromRGBO(78, 159, 193, 1),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  onPressed: () async {
-                                    var _respone = await UserRepository()
-                                        .updateUser(_profile);
-                                    print(_respone);
-                                    if (_respone
-                                        .toString()
-                                        .contains("UPDATE_USER_SUCCESS")) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (ctx) => AlertDialog(
-                                          title: Text(
-                                            'Thành Công',
-                                            style:
-                                                TextStyle(color: Colors.blue),
-                                          ),
-                                          content: Text(
-                                              "Cập nhập thông tin thành công"),
-                                          actions: <Widget>[
-                                            // ignore: deprecated_member_use
-                                            FlatButton(
-                                              child: Text('Okay'),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    } else if (_respone
-                                        .toString()
-                                        .contains("UPDATE_USER_FAIL")) {
-                                      _showerrorDialog(
-                                          "Cập Nhập Thông Tin Không Thành Công");
-                                    } else {
-                                      print(_respone);
-                                      _showerrorDialog("Đã Xảy Ra Lỗi");
-                                    }
+                      Container(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 150,
+                                child: TextField(
+                                  decoration: const InputDecoration(
+                                      labelText: "Ngày Sinh (*):",
+                                      labelStyle: TextStyle(fontSize: 18)),
+                                  focusNode: AlwaysDisabledFocusNode(),
+                                  controller: _textDOBController,
+                                  onTap: () {
+                                    _selectDate(context);
                                   },
-                                  child: new Text(
-                                    'Cập Nhập',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 13,
+                                ),
+                              ),
+                              Text("Giới tính", style: TextStyle(fontSize: 16)),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: DropdownButton<String>(
+                                  hint: _selectedGender != null
+                                      ? Text(
+                                          _selectedGender!.toString(),
+                                          style: TextStyle(color: Colors.grey),
+                                        )
+                                      : Text(
+                                          _profile.gender.toString(),
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                  items: _gender.map((String value) {
+                                    return new DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedGender = value!;
+                                      _profile.gender = value;
+                                    });
+
+                                    ;
+                                  },
+                                ),
+                              ),
+                            ],
+                          )),
+                      TextFormField(
+                        enabled: false,
+                        controller: TextEditingController(text: _profile.phone),
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                        decoration: const InputDecoration(
+                            labelText: "Số Điện Thoại (*):",
+                            labelStyle: TextStyle(fontSize: 18)),
+                      ),
+                      TextFormField(
+                        controller: _textIDCardController,
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                        onChanged: (val) {
+                          _profile.identityId = val;
+                        },
+                        validator: (val) {
+                          if (val == null) {
+                            return 'Vui lòng nhập CCCD';
+                          }
+                          if (val.length != 12) {
+                            return 'Vui Lòng nhập CCCD hợp lệ';
+                          }
+                        },
+                        decoration: const InputDecoration(
+                            labelText: "Căn Cước công dân/ hộ chiếu (*):",
+                            hintText: "Vui Lòng Cập Nhập",
+                            labelStyle: TextStyle(fontSize: 18)),
+                      ),
+                      TextFormField(
+                        enabled: false,
+                        controller: TextEditingController(
+                            text: _profile.province!.name.toString()),
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                        decoration: const InputDecoration(
+                            labelText: "Thành phố:",
+                            labelStyle: TextStyle(fontSize: 18)),
+                      ),
+                      TextFormField(
+                        enabled: false,
+                        controller: TextEditingController(
+                          text: _profile.district!.name.toString(),
+                        ),
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                        decoration: const InputDecoration(
+                            labelText: "Quận/Huyện:",
+                            labelStyle: TextStyle(fontSize: 18)),
+                      ),
+                      TextFormField(
+                        enabled: false,
+                        controller: TextEditingController(
+                            text: _profile.village!.name.toString()),
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                        decoration: const InputDecoration(
+                            labelText: "Làng/xã:",
+                            labelStyle: TextStyle(fontSize: 18)),
+                      ),
+                      TextFormField(
+                        controller: _textAddressController,
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                        onChanged: (val) {
+                          _profile.address = val;
+                        },
+                        decoration: const InputDecoration(
+                            labelText: "Địa chỉ thường trú (*):",
+                            hintText: "Vui Lòng Cập Nhập",
+                            labelStyle: TextStyle(fontSize: 18)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Center(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: SizedBox(
+                                  width: 130.0,
+                                  height: 40.0,
+                                  // ignore: deprecated_member_use
+                                  child: new RaisedButton(
+                                    color: Color.fromRGBO(78, 159, 193, 1),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    onPressed: () async {
+                                      var _respone = await UserRepository()
+                                          .updateUser(_profile);
+                                      print(_respone);
+                                      if (_respone
+                                          .toString()
+                                          .contains("UPDATE_USER_SUCCESS")) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (ctx) => AlertDialog(
+                                            title: Text(
+                                              'Thành Công',
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            ),
+                                            content: Text(
+                                                "Cập nhập thông tin thành công"),
+                                            actions: <Widget>[
+                                              // ignore: deprecated_member_use
+                                              FlatButton(
+                                                child: Text('Okay'),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      } else if (_respone
+                                          .toString()
+                                          .contains("UPDATE_USER_FAIL")) {
+                                        _showerrorDialog(
+                                            "Cập Nhập Thông Tin Không Thành Công");
+                                      } else {
+                                        print(_respone);
+                                        _showerrorDialog("Đã Xảy Ra Lỗi");
+                                      }
+                                    },
+                                    child: new Text(
+                                      'Cập Nhập',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -426,7 +455,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         context: context,
         initialDate: _profile.dateOfBirth!,
         firstDate: DateTime(1900),
-        lastDate: DateTime(2101));
+        lastDate: DateTime.now());
     _textDOBController
       ..text = df.format(_profile.dateOfBirth!)
       ..selection = TextSelection.fromPosition(TextPosition(

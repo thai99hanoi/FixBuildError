@@ -22,7 +22,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool _continue = false;
+  // bool _continue = false;
   Report? _report;
   int pageIndex = 2;
   // List<Widget> pageList = <Widget>[
@@ -105,11 +105,11 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
-  void onDataChange(val) {
-    setState(() {
-      _continue = val;
-    });
-  }
+  // void onDataChange(val) {
+  //   setState(() {
+  //     _continue = val;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +119,7 @@ class _MainScreenState extends State<MainScreen> {
   Scaffold buildUIApp() {
     return Scaffold(
       body: <Widget>[
-        ReportScreen(lastReport: _report, callback: (val) => onDataChange(val)),
+        ReportScreen(lastReport: _report),
         ListUser(),
         homeScreen(),
         TestResultScreen(),
@@ -128,41 +128,9 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: pageIndex,
         onTap: (value) {
-          if (_continue) {
-            showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: Text(
-                  'Lỗi',
-                  style: TextStyle(color: Colors.blue),
-                ),
-                content: Text("Bạn muốn tiếp tục gửi thông báo?"),
-                actions: <Widget>[
-                  // ignore: deprecated_member_use
-                  FlatButton(
-                    child: Text('Có'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  FlatButton(
-                    child: Text('Không'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      setState(() {
-                        _continue = false;
-                        pageIndex = value;
-                      });
-                    },
-                  )
-                ],
-              ),
-            );
-          } else {
-            setState(() {
-              pageIndex = value;
-            });
-          }
+          setState(() {
+            pageIndex = value;
+          });
         },
         type: BottomNavigationBarType.fixed,
         items: [

@@ -16,22 +16,19 @@ import 'components/NavSideBar.dart';
 class NextScreenReport extends StatefulWidget {
   final ReportDTO reportDTO;
   final Report? lastReport;
-  final bool continueEdit;
 
-  const NextScreenReport(
-      {Key? key,
-      required this.reportDTO,
-      this.lastReport,
-      required this.continueEdit})
-      : super(key: key);
+  const NextScreenReport({
+    Key? key,
+    required this.reportDTO,
+    this.lastReport,
+  }) : super(key: key);
 
   @override
   State<NextScreenReport> createState() =>
-      _NextScreenReportState(reportDTO, lastReport, continueEdit);
+      _NextScreenReportState(reportDTO, lastReport);
 }
 
 class _NextScreenReportState extends State<NextScreenReport> {
-  bool continueEdit;
   List<int?>? _selectedExercise = [];
   List<Exercise> _allExercise = [];
   List<int?>? _selectedMedicine = [];
@@ -49,7 +46,7 @@ class _NextScreenReportState extends State<NextScreenReport> {
   String? formatted;
   String? formattedDate;
 
-  _NextScreenReportState(this.reportDTO, this.lastReport, this.continueEdit) {
+  _NextScreenReportState(this.reportDTO, this.lastReport) {
     ExerciseRepository().getAllExercises().then((val) => setState(() {
           _allExercise = val!;
         }));
