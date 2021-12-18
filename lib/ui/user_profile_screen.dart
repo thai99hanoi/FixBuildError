@@ -194,17 +194,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           nameList = val.split(" ");
                           print(val.split(" "));
                           if (nameList.length > 2) {
-                            _profile.firstname = nameList.first;
+                            _profile.firstname = nameList.last;
                             for (int i = 1; i < nameList.length - 1; i++) {
                               _surname += (nameList[i]! + " ");
                             }
                             _profile.surname = _surname.trim();
 
-                            _profile.lastname = nameList.last;
+                            _profile.lastname = nameList.first;
                           }
                           if (nameList.length > 1) {
-                            _profile.firstname = nameList.first;
-                            _profile.lastname = nameList.last;
+                            _profile.firstname = nameList.last;
+                            _profile.lastname = nameList.first;
                           } else {
                             _profile.firstname = val;
                           }

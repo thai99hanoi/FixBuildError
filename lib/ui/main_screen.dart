@@ -34,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   // ];
 
   bool isInCall = false;
+  bool loadDone = false;
 
   listenerCall() {
     UserRepository().getCurrentUser().then((currentUser) {
@@ -90,6 +91,9 @@ class _MainScreenState extends State<MainScreen> {
           .getReport(currentUser.userId!)
           .then((lastReport) => _report = lastReport.last);
     });
+    setState(() {
+      loadDone = true;
+    });
   }
 
   void navigatorPage(Widget page) {
@@ -117,7 +121,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Scaffold buildUIApp() {
-    return Scaffold(
+    return loadDone
+     ?  Scaffold(
       body: <Widget>[
         ReportScreen(lastReport: _report),
         ListUser(),
@@ -144,6 +149,12 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Cá Nhân")
         ],
       ),
+    )
+    : Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
+
   }
 }

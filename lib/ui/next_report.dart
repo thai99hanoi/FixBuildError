@@ -62,12 +62,14 @@ class _NextScreenReportState extends State<NextScreenReport> {
     endTime = f.parse("24:00:00");
     formatted = f.format(DateTime.now());
     formattedDate = sdf.format(DateTime.now());
-    now = f.parse(formatted!);
+    String time = DateFormat.Hms().format(DateTime.now());
+    now = f.parse(time);
     today = sdf.parse(formattedDate!);
     var _response;
 
     if (lastReport == null) {
       _response = await ReportDTORepository().createReport(reportDTO);
+      showContext(_response);
     } else {
       DateTime dateReport = sdf.parse(lastReport!.date.toString());
       DateTime timeReport = f.parse(lastReport!.time.toString());
@@ -81,25 +83,11 @@ class _NextScreenReportState extends State<NextScreenReport> {
           _showerrorDialog("Bạn đã gửi báo cáo vào buổi chiều!");
         } else {
           _response = await ReportDTORepository().createReport(reportDTO);
-          print(_response);
-          if (_response.toString().contains("CREATE_REPORT_SUCCESS")) {
-            showAlertDialog(context);
-          } else if (_response.toString().contains("FAIL")) {
-            _showerrorDialog("Gửi Báo Cáo Không Thành Công");
-          } else {
-            _showerrorDialog("Xảy ra lỗi");
-          }
+          showContext(_response);
         }
       } else {
         _response = await ReportDTORepository().createReport(reportDTO);
-        print(_response);
-        if (_response.toString().contains("CREATE_REPORT_SUCCESS")) {
-          showAlertDialog(context);
-        } else if (_response.toString().contains("FAIL")) {
-          _showerrorDialog("Gửi Báo Cáo Không Thành Công");
-        } else {
-          _showerrorDialog("Xảy ra lỗi");
-        }
+        showContext(_response);
       }
     }
   }
@@ -203,14 +191,14 @@ class _NextScreenReportState extends State<NextScreenReport> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          'An Error Occurs',
+          'Thông Báo',
           style: TextStyle(color: Colors.blue),
         ),
         content: Text(message),
         actions: <Widget>[
           // ignore: deprecated_member_use
           FlatButton(
-            child: Text('Okay'),
+            child: Text('Ok'),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -219,7 +207,18 @@ class _NextScreenReportState extends State<NextScreenReport> {
       ),
     );
   }
+  showContext(String _response){
+    print(_response);
+    if (_response.toString().contains("CREATE_REPORT_SUCCESS")) {
+      showAlertDialog(context);
+    } else if (_response.toString().contains("FAIL")) {
+      _showerrorDialog("Gửi Báo Cáo Không Thành Công");
+    } else {
+      _showerrorDialog("Xảy ra lỗi");
+    }
+  }
 }
+
 
 showAlertDialog(BuildContext context) {
   // set up the button
@@ -247,4 +246,6 @@ showAlertDialog(BuildContext context) {
       return alert;
     },
   );
+
 }
+

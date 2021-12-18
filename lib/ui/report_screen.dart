@@ -74,8 +74,8 @@ class _ReportScreenState extends State<ReportScreen> {
                               RequiredValidator(
                                   errorText: "Vui lòng nhập nồng độ oxi"),
                               RangeValidator(
-                                  min: 0,
-                                  max: 100,
+                                  min: 85,
+                                  max: 200,
                                   errorText: "Vui lòng nhập nồng đọ oxi hợp lệ")
                             ]),
                             controller: TextEditingController(
@@ -113,8 +113,8 @@ class _ReportScreenState extends State<ReportScreen> {
                               RequiredValidator(
                                   errorText: "Vui lòng nhập nhiệt độ"),
                               RangeValidator(
-                                  min: 30,
-                                  max: 50,
+                                  min: 35,
+                                  max: 42,
                                   errorText: "Vui lòng nhập nhiệt độ hợp lệ")
                             ]),
 

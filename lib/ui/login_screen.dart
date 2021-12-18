@@ -22,22 +22,9 @@ class _State extends State<LoginPage> {
   Future save() async {
     try {
       await Provider.of<Auth>(context, listen: false).login(user);
-    } on HttpException catch (e) {
-      var errorMessage = 'Authentication Failed';
-      if (e.toString().contains('Username is invalid!')) {
-        errorMessage = 'Username is invalid!';
-        _showerrorDialog(errorMessage);
-        // } else if (e.toString().contains('EMAIL_NOT_FOUND')) {
-        //   errorMessage = 'This email not found';
-        //   _showerrorDialog(errorMessage);
-      } else if (e
-          .toString()
-          .contains('Password must more than 6 characters')) {
-        errorMessage = 'Password must more than 6 characters';
-        _showerrorDialog(errorMessage);
-      }
     } catch (error) {
-      var errorMessage = 'Please try again later';
+      var errorMessage = 'Đăng nhập thất bại! \n'
+          'Vui lòng kiểm tra lại tài khoản và mật khẩu';
       print(error.toString());
       _showerrorDialog(errorMessage);
     }
@@ -232,10 +219,10 @@ class _State extends State<LoginPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          'An Error Occurs',
+          'Thông báo',
           style: TextStyle(color: Colors.blue),
         ),
-        content: Text(message),
+        content: Text(message,textAlign: TextAlign.center, style: TextStyle(fontSize: 14),),
         actions: <Widget>[
           // ignore: deprecated_member_use
           FlatButton(
