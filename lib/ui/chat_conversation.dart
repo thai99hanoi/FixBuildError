@@ -42,7 +42,7 @@ class ConversationChat extends StatelessWidget {
           ),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(friend.getDisplayName(), style: TextStyle(fontSize: 16)),
-            Text(friend.isOnline == 1 ? "Đang Hoạt DỘng" : "Offline",
+            Text(friend.isOnline == 1 ? "Đang Hoạt Động" : "Offline",
                 style: TextStyle(fontSize: 12)),
           ])
         ]),

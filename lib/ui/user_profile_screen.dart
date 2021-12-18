@@ -128,7 +128,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               actions: <Widget>[
                                 // ignore: deprecated_member_use
                                 FlatButton(
-                                  child: Text('Okay'),
+                                  child: Text('Xác nhận'),
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
@@ -147,8 +147,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         }
                       }
                     },
-                    child: _profileAva.avatar == null
-                        ? (_profileAva.gender == "Nam"
+                    child: _profile.avatar == null
+                        ? (_profile.gender == "Nam"
                             ? CircleAvatar(
                                 radius: 50,
                                 backgroundImage:
@@ -159,8 +159,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     AssetImage('assets/images/ava_female.png')))
                         : CircleAvatar(
                             radius: 50,
-                            backgroundImage: NetworkImage(
-                                Api.imageUrl + _profileAva.avatar!)),
+                            backgroundImage:
+                                NetworkImage(Api.imageUrl + _profile.avatar!)),
                   ),
                 ),
               ),

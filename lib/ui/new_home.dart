@@ -35,13 +35,6 @@ class _homeScreenState extends State<homeScreen> {
     // document = await PDFDocument.fromAsset('assets/file/huong_dan.pdf');
     document = await PDFDocument.fromURL(
       "https://healthcaresystemstorage.s3.us-east-2.amazonaws.com/Info+Huong+dan+F0+tai+nha.pdf",
-      cacheManager: CacheManager(
-        Config(
-          "customCacheKey",
-          stalePeriod: const Duration(days: 2),
-          maxNrOfCacheObjects: 10,
-        ),
-      ),
     );
 
     setState(() => _isLoading = false);
