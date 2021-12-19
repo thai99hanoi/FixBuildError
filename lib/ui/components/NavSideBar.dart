@@ -91,16 +91,16 @@ class _NavDrawer extends State<NavDrawer> {
               )
             },
           ),
-          ListTile(
-            leading: Icon(Icons.info_outline),
-            title: Text('Hướng dẫn cách ly tại nhà'),
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UserGuilderScreen()),
-              )
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.info_outline),
+          //   title: Text('Hướng dẫn cách ly tại nhà'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => UserGuilderScreen()),
+          //     )
+          //   },
+          // ),
           ListTile(
               leading: Icon(Icons.logout_outlined),
               title: Text('Đăng xuất'),

@@ -6,7 +6,7 @@ import 'package:heath_care/ui/excercise_screen.dart';
 import 'package:heath_care/ui/medicine_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'components/NavSideBar.dart';
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 // ignore: camel_case_types
 class homeScreen extends StatefulWidget {
@@ -14,8 +14,7 @@ class homeScreen extends StatefulWidget {
   State<homeScreen> createState() => _homeScreenState();
 }
 
-bool _isLoading = true;
-PDFDocument? document;
+String pathPDF = "";
 
 const _url = 'http://tokhaiyte.vn';
 
@@ -31,19 +30,20 @@ class _homeScreenState extends State<homeScreen> {
           _todayData = val;
         }));
   }
-  loadDocument() async {
-    // document = await PDFDocument.fromAsset('assets/file/huong_dan.pdf');
-    document = await PDFDocument.fromURL(
-      "https://healthcaresystemstorage.s3.us-east-2.amazonaws.com/Info+Huong+dan+F0+tai+nha.pdf",
-    );
-
-    setState(() => _isLoading = false);
-  }
+  // loadDocument() async {
+  //   // document = await PDFDocument.fromAsset('assets/file/huong_dan.pdf');
+  //   // document = await PDFDocument.fromURL(
+  //   //   "https://healthcaresystemstorage.s3.us-east-2.amazonaws.com/Info+Huong+dan+F0+tai+nha.pdf",
+  //   // );
+  //   document = await PDFDocument.fromAsset('assets/file/huong-dan.pdf');
+  //   setState(() => _isLoading = false);
+  // }
 
   @override
   void initState() {
     super.initState();
-    loadDocument();
+
+    // loadDocument();
   }
 
   @override
@@ -331,7 +331,7 @@ class _homeScreenState extends State<homeScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Text("HƯỚNG DẪN SỬ DỤNG PHẦN MỀM",
+            child: Text("HƯỚNG DẪN CÁCH LY TẠI NHÀ",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center),
           ),
@@ -344,50 +344,11 @@ class _homeScreenState extends State<homeScreen> {
                   color: Color.fromRGBO(78, 159, 193, 0.3),
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               child: Center(
-                child: _isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : PDFViewer(
-                        document: document!,
-                        zoomSteps: 2,
-                        //uncomment below line to preload all pages
-                        // lazyLoad: false,
-                        // uncomment below line to scroll vertically
-                        // scrollDirection: Axis.vertical,
-
-                        //uncomment below code to replace bottom navigation with your own
-                        /* navigationBuilder:
-                      (context, page, totalPages, jumpToPage, animateToPage) {
-                    return ButtonBar(
-                      alignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.first_page),
-                          onPressed: () {
-                            jumpToPage()(page: 0);
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () {
-                            animateToPage(page: page - 2);
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.arrow_forward),
-                          onPressed: () {
-                            animateToPage(page: page);
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.last_page),
-                          onPressed: () {
-                            jumpToPage(page: totalPages - 1);
-                          },
-                        ),
-                      ],
-                    );
-                  }, */
-                      ),
+                child:
+                    // _isLoading
+                    //     ? Center(child: CircularProgressIndicator())
+                    // :
+                    SfPdfViewer.asset('assets/files/huong-dan.pdf'),
               ),
             ),
           ),
