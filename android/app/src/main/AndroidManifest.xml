@@ -13,7 +13,7 @@
     <application
         android:label="Theo Dõi Sức Khoẻ"
         android:usesCleartextTraffic="true"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

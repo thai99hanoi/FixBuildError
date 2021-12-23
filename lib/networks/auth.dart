@@ -32,8 +32,10 @@ class Auth with ChangeNotifier {
   var _expiryDate;
   var _authTimer;
   User? _currentUser;
+  bool _isLogout = false;
+  bool get isLogout => _isLogout;
 
-  setCurrentUser(User user) {
+  setCurrentUser(User? user) {
     _currentUser = user;
 
     notifyListeners();
@@ -80,13 +82,14 @@ class Auth with ChangeNotifier {
       _token = null;
       _userEmail = null;
       _userId = null;
+      setCurrentUser(null);
       // _expiryDate = null;
 
       // if (_authTimer != null) {
       //   _authTimer.cancel();
       //   _authTimer = null;
       // }
-
+      _isLogout = true;
       notifyListeners();
 
       final pref = await SharedPreferences.getInstance();
@@ -130,6 +133,7 @@ class Auth with ChangeNotifier {
     _token = extractedUserData['token'];
     User user = await userRepository.getCurrentUser(tokenTmp: _token);
     setCurrentUser(user);
+    _isLogout = false;
     // _userId = extractedUserData['userId'];
     // _userEmail = extractedUserData['userEmail'];
     // _expiryDate = expiryDate;
@@ -169,6 +173,7 @@ class Auth with ChangeNotifier {
       User user = await userRepository.getCurrentUser(tokenTmp: _token);
       setCurrentUserCache(user.userId);
       setCurrentUser(user);
+      _isLogout = false;
       // _expiryDate = DateTime.now().add(Duration(seconds: 600));
 
       // _autologout();

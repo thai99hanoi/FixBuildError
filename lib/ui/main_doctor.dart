@@ -4,6 +4,7 @@ import 'package:heath_care/firebase/call_firebase.dart';
 import 'package:heath_care/firebase/chat_firebase.dart';
 import 'package:heath_care/model/message.dart';
 import 'package:heath_care/model/request_call.dart';
+import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/chat_doctor.dart';
 import 'package:heath_care/ui/doctor_all_contact.dart';
@@ -12,6 +13,7 @@ import 'package:heath_care/ui/report_screen.dart';
 import 'package:heath_care/ui/test_screen.dart';
 import 'package:heath_care/ui/user_profile_screen.dart';
 import 'package:heath_care/ui/videocall/receive_call_page.dart';
+import 'package:provider/provider.dart';
 
 import 'chat_list_user.dart';
 import 'new_home.dart';
@@ -32,10 +34,10 @@ class _MainScreenState extends State<MainScreenDoctor> {
   ];
 
   bool isInCall = false;
-
+  var sub;
   listenerCall() {
     UserRepository().getCurrentUser().then((currentUser) {
-      CallFireBase.getInstance()
+     sub =  CallFireBase.getInstance()
           .getRequestsStream(currentUser.username.toString())
           .listen((event) {
         final datas = event.docs;
@@ -88,14 +90,32 @@ class _MainScreenState extends State<MainScreenDoctor> {
     Navigator.push(context, route);
   }
 
+  listenerLogOut() {
+    var isLogout = Provider.of<Auth>(context, listen: false).isLogout;
+    if (isLogout) {
+      print('logout');
+      sub?.cancel();
+    }
+  }
+
   @override
   void initState() {
+    isInCall = false;
     listenerCall();
     super.initState();
   }
 
   @override
+  void dispose() {
+    print('dispose main doctor');
+    super.dispose();
+    isInCall = false;
+    sub?.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    listenerLogOut();
     return buildUIApp();
   }
 

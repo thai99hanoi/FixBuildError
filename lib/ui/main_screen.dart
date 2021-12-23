@@ -5,12 +5,14 @@ import 'package:heath_care/firebase/chat_firebase.dart';
 import 'package:heath_care/model/message.dart';
 import 'package:heath_care/model/report.dart';
 import 'package:heath_care/model/request_call.dart';
+import 'package:heath_care/networks/auth.dart';
 import 'package:heath_care/repository/report_dto_repository.dart';
 import 'package:heath_care/repository/user_repository.dart';
 import 'package:heath_care/ui/report_screen.dart';
 import 'package:heath_care/ui/test_screen.dart';
 import 'package:heath_care/ui/user_profile_screen.dart';
 import 'package:heath_care/ui/videocall/receive_call_page.dart';
+import 'package:provider/provider.dart';
 
 import 'chat_list_user.dart';
 import 'new_home.dart';
@@ -25,6 +27,7 @@ class _MainScreenState extends State<MainScreen> {
   // bool _continue = false;
   Report? _report;
   int pageIndex = 2;
+
   // List<Widget> pageList = <Widget>[
   //   ReportScreen(lastReport: _report,),
   //   ListUser(),
@@ -35,10 +38,12 @@ class _MainScreenState extends State<MainScreen> {
 
   bool isInCall = false;
   bool loadDone = false;
+  var sub;
 
   listenerCall() {
     UserRepository().getCurrentUser().then((currentUser) {
-      CallFireBase.getInstance()
+      print('user:${currentUser.username}');
+      sub = CallFireBase.getInstance()
           .getRequestsStream(currentUser.username.toString())
           .listen((event) {
         final datas = event.docs;
@@ -102,59 +107,73 @@ class _MainScreenState extends State<MainScreen> {
     Navigator.push(context, route);
   }
 
+  listenerLogOut() {
+    var isLogout = Provider.of<Auth>(context, listen: false).isLogout;
+    if (isLogout) {
+      print('logout');
+      sub?.cancel();
+    }
+  }
+
   @override
   void initState() {
+    // listenerLogOut();
     listenerCall();
     getLastReport();
     super.initState();
   }
 
-  // void onDataChange(val) {
-  //   setState(() {
-  //     _continue = val;
-  //   });
-  // }
+  @override
+  void dispose() {
+    print('dispose main_screnn');
+    super.dispose();
+    isInCall = false;
+    sub?.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
+    listenerLogOut();
     return buildUIApp();
   }
 
   Scaffold buildUIApp() {
     return loadDone
-     ?  Scaffold(
-      body: <Widget>[
-        ReportScreen(lastReport: _report),
-        ListUser(),
-        homeScreen(),
-        TestResultScreen(),
-        UserProfileScreen()
-      ][pageIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: pageIndex,
-        onTap: (value) {
-          setState(() {
-            pageIndex = value;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.analytics_outlined), label: "Báo Cáo"),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: "Liên Hệ"),
-          BottomNavigationBarItem(icon: Icon(Icons.home, size: 45), label: ""),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.assignment_returned_outlined),
-              label: "Xét Nghiệm"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Cá Nhân")
-        ],
-      ),
-    )
-    : Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-
+        ? Scaffold(
+            body: <Widget>[
+              ReportScreen(lastReport: _report),
+              ListUser(),
+              homeScreen(),
+              TestResultScreen(),
+              UserProfileScreen()
+            ][pageIndex],
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: pageIndex,
+              onTap: (value) {
+                setState(() {
+                  pageIndex = value;
+                });
+              },
+              type: BottomNavigationBarType.fixed,
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.analytics_outlined), label: "Báo Cáo"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.message), label: "Liên Hệ"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home, size: 45), label: ""),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.assignment_returned_outlined),
+                    label: "Xét Nghiệm"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person), label: "Cá Nhân")
+              ],
+            ),
+          )
+        : Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
   }
 }
